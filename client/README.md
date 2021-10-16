@@ -1,4 +1,4 @@
-# roomlender
+# client
 
 ## Project setup
 ```

@@ -1,10 +1,20 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div>
+    <div>Hello there</div>
+    <theme-button msg="Button"/>
   </div>
-  <router-view/>
 </template>
+
+<script>
+import PictureFrame from '@/components/PictureFrame.vue'
+import ThemeButton from '@/components/ThemeButton.vue'
+export default {
+  components: {
+    PictureFrame,
+    ThemeButton
+  }
+}
+</script>
 
 <style>
 #app {
@@ -13,18 +23,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
