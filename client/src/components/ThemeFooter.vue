@@ -123,6 +123,16 @@ export default {
     line-height: 1.8;
 }
 
+@media only screen and (min-width: 1140px) {
+    .texttitle {
+        font-size: 24px;
+    }
+
+    .textcontent {
+        font-size: 17px;
+    }
+}
+
 .divider {
     display: flex;
     flex: 1;
