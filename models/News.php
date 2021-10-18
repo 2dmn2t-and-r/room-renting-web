@@ -5,7 +5,7 @@
         public $newsId;
         public $title;
         public $createDate;
-        public $modifyDate
+        public $modifyDate;
         public $content;
         public $image;
 

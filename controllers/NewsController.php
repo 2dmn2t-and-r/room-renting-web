@@ -2,7 +2,7 @@
     namespace Controllers;
     require_once('models/News.php');
 
-    class RoomController {
+    class NewsController {
         public function loadNews() {
             $News = 'News\\Room';
         }
