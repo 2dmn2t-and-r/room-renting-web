@@ -3,7 +3,4 @@
 
     $router->get('/', 'ExampleController.index');
 
-    $router->get('/data', function() {
-        echo 'data';
-    });
 ?>
