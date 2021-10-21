@@ -8,18 +8,18 @@
         public $startTime;
         public $endTime;
         public $totalPrice;
-        public $status;
+        public $statusR;
         public $roomId;
         public $userId;
 
-        public function __construct($resId, $bookDate, $useDate, $startTime, $endTime, $totalPrice, $status, $roomId, $userId) {
+        public function __construct($resId, $bookDate, $useDate, $startTime, $endTime, $totalPrice, $statusR, $roomId, $userId) {
             $this->resId = $resId;
             $this->bookDate = $bookDate;
             $this->useDate = $useDate;
             $this->startTime = $startTime;
             $this->endTime = $endTime;
             $this->totalPrice = $totalPrice;
-            $this->status = $status;
+            $this->statusR = $statusR;
             $this->roomId = $roomId;
             $this->userId = $userId;
         }
