@@ -39,7 +39,6 @@ export default {
 
 <style scoped>
 .bare_section {
-    background-color: var(--theme_fore);
     height: 79.30vw;
     max-height: 904px;
     width: 100%;
