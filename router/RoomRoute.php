@@ -1,9 +1,9 @@
 <?php
     require_once('controllers/RoomController.php');
 
-    $router->get('/rooms', 'RoomController.loadRooms');
+    $router->get('/rooms/load/{type}', 'RoomController.loadRooms');
 
-    $router->get('/room', 'RoomController.loadRoom');
+    $router->get('/room/load/{id}', 'RoomController.loadRoom');
 
     $router->post('/room/upload', 'RoomController.uploadRoom');
 ?>

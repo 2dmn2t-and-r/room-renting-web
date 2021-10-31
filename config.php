@@ -3,7 +3,7 @@
         private static $instance = NULL;
         private static $servername = "localhost";
         private static $username = "root";
-        private static $password = "";
+        private static $password = "13062001";
         private static $dbname = "web_database";  
 
         public static function getInstance() {
