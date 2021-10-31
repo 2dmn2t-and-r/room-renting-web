@@ -1,5 +1,7 @@
 <?php
     namespace Controllers;
+
+
     require_once('models/Room.php');
 
     class RoomController {
@@ -33,7 +35,6 @@
 
         public function uploadRoom() {
             $Room = 'Models\\Room';
-
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
@@ -50,7 +51,6 @@
             $db = 'Database'::getInstance();
 
             $room = json_decode(file_get_contents('php://input'), true);
-            $roomId = $room['roomId'];
             $roomName = $room['roomName'];
             $roomType = $room['type'];
             $floor = $room['floor'];
@@ -62,13 +62,19 @@
             $description = $room['description'];
             $image = $room['image'];
 
-
-            $query =   "UPDATE WEB_DATABASE.ROOM
-                        SET roomName = '$roomName', type = '$roomType', floor = '$floor', price = '$price', statusRo = '$statusRo', openTime= '$openTime', closeTime = '$closeTime', address = '$address', description = '$description', image = '$image'
-                        WHERE roomId = '$roomId';";
+            if (array_key_exists('roomId', $room)) {
+                $roomId = $room['roomId'];
+                $query =   "UPDATE WEB_DATABASE.ROOM
+                            SET roomName = '$roomName', type = '$roomType', floor = '$floor', price = '$price', statusRo = '$statusRo', openTime= '$openTime', closeTime = '$closeTime', address = '$address', description = '$description', image = '$image'
+                            WHERE roomId = '$roomId';";
+            }
+            else {
+                $query =   "INSERT INTO WEB_DATABASE.ROOM (roomName, type, floor, price, statusRo, openTime, closeTime, address, description, image)
+                            VALUES ('$roomName', '$roomType', '$floor', '$price', '$statusRo', '$openTime', '$closeTime', '$address', '$description', '$image')";
+            }
 
             $result = mysqli_query($db, $query);
-            echo json_encode(['result' => $result, 'status'=>200]); 
+            echo json_encode(['result' => $result, 'status'=>200]);
         }
     }
 ?>

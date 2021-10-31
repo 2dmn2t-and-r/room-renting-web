@@ -46,18 +46,23 @@
             $db = 'Database'::getInstance();
 
             $news = json_decode(file_get_contents('php://input'), true);
-            $newsId = $news['newsId'];
             $title = $news['title'];
             $createDate = $news['createDate'];
             $modifyDate = $news['modifyDate'];
             $content = $news['content'];
             $image = $news['image'];
 
-
-            $query =   "UPDATE WEB_DATABASE.NEWS
-                        SET title = '$title', createDate = '$createDate', modifyDate = '$modifyDate', content = '$content', image = '$image'
-                        WHERE newsId = '$newsId';";
-
+            if (array_key_exists('newsId', $news)) {
+                $newsId = $news['newsId'];
+                $query =   "UPDATE WEB_DATABASE.NEWS
+                            SET title = '$title', createDate = '$createDate', modifyDate = '$modifyDate', content = '$content', image = '$image'
+                            WHERE newsId = '$newsId';";
+            }
+            else {
+                $query =   "INSERT INTO WEB_DATABASE.NEWS (title, createDate, modifyDate, content, image)
+                            VALUES ('$title', '$createDate', '$modifyDate', '$content', '$image')";
+            }
+            
             $result = mysqli_query($db, $query);
             echo json_encode(['result' => $result, 'status'=>200]); 
         }
