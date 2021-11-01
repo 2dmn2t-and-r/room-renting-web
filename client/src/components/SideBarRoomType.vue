@@ -33,7 +33,6 @@ export default {
     .text_class {
         font-size: 24px;
         line-height: 2.5;
-        font-weight: bold;
     }
     .text_normal {
         color: var(--theme_black);
