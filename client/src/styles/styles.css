@@ -1,0 +1,19 @@
+:root {
+    --theme_brown: #caa892;
+    --theme_jade: #37806b;
+    --theme_black: #111111;
+    --theme_gray: #646464;
+    --theme_fore: #f8f8f8;
+    --theme_white: #ffffff;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Material+Icons");
+
+@font-face {
+    font-family: OpenSans;
+    src: url(../assets/fonts/OpenSans.ttf);
+}
+
+* {
+    font-family: OpenSans;
+}
