@@ -13,6 +13,7 @@ export default {
 
 
 <style src="./styles/styles.css">
+
 #app {
   font-family: OpenSans;
   -webkit-font-smoothing: antialiased;
