@@ -18,31 +18,31 @@ export default {
     computed: {
         step_1: function(){
             return {
-                "display": this.step ? (this.step < 0 ? "none": "flex") : "flex",
+                "display": (this.step !== undefined) ? (this.step <= 0 ? "none": "flex") : "flex",
                 "background-color": this.step ? ((this.step >= 1) ? palette[0] : palette[1]) : palette[1],
             }
         },
         line_1: function(){
             return {
-                "display": this.step ? (this.step < 0 ? "none": "flex") : "flex",
+                "display": (this.step !== undefined) ? (this.step <= 0 ? "none": "flex") : "flex",
                 "background-color": this.step ? ((this.step > 1) ? palette[0] : palette[1]) : palette[1],
             }
         },
         step_2: function(){
             return {
-                "display": this.step ? (this.step < 0 ? "none": "flex") : "flex",
+                "display": (this.step !== undefined) ? (this.step <= 0 ? "none": "flex") : "flex",
                 "background-color": this.step ? ((this.step >= 2) ? palette[0] : palette[1]) : palette[1],
             }
         },
         line_2: function(){
             return {
-                "display": this.step ? (this.step < 0 ? "none": "flex") : "flex",
+                "display": (this.step !== undefined) ? (this.step <= 0 ? "none": "flex") : "flex",
                 "background-color": this.step ? ((this.step > 2) ? palette[0] : palette[1]) : palette[1],
             }
         },
         step_3: function(){
             return {
-                "display": this.step ? (this.step < 0 ? "none": "flex") : "flex",
+                "display": (this.step !== undefined) ? (this.step <= 0 ? "none": "flex") : "flex",
                 "background-color": this.step ? ((this.step >= 3) ? palette[0] : palette[1]) : palette[1],
             }
         },

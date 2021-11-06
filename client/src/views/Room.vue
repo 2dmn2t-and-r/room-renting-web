@@ -1,25 +1,51 @@
 <template>
   <div class="room">
     <h1>Page này của Đức không đc đụng vô !!!!</h1>
+    <theme-input
+      type="text"
+      value="12"
+      buttonTitle="clear"
+      buttonWidth = "50px"
+    >
+    </theme-input>
+    <custominput
+      label="input.label"
+      type="text"
+      modelValue="12"
+    >
+    </custominput>
+    
     <modal-template  v-bind="{
       title: 'Reservation',
-      step: 2,
+      step: -1,
       buttonTitle: ['Next', 'Next', 'OK']
     }">
       <div slot="1">1</div>
       <div slot="2">2</div>
+      <div slot="2">3</div>
     </modal-template>
   </div>
 </template>
 
 <script>
-  import ModalTemplate from '@/components/ModalTemplate.vue'
+  import ModalTemplate from '@/components/ModalTemplate.vue';
+  import Custominput from '@/components/Custominput.vue';
+  import ThemeInput from '@/components/ThemeInput.vue';
 
   export default {
   name: 'Room',
   components: {
     ModalTemplate,
+    Custominput,
+    ThemeInput
   }
 }
 </script>
+
+<style>
+  .room {
+    background-color: var(--theme_white);
+    height: 1000px;
+  }
+</style>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal">
+    <div class="modal" :style="modal">
         <div class="modal-container">
             <div class="modal-header">
                 <div class="icon-bt"></div>
@@ -24,14 +24,14 @@
                     height: '40px',
                     width: '140px',
                     border_radius: '15px'
-                }"/>
+                }"></theme-button>
                 <theme-button theme-button v-bind="{
-                    msg: buttonTitle ? (buttonTitle[step - 1] ? buttonTitle[step - 1] : '') : '',
+                    msg: buttonTitle ? ((step === 0) ? buttonTitle[0] || '' : buttonTitle[step - 1] || '' ) : 'OK',
                     background_color: 'var(--theme_jade)',
                     height: '40px',
                     width: '140px',
                     border_radius: '15px'
-                }"/>
+                }"></theme-button>
             </div>
         </div>
     </div>
@@ -68,16 +68,21 @@
                 }
             },
             slot_3: function(){
-                var isDisplay = this.step === 3
+                var isDisplay = this.step === 3;
                 return {
                     "display": isDisplay ? "flex" : "none",
                     "width": "100%",
                     "justify-content": "center",
                 }
             },
+            modal: function() {
+                var isDisplay = (this.step !== undefined) && (this.step >= 0);
+                return {
+                    "display": isDisplay ? "flex" : "none",
+                }
+            }
         },
         data() {
-            console.log(this.$slots.default);
             return {
                 child: 123,
             }
@@ -88,7 +93,6 @@
 
 <style scoped>
     .modal {
-        display: flex;
         position: fixed;
         z-index: 1;
         left: 0;
