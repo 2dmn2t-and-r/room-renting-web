@@ -32,6 +32,14 @@
         }
       ]"
     />
+    <room-card
+      :name="'Hall2'"
+      :floor="10"
+      :seat="50"
+      :address="'98 Thu Duc Tan Binh'"
+      :status="'Available'"
+    />
+    <reservation-info/>
   </div>
 </template>
 
@@ -43,6 +51,8 @@ import ThemeButton from '@/components/ThemeButton.vue'
 import ThemeFooter from '@/components/ThemeFooter.vue'
 import Section1 from '@/components/home/Section1.vue'
 import DescriptionCommentBox from '../components/modals/reserve/DescriptionCommentBox.vue'
+import RoomCard from '../components/RoomCard.vue'
+import ReservationInfo from '../components/ReservationInfo.vue'
 
 export default {
   name: 'Home',
@@ -52,13 +62,12 @@ export default {
     ThemeButton,
     ThemeFooter,
     Section1,
-    DescriptionCommentBox
+    DescriptionCommentBox,
+    RoomCard,
+    ReservationInfo
   }
 }
 </script>
 <style scoped>
-.ho
-    DescriptionCommentBoxme {
-  background-color:aquamarine;
-}
+
 </style>

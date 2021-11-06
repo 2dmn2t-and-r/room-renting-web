@@ -45,8 +45,7 @@ export default {
 <style scoped>
 .bare_footer {
     background-color: var(--theme_fore);
-    height: 36.84vw;
-    max-height: 420px;
+    height: 420px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -55,7 +54,7 @@ export default {
 }
 
 .inner_footer {
-    height: 66.67%;
+    height: 280px;
     width: 100%;
     max-width: 1140px;
     display: flex;
@@ -65,7 +64,7 @@ export default {
 
 .logo {
     align-self: flex-start;
-    width: 20%;
+    width: 228px;
     height: 100%;
     background-image: url('../assets/logo/full.png');
     background-size: contain;
@@ -74,7 +73,7 @@ export default {
 
 .followus {
     height: 100%;
-    width: 20%;
+    width: 228px;
 }
 
 .socialrow {
@@ -97,7 +96,7 @@ export default {
 
 .contactus {
     height: 100%;
-    width: 30%;
+    width: 250px;
 }
 
 .icon {
@@ -111,30 +110,37 @@ export default {
 }
 
 .texttitle {
-    font-size: 2.1vw;
+    font-size: 24px;
     font-weight: bold;
     line-height: 3;
     color: var(--theme_black);
 }
 
 .textcontent {
-    font-size: 1.5vw;
+    font-size: 17px;
     color: var(--theme_gray);
     line-height: 1.8;
-}
-
-@media only screen and (min-width: 1140px) {
-    .texttitle {
-        font-size: 24px;
-    }
-
-    .textcontent {
-        font-size: 17px;
-    }
 }
 
 .divider {
     display: flex;
     flex: 1;
+}
+
+@media only screen and (max-width: 768px) {
+    .divider {
+        display: none;
+    }
+    .bare_footer {
+        height: fit-content;
+        padding: 20px;
+    }
+    .inner_footer {
+        height: fit-content;
+        flex-direction: column;
+    }
+    .logo {
+        height: 78px;
+    }
 }
 </style>
