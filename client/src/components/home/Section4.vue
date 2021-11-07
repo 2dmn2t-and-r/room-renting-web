@@ -4,7 +4,7 @@
         <div class="inner_section">
             <div class="text_title">Sign up now to use our services</div>
             <!-- <hr style="width: 40%; color: var(--theme_fore);"> -->
-            <div class="sign_row">
+            <!-- <div class="sign_row">
                 <md-field md-inline class="type_sign_up">
                     <label>Enter your email address</label>
                     <md-input v-model="inline">Enter your email address</md-input>
@@ -16,7 +16,8 @@
                     height: '4.21vw',
                     border_radius: '1.32vw'
                 }" class='sign_up' style="font-weight: bold"/>
-            </div>
+            </div> -->
+            <theme-input :buttonTitle="'Sign up'" :buttonWidth="'100px'" :value="'Enter your email address'"/>
         </div>
     </div>
     <div class="empty_end"></div>
@@ -26,8 +27,9 @@
 <script>
 import PictureFrame from '../PictureFrame.vue'
 import ThemeButton from '../ThemeButton.vue'
+import ThemeInput from '../ThemeInput.vue'
 export default {
-  components: { PictureFrame, ThemeButton },
+  components: { PictureFrame, ThemeButton, ThemeInput },
 
 }
 </script>
@@ -55,7 +57,7 @@ export default {
 }
 
 .text_title {
-    font-size: 4.21vw;
+    font-size: 30px;
     font-weight: bold;
     line-height: 1.5;
     text-align: center;
@@ -115,7 +117,7 @@ html.md-theme-default {
     height: 7.02vw;
     max-height: 80px;
 }
-@media only screen and (min-width: 1140px) {
+@media only screen and (min-width: 768px) {
     .text_title {
         font-size: 48px;
     }
@@ -135,6 +137,12 @@ html.md-theme-default {
     }
     .md-field.md-has-value .md-input {
         font-size: 18px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .text_title {
+        font-size: 20px;
     }
 }
 </style>

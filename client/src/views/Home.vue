@@ -40,6 +40,11 @@
       :status="'Available'"
     />
     <reservation-info/>
+    <div style="display: flex; flex-direction: row;">
+      <reservation-block/>
+      <information-block/>
+    </div>
+    <section-4/>
   </div>
 </template>
 
@@ -53,6 +58,9 @@ import Section1 from '@/components/home/Section1.vue'
 import DescriptionCommentBox from '../components/modals/reserve/DescriptionCommentBox.vue'
 import RoomCard from '../components/RoomCard.vue'
 import ReservationInfo from '../components/ReservationInfo.vue'
+import ReservationBlock from '../components/ReservationBlock.vue'
+import InformationBlock from '../components/InformationBlock.vue'
+import Section4 from '../components/home/Section4.vue'
 
 export default {
   name: 'Home',
@@ -64,7 +72,10 @@ export default {
     Section1,
     DescriptionCommentBox,
     RoomCard,
-    ReservationInfo
+    ReservationInfo,
+    ReservationBlock,
+    InformationBlock,
+    Section4
   }
 }
 </script>
