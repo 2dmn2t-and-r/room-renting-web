@@ -31,6 +31,10 @@ export default {
         isIconTitle: {
             type: Boolean,
             default: false,
+        },                      // Optional
+        isInputBgWhite: {
+            type: Boolean,
+            default: false
         }                       // Optional
     },
     computed: {
@@ -46,6 +50,7 @@ export default {
             return {
                 "width": (this.buttonTitle == "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
                 "border-radius": "15px 0px 0px 0px",
+                "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)"
             };
         },
         button_style: function() {
@@ -92,7 +97,7 @@ export default {
 
     .input {
         font-size: 16px;
-        background-color: var(--theme_fore);
+        /* background-color: var(--theme_fore); */
         border-radius: 15px 0px;
         font-weight: 600;
         height: 40px;
@@ -121,6 +126,7 @@ export default {
 
     .button:hover {
         cursor: pointer;
+        opacity: 0.9;
     }
 
     .button:active {
