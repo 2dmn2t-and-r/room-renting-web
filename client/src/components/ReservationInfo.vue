@@ -1,0 +1,107 @@
+<template>
+    <div class="row border contain">
+        <div class="image" :style="img_style"></div>
+        <div class="col part linespace">
+            <div class="font">By: <span class="bold">{{user}}</span></div>
+            <div class="font">Date: <span class="bold">{{convertDate(reserveDate)}}</span></div>
+        </div>
+        <div v-if="this.showMiddle" class="col part linespace">
+            <div class="font">Room: <span class="bold">{{roomName}}</span></div>
+            <div class="font">Start: <span class="bold">{{convertDate(startDate)}}</span></div>
+        </div>
+        <div class="col part linespace">
+            <div class="font">Duration: <span class="bold">{{duration}}</span></div>
+            <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
+        </div>
+        <img v-if="this.paid" src="../assets/icon/paid.png" class="pay" alt="pay">
+        <img v-else src="../assets/icon/unpaid.png" class="pay" alt="pay">
+    </div>
+</template>
+
+<script>
+import moment from 'moment';
+export default {
+    props: {
+        user: String,
+        reserveDate: Date,
+        showMiddle: {
+            type: Boolean,
+            default: false
+        },
+        roomName: String, // Optional if showMiddle
+        startDate: Date, // Optional if showMiddle
+        duration: String,
+        price: Number,
+        img: String,
+        paid: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        img_style: function(){
+            return {
+                "background-image": "url(" + (this.img ? this.img : 'https://i.9mobi.vn/cf/images/2015/03/nkk/nhung-hinh-anh-dep-19.jpg') + ")"
+            }
+        }
+    },
+    methods: {
+        convertDate: function(day) {
+            return moment(String(day)).format('DD/MM/YYYY');
+        },
+    }
+}
+</script>
+
+<style scoped>
+    .border {
+        border-radius: 10px 0px 10px 0px;
+    }
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+    .contain {
+        background-color: var(--theme_fore);
+        justify-content: space-around;
+        align-items: center;
+        color: var(--theme_black);
+    }
+    .cost {
+        color: var(--theme_jade);
+    }
+    .contain:hover {
+        background-color: var(--theme_gray);
+        color: var(--theme_white);
+    }
+    .image {
+        height: 74px;
+        width: 74px;
+        min-width: 74px;
+        border-radius: 40px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .pay {
+        width: 35px;
+        display: block;
+    }
+    .part {
+        height: 80px;
+        width: 200px;
+    }
+    .linespace {
+        justify-content: space-evenly;
+    }
+    .font {
+        font-size: 18px;
+    }
+    .bold {
+        font-weight: bold;
+    }
+</style>

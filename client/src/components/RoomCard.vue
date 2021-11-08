@@ -26,7 +26,7 @@ export default {
         floor: Number,
         seat: Number,
         address: String,
-        startdate: String
+        status: String
     },
     computed: {
         img_style: function(){
