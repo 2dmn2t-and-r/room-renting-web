@@ -1,4 +1,6 @@
 export { default as Home } from './Home';
+export { default as HomeManagement } from './HomeManagement';
+export { default as Authenticate } from './Authenticate';
 export { default as Room } from './Room';
 export { default as Reservation } from './Reservation';
 export { default as News } from './News';

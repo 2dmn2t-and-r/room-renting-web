@@ -1,6 +1,5 @@
 <template>
   <div class="room">
-    <h1>Page này của Đức không đc đụng vô !!!!</h1>
     <theme-input
       type="text"
       value="12"
@@ -31,15 +30,17 @@
   import ModalTemplate from '@/components/ModalTemplate.vue';
   import Custominput from '@/components/Custominput.vue';
   import ThemeInput from '@/components/ThemeInput.vue';
+  import HeaderBar from '@/components/HeaderBar.vue';
 
   export default {
-  name: 'Room',
-  components: {
-    ModalTemplate,
-    Custominput,
-    ThemeInput
+    name: 'Room',
+    components: {
+      ModalTemplate,
+      Custominput,
+      ThemeInput,
+      HeaderBar,
+    }
   }
-}
 </script>
 
 <style>

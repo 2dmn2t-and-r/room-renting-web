@@ -82,11 +82,6 @@
                 }
             }
         },
-        data() {
-            return {
-                child: 123,
-            }
-        }
     }
 </script>
 

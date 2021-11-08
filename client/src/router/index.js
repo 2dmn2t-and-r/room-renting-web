@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {
+  Authenticate,
   Home, 
+  HomeManagement, 
   News, 
   NewsDetail, 
   NewsDetailManagement, 
@@ -23,6 +25,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/management',
+    name: 'HomeManagemet',
+    component: HomeManagement,
+  },
+  {
+    path: '/auth',
+    name: 'Authenticate',
+    component: Authenticate,
   },
   {
     path: '/room',
@@ -54,7 +66,6 @@ const routes = [
     path: '/management/room',
     name: 'RoomManagement',
     component: RoomManagement,
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/management/room/:roomId',
