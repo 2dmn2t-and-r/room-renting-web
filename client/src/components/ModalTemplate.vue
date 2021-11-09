@@ -25,7 +25,7 @@
                     width: '140px',
                     border_radius: '15px'
                 }"></theme-button>
-                <theme-button theme-button v-bind="{
+                <theme-button v-bind="{
                     msg: buttonTitle ? ((step === 0) ? buttonTitle[0] || '' : buttonTitle[step - 1] || '' ) : 'OK',
                     background_color: 'var(--theme_jade)',
                     height: '40px',
@@ -89,7 +89,7 @@
 <style scoped>
     .modal {
         position: fixed;
-        z-index: 1;
+        z-index: 100;
         left: 0;
         top: 0;
         width: 100%;

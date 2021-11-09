@@ -2,7 +2,7 @@
     <div class="theme-input">
         <div class="label">{{label}}</div>
         <div class="input-container">
-            <input class="box" :style="input_style" :type="type" v-model="input_value">
+            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable">
             <div :style="button_style" class="button">
                 {{title}}
                 <md-icon :style="icon_style">
@@ -33,6 +33,10 @@ export default {
             default: false,
         },                      // Optional
         isInputBgWhite: {
+            type: Boolean,
+            default: false
+        },                      // Optional
+        disable: {
             type: Boolean,
             default: false
         }                       // Optional

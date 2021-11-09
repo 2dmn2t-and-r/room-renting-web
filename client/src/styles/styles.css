@@ -3,8 +3,8 @@
     --theme_jade: #37806b;
     --theme_black: #111111;
     --theme_gray: #646464;
-    --theme_fore: #f8f8f8;
-    --theme_white: #ffffff;
+    --theme_fore: #F0F0F0;
+    --theme_white: #FFFFFF;
 }
 
 ::-webkit-scrollbar {
@@ -248,5 +248,9 @@
 
 * {
     font-family: OpenSans;
-    overflow: none;
+    overflow: visible;
+}
+
+html {
+    overflow-y: overlay;
 }
