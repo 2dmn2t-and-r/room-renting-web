@@ -142,6 +142,7 @@
         overflow: overlay;
         height: calc(100% - 188px);
         margin-bottom: 20px;
+        width: 100%;
     }
 
     .modal-button-bar {

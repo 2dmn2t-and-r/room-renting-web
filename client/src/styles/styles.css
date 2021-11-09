@@ -248,5 +248,5 @@
 
 * {
     font-family: OpenSans;
-    overflow-y: overlay;
+    overflow: none;
 }

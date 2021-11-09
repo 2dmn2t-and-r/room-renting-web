@@ -1,15 +1,6 @@
 <template>
-    <div class="theme-input">
-        <div class="label">{{label}}</div>
-        <div class="input-container">
-            <input class="box" :style="input_style" :type="type" v-model="input_value">
-            <div :style="button_style" class="button">
-                {{title}}
-                <md-icon :style="icon_style">
-                    {{icon}}
-                </md-icon>
-            </div>
-        </div>
+    <div class="change-password">
+        
     </div>
 </template>
 <script>
@@ -48,8 +39,8 @@ export default {
         },
         input_style: function() {
             return {
-                "width": (this.buttonTitle === "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
-                "border-radius": (this.buttonTitle === "") ? "15px 0px 15px 0px" : "15px 0px 0px 0px",
+                "width": (this.buttonTitle == "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
+                "border-radius": "15px 0px 0px 0px",
                 "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)"
             };
         },
@@ -59,7 +50,7 @@ export default {
                 "border-radius": "0px 0px 15px 0px",
                 "background-color": palette[0],
                 "height": "40px",
-                "display": (this.buttonTitle === "") ? "none" : " flex",
+                "display": (this.buttonTitle == "") ? "none" : " flex",
                 "justify-content": "center",
                 "align-items": "center",
                 "color": palette[3],
@@ -84,27 +75,26 @@ export default {
 </script>
 <style scoped>
     .theme-input {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
+        width:100%
     }
 
     .label {
         color: #212121;
-        font-family: 'OpenSans';
+        font-family: 'Open Sans';
         font-weight: 300;
         font-size: 14px;
         line-height: 20px;
     }
 
-    .box {
+    .input {
         font-size: 16px;
+        /* background-color: var(--theme_fore); */
         border-radius: 15px 0px;
         font-weight: 600;
         height: 40px;
         border: none;
         outline: none;
-        padding: 0 8px;
+        padding-left: 8px;
     }
 
     .input:focus {

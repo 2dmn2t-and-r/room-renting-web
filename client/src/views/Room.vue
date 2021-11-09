@@ -7,12 +7,6 @@
       buttonWidth = "50px"
     >
     </theme-input>
-    <custominput
-      label="input.label"
-      type="text"
-      modelValue="12"
-    >
-    </custominput>
     
     <modal-template  v-bind="{
       title: 'Reservation',
