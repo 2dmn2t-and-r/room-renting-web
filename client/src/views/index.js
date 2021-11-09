@@ -13,3 +13,5 @@ export { default as NewsManagement } from './NewsManagement';
 export { default as NewsDetailManagement } from './NewsDetailManagement';
 export { default as ProfileManagement } from './ProfileManagement';
 export { default as UserProfileManagement } from './UserProfileManagement';
+export { default as Login } from './Login';
+export { default as Signup } from './Signup';
