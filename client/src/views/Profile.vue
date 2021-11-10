@@ -164,12 +164,17 @@
 
 <style scoped>
   .profile {
-    padding: 0 20px;
+    padding: 20px;
     background-color: var(--theme_white);
     min-height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .page-container {
+    width: 100%;
+    max-width: 1140px;
   }
 
   .change-form {
@@ -181,12 +186,6 @@
 
   .input-box {
     margin-bottom: 10px;
-  }
-
-  .page-container {
-    padding-top: 20px;
-    width: 100%;
-    max-width: 1140px;
   }
 
   .content {

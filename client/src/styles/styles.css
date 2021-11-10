@@ -13,16 +13,16 @@
 }
 
 ::-webkit-scrollbar-track {
-    background-color: var(--theme_fore); 
+    background-color: rgba(240, 240, 240, 0.2); 
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--theme_jade);
+    background-color: rgba(55, 128, 107, 0.2);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #47a087;
+    background-color: var(--theme_jade);
 }
 
 @import url("https://fonts.googleapis.com/css?family=Material+Icons");

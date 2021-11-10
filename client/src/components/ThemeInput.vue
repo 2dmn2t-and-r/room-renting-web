@@ -2,7 +2,7 @@
     <div class="theme-input">
         <div class="label">{{label}}</div>
         <div class="input-container">
-            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable">
+            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable"/>
             <div :style="button_style" class="button">
                 {{title}}
                 <md-icon :style="icon_style">
@@ -54,7 +54,8 @@ export default {
             return {
                 "width": (this.buttonTitle === "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
                 "border-radius": (this.buttonTitle === "") ? "15px 0px 15px 0px" : "15px 0px 0px 0px",
-                "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)"
+                "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)",
+                "box-shadow": this.isInputBgWhite ? "0 1px 2px 0px rgba(17, 17, 17, 0.1)" : "none"
             };
         },
         button_style: function() {
@@ -108,10 +109,10 @@ export default {
         height: 40px;
         border: none;
         outline: none;
-        padding: 0 8px;
+        padding: 0px 8px;
     }
 
-    .input:focus {
+    .box:focus {
         outline-width: 2px;
         outline-style: solid;
         outline-color: var(--theme_jade);
@@ -123,7 +124,7 @@ export default {
         align-items: center;
     }
 
-    .input:focus ~ .button {
+    .box:focus ~ .button {
         outline-width: 2px;
         outline-style: solid;
         outline-color: var(--theme_jade);

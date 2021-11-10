@@ -56,6 +56,9 @@ export default {
         height: 200px;
         width: 100%;
     }
+    .card_outer:hover {
+        cursor: pointer;
+    }
     .card_img {
         height: 182px;
         width: 218px;
