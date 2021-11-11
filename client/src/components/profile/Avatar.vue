@@ -4,7 +4,7 @@
             <div class="block-img">
                 <img class="img" v-bind:src="avt" alt="avt">
             </div>
-            <theme-icon-button class="edit-bt" icon="mode_edit" bgColor="var(--theme_jade)" color="var(--theme_white)"/>
+            <theme-icon-button class="edit-bt" :style="hide" icon="mode_edit" bgColor="var(--theme_jade)" color="var(--theme_white)"/>
         </div>
         <theme-button theme-button v-bind="{
             msg: username,
@@ -32,8 +32,19 @@ export default {
         avt: {
             type: String,
             default: "",
+        },
+        hideEdit: {
+            type: Boolean,
+            default: false,
         }
     },
+    computed: {
+        hide: function () {
+            return {
+                "display": this.hideEdit ? "none" : "inline"
+            }
+        }
+    }
 }
 </script>
 
