@@ -68,84 +68,11 @@
           </div>
         </div>
       </div>
-      <modal-template  v-bind="{
-        title: 'Reservation',
-        step: -1,
-        buttonTitle: ['Next', 'Next', 'OK']
-      }">
-        <div slot="1" class="change-form">
-          <theme-input
-            class="input-box"
-            label="User name:"
-            type="text"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="Email:"
-            type="text"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="Address:"
-            type="text"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="Birthday:"
-            type="date"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="Phone number:"
-            type="text"
-            value=""
-          >
-          </theme-input>
-        </div>
-      </modal-template>
-      <modal-template  v-bind="{
-        title: 'Reservation',
-        step: -1,
-        buttonTitle: ['Next', 'Next', 'OK']
-      }">
-        <div slot="1" class="change-form">
-          <theme-input
-            class="input-box"
-            label="Old password:"
-            type="password"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="New password:"
-            type="password"
-            value=""
-          >
-          </theme-input>
-          <theme-input
-            class="input-box"
-            label="Confirm new password:"
-            type="password"
-            value=""
-          >
-          </theme-input>
-        </div>
-      </modal-template>
     </div>
   </div>
 </template>
 
 <script>
-  import ModalTemplate from '@/components/ModalTemplate.vue';
   import ThemeInput from '@/components/ThemeInput.vue';
   import PageTitle from '../components/PageTitle.vue';
   import Avatar from '../components/profile/Avatar.vue';
@@ -154,7 +81,6 @@
   export default {
     name: 'Room',
     components: {
-      ModalTemplate,
       ThemeInput,
       PageTitle,
       Avatar,
@@ -176,13 +102,6 @@
   .page-container {
     width: 100%;
     max-width: 1140px;
-  }
-
-  .change-form {
-    width: 100%;
-    padding: 2px 0px 0px 0px;
-    max-width: 800px;
-    width: 100%;
   }
 
   .input-box {
