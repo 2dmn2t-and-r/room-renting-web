@@ -18,7 +18,7 @@ export default {
         button_style: function(){
             return {
                 "width": "100%",
-                "height": this.height ? this.height : '32px',
+                "height": this.height ? this.height : '45px',
                 "background-color": this.background_color ? this.background_color : "#caa892",
                 "color": this.color ? this.color : "#ffffff",
                 "border-radius": (this.border_radius ? this.border_radius : '15px') + " 0px",
