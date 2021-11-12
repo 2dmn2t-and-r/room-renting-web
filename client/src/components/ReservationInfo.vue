@@ -1,20 +1,26 @@
 <template>
     <div class="row border contain">
+        <div style="min-width: 10px"> </div>
         <div class="image" :style="img_style"></div>
+        <div style="min-width: 10px"> </div>
         <div class="col part linespace">
             <div class="font">By: <span class="bold">{{user}}</span></div>
             <div class="font">Date: <span class="bold">{{convertDate(reserveDate)}}</span></div>
         </div>
+        <div style="min-width: 10px"> </div>
         <div v-if="this.showMiddle" class="col part linespace">
             <div class="font">Room: <span class="bold">{{roomName}}</span></div>
             <div class="font">Start: <span class="bold">{{convertDate(startDate)}}</span></div>
         </div>
-        <div class="col part linespace">
+        <div style="min-width: 10px" v-if="this.showMiddle"> </div>
+        <div class="not_show col part linespace">
             <div class="font">Duration: <span class="bold">{{duration}}</span></div>
             <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
         </div>
+        <div style="min-width: 10px"> </div>
         <img v-if="this.paid" src="../assets/icon/paid.png" class="pay" alt="pay">
         <img v-else src="../assets/icon/unpaid.png" class="pay" alt="pay">
+        <div style="min-width: 10px"> </div>
     </div>
 </template>
 
@@ -103,5 +109,62 @@ export default {
     }
     .bold {
         font-weight: bold;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .part {
+            width: 33%;
+        }
+        .font {
+            font-size: 15px;
+        }
+        .image {
+            width: 60px;
+            height: 60px;
+            min-height: 60px;
+            min-width: 60px;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .part {
+            width: 33%;
+        }
+        .font {
+            font-size: 12px;
+        }
+        .image {
+            width: 50px;
+            height: 50px;
+            min-height: 50px;
+            min-width: 50px;
+        }
+        .not_show {
+            display: none;
+        }
+        .pay {
+            width: 30px;
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        .part {
+            width: 33%;
+        }
+        .font {
+            font-size: 10px;
+        }
+        .image {
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            min-width: 40px;
+        }
+        .not_show {
+            display: none;
+        }
+        .pay {
+            width: 25px;
+        }
     }
 </style>

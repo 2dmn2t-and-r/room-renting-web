@@ -76,7 +76,8 @@ export default {
     }
     .card_img {
         height: 182px;
-        width: 218px;
+        max-width: 218px;
+        width: 30%;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -100,10 +101,10 @@ export default {
         width: 18px;
     }
     .text_box {
-        flex-basis: 50%;
+        flex-basis: 35%;
     }
     .text_box2 {
-        flex-basis: 50%;
+        flex-basis: 65%;
     }
     @media only screen and (max-width: 768px) {
         .text_box {
@@ -111,6 +112,18 @@ export default {
         }
         .text_box2 {
             flex-basis: 65%;
+        }
+        .room_descript {
+            font-size: 16px;
+        }
+        .card_img {
+            max-width: 120px;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .room_descript {
+            font-size: 12px;
         }
     }
     .text_line {

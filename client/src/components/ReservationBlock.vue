@@ -2,33 +2,30 @@
     <div class="border_other box jade col">
         <div class="title_box title_font white bold">Reservation</div>
         <div class="border content col">
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
-            <reservation-info/>
-            <div class="divider_other"> </div>
+            <slot/>
         </div>
         <div class="date_box row date_box_row">
-            <input type="date">
+            <input type="date" v-model="dateStart">
+            <!-- <theme-input type="date"/> -->
             <div class="divider_other"> </div>
-            <input type="date">
+            <input type="date" v-model="dateEnd">
+            <!-- <theme-input type="date"/> -->
         </div>
     </div>
 </template>
 
 <script>
+import moment from 'moment'
 import ReservationInfo from './ReservationInfo.vue'
+import ThemeInput from './ThemeInput.vue'
 export default {
-  components: { ReservationInfo },
+    data() {
+        return {
+            dateStart: '1970-02-01',
+            dateEnd: moment(new Date()).format('YYYY-MM-DD')
+        }
+    },
+    components: { ReservationInfo, ThemeInput },
 }
 </script>
 
