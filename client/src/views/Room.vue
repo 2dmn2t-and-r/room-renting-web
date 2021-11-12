@@ -150,5 +150,11 @@
     display: block;
     
   }
+
+   @media only screen and (max-width: 768px) {
+        .main {
+          display: block;
+        }
+    }
 </style>
 

@@ -5,7 +5,10 @@
         <img class="logo-img" src="@/assets/logo/notext_white.png" width="120" height="120" >
         ROOM PRO
       </div>
-      <login-form :inputs="inputs" :check="rememberpw" class="form"></login-form>   
+      <div class="form-container">
+        <login-form :inputs="inputs" :check="agree" class="form"></login-form>
+      </div>
+         
     </div>
     
 </template>
@@ -19,6 +22,11 @@ export default {
       return {
      inputs: [
           {
+              label: "Username",
+              value: "",
+              type: 'text'
+          },
+          {
               label: "Email",
               value: "",
               type: 'email'
@@ -27,10 +35,21 @@ export default {
               label: 'Password',
               value: "",
               type: 'password'
+          },
+          {
+              label: 'Confirm password',
+              value: "",
+              type: 'password'
+          },
+          {
+              label: 'Birthday',
+              value: "",
+              type: 'date'
           }
+          
       ],
-      rememberpw: {
-          label: "Remember password",
+      agree: {
+          label: "I have agreed with the term of use of this site",
           value: false
       }
       }
@@ -51,6 +70,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding-top: 3%;
+  padding-bottom: 3%;
   font-family: Poppins;
   font-size: 48px;
   font-weight: 300;
@@ -60,11 +80,14 @@ export default {
   padding-right: 20px;
 }
 
+
+
 .form {
+ 
   width: 600px;
-  top: 40%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translateX(-50%);
   padding: 2%;
 }
 @media only screen and (max-width: 600px) {

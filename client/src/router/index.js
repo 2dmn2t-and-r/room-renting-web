@@ -15,7 +15,9 @@ import {
   Room, 
   RoomDetailManagement, 
   RoomManagement,
-  UserProfileManagement
+  UserProfileManagement,
+  Login,
+  Signup
 } from '../views'
 
 Vue.use(VueRouter)
@@ -25,6 +27,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: Signup,
   },
   {
     path: '/management',
