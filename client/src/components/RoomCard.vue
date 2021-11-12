@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-    .room_name {
+    /* .room_name {
         font-size: 22px;
     }
     .room_descript {
@@ -109,6 +109,92 @@ export default {
         }
         .text_box2 {
             flex-basis: 65%;
+        }
+    }
+    .text_line {
+        line-height: 1.8;
+    }
+    .break {
+        flex-basis: 100%;
+        height: 0;
+    } */
+    .room_name {
+        font-size: 22px;
+    }
+    .room_descript {
+        font-size: 18px;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .card_background {
+        color: var(--theme_black);
+        background-color: var(--theme_white);
+    }
+    .card_background:hover {
+        color: var(--theme_white);
+        background-color: var(--theme_brown);
+    }
+    .border {
+        border-radius: 20px 0px 20px 0px;
+    }
+    .card_padding {
+        padding: 9px;
+    }
+    .card_outer {
+        height: 200px;
+        width: 100%;
+    }
+    .card_img {
+        height: 182px;
+        max-width: 218px;
+        width: 30%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .card_inner {
+        display: flex;
+        flex-direction: row;
+    }
+    .two_cols {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+    .column {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        flex-grow: 1;
+    }
+    .divider {
+        width: 18px;
+    }
+    .text_box {
+        flex-basis: 35%;
+    }
+    .text_box2 {
+        flex-basis: 65%;
+    }
+    @media only screen and (max-width: 768px) {
+        .text_box {
+            flex-basis: 35%;
+        }
+        .text_box2 {
+            flex-basis: 65%;
+        }
+        .room_descript {
+            font-size: 16px;
+        }
+        .card_img {
+            max-width: 120px;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .room_descript {
+            font-size: 12px;
         }
     }
     .text_line {
