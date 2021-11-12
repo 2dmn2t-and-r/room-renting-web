@@ -88,7 +88,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translateX(-50%);
- 
+  padding: 2%;
 }
 @media only screen and (max-width: 600px) {
     .form {

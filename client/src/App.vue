@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <!-- <header-bar v-bind="{
+    <header-bar v-bind="{
       isAuth: true,
       isManager: false,
       avt: 'https://picsum.photos/200/300',
       route: $router.history.current.path
-    }"/> -->
+    }"/>
     <router-view/>
     <theme-footer/>
   </div>

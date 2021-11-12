@@ -44,7 +44,7 @@ export default {
     
     height: 100vh;
     background-color: #37806B;
-    padding: 3%;
+    
 }
 .logo {
   display: flex;
@@ -65,7 +65,7 @@ export default {
   top: 40%;
   left: 50%;
   transform: translate(-50%,-50%);
- 
+  padding: 2%;
 }
 @media only screen and (max-width: 600px) {
     .form {

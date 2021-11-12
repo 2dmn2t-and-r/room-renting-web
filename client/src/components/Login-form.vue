@@ -108,7 +108,7 @@ export default {
 .accept {
     width: 100%;
     display: flex;;
-    
+    padding-left: 2%;
 }
 .accept:checked {
     background-color: var(--theme_jade)
