@@ -20,7 +20,6 @@
             <theme-input :buttonTitle="'Sign up'" :buttonWidth="'100px'" :value="'Enter your email address'"/>
         </div>
     </div>
-    <div class="empty_end"></div>
     </div>
 </template>
 
@@ -37,8 +36,8 @@ export default {
 <style scoped>
 .bare_section {
     background-color: white;
-    height: 28.51vw;
-    max-height: 225px;
+    /* height: 28.51vw;
+    max-height: 225px; */
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -54,6 +53,7 @@ export default {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    padding: 60px 20px;
 }
 
 .text_title {
