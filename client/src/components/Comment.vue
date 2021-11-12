@@ -5,7 +5,17 @@
             <div class="row baseline">
                 <div class="large font bold">{{name}}</div>
                 <div class="grow"></div>
-                <div class="small font">{{convertDate(time)}}</div>
+                <div class="small font">{{((date) => {
+                    var year = date.getFullYear();
+
+                    var month = (1 + date.getMonth()).toString();
+                    month = month.length > 1 ? month : '0' + month;
+
+                    var day = date.getDate().toString();
+                    day = day.length > 1 ? day : '0' + day;
+                    
+                    return month + '/' + day + '/' + year;
+                })(time)}}</div>
                 <div v-if="this.deletable" class="medium font close bold" v-on:click="executeDelete">X</div>
             </div>
             <div class="medium font stretch">{{content}}</div>

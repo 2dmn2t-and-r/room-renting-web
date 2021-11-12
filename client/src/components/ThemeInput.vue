@@ -2,7 +2,7 @@
     <div class="theme-input">
         <div class="label">{{label}}</div>
         <div class="input-container">
-            <input class="input" :style="input_style" :type="type" v-model="input_value">
+            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable"/>
             <div :style="button_style" class="button">
                 {{title}}
                 <md-icon :style="icon_style">
@@ -35,6 +35,10 @@ export default {
         isInputBgWhite: {
             type: Boolean,
             default: false
+        },                      // Optional
+        disable: {
+            type: Boolean,
+            default: false
         }                       // Optional
     },
     computed: {
@@ -48,9 +52,10 @@ export default {
         },
         input_style: function() {
             return {
-                "width": (this.buttonTitle == "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
-                "border-radius": "15px 0px 0px 0px",
-                "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)"
+                "width": (this.buttonTitle === "") ? "100%" : "calc(100% - " + this.buttonWidth + ")",
+                "border-radius": (this.buttonTitle === "") ? "15px 0px 15px 0px" : "15px 0px 0px 0px",
+                "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)",
+                "box-shadow": this.isInputBgWhite ? "0 1px 2px 0px rgba(17, 17, 17, 0.1)" : "none"
             };
         },
         button_style: function() {
@@ -59,7 +64,7 @@ export default {
                 "border-radius": "0px 0px 15px 0px",
                 "background-color": palette[0],
                 "height": "40px",
-                "display": (this.buttonTitle == "") ? "none" : " flex",
+                "display": (this.buttonTitle === "") ? "none" : " flex",
                 "justify-content": "center",
                 "align-items": "center",
                 "color": palette[3],
@@ -84,29 +89,30 @@ export default {
 </script>
 <style scoped>
     .theme-input {
-        width:100%
+        width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .label {
         color: #212121;
-        font-family: 'Open Sans';
+        font-family: 'OpenSans';
         font-weight: 300;
         font-size: 14px;
         line-height: 20px;
     }
 
-    .input {
+    .box {
         font-size: 16px;
-        /* background-color: var(--theme_fore); */
         border-radius: 15px 0px;
         font-weight: 600;
         height: 40px;
         border: none;
         outline: none;
-        padding-left: 8px;
+        padding: 0px 8px;
     }
 
-    .input:focus {
+    .box:focus {
         outline-width: 2px;
         outline-style: solid;
         outline-color: var(--theme_jade);
@@ -118,7 +124,7 @@ export default {
         align-items: center;
     }
 
-    .input:focus ~ .button {
+    .box:focus ~ .button {
         outline-width: 2px;
         outline-style: solid;
         outline-color: var(--theme_jade);

@@ -17,11 +17,16 @@ export default {
     props: {
         icon: String,
         color: String,
+        bgColor: {
+            type: String,
+            default: "transparent",
+        }
     },
     computed: {
         button_style: function(){
             return {
                 "text-transform": "none",
+                "background-color": this.bgColor,
             }
         },
         icon_style: function(){

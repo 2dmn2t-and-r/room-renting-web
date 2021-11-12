@@ -7,16 +7,19 @@
       route: $router.history.current.path
     }"/> -->
     <router-view/>
+    <theme-footer/>
   </div>
 </template>
 
 <script>
   import HeaderBar from '@/components/HeaderBar.vue';
+  import ThemeFooter from './components/ThemeFooter.vue';
   
   export default {
     name: 'Room',
     components: {
       HeaderBar,
+      ThemeFooter,
     }
   }
 </script>

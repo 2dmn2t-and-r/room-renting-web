@@ -157,7 +157,6 @@
                 
                 var index = this.route.split('/')[1] === 'management' ? 2 : 1
                 var splitRoute = this.route.split('/')[index]
-                console.log(splitRoute)
                 return {
                     "color": splitRoute === "room" ? "var(--theme_jade)" : "var(--theme_black)",
                     "text-decoration": splitRoute === "room" ? "underline" : "none",
@@ -198,7 +197,7 @@
 
     .header-bar {
         position: fixed;
-        z-index: 1;
+        z-index: 99;
         left: 0;
         top: 0;
         width: 100vw;
@@ -276,7 +275,6 @@
     .avt-button:hover .list {
         display: flex;
     }
-    
 
     .avt {
         width: 52px;
@@ -287,11 +285,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .avt > img {
-        width: 100%;
-        object-fit: cover;
     }
 
     .username {

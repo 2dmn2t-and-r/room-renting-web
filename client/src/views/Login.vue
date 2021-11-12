@@ -44,7 +44,7 @@ export default {
     
     height: 100vh;
     background-color: #37806B;
-    
+    padding: 3%;
 }
 .logo {
   display: flex;

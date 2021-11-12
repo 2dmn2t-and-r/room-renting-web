@@ -50,7 +50,7 @@ export default {
     .chosen {
         width: 5px;
         border-radius: 2.5px;
-        height: 60px;
+        height: 100%;
         background-color: var(--theme_jade);
         position: absolute;
         top: 0px;

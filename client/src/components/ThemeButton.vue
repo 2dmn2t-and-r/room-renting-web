@@ -1,5 +1,7 @@
 <template>
-    <md-button :style="button_style" >{{ msg }}</md-button>
+    <div class="theme-button" :style="style">
+        <md-button :style="button_style">{{ msg }}</md-button>
+    </div>
 </template>
 
 <script>
@@ -17,15 +19,26 @@ export default {
     computed: {
         button_style: function(){
             return {
-                "width": this.width ? this.width : '97px',
+                "width": "100%",
                 "height": this.height ? this.height : '32px',
                 "background-color": this.background_color ? this.background_color : "#caa892",
                 "color": this.color ? this.color : "#ffffff",
                 "border-radius": (this.border_radius ? this.border_radius : '15px') + " 0px",
-                "text-transform": "none"
+                "text-transform": "none",
+                "margin": "0px",
+            }
+        },
+        style: function() {
+            return {
+                "width": this.width ? this.width : '97px',
+                "height": this.height ? this.height : '32px',
             }
         },
         
     }
 }
 </script>
+
+<style scoped>
+
+</style>
