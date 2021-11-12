@@ -15,10 +15,9 @@ export default {
 </script>
 <style scoped>
 .container {
-    position: absolute;
-    margin: 0 0 0 0;
-    width: 100%;
-    height: 100%;
+    
+    
+    height: 100vh;
     background-color: #37806B;
     
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="room">
     <div class="page-container">
-      <page-title title="Book Now"/>
+      <page-title title="Book Now" class="title"/>
 
       <div class="main">
         <div class="sidebar">
@@ -14,11 +14,15 @@
             floor: room.floor,
             seat: room.seat,
             address: room.address,
-            status: room.status
+            status: room.status 
         }"/>
         </div>
         
       </div>
+
+    </div>
+    <div class="timeline" >
+      <timeline ></timeline>
     </div>
     
     <modal-template  v-bind="{
@@ -37,16 +41,20 @@
   import ModalTemplate from '@/components/ModalTemplate.vue';
   import RoomCard from '@/components/RoomCard.vue';
   import PageTitle from '../components/PageTitle.vue'
-import SideBarRoomType from '../components/SideBarRoomType.vue';
+  import SideBarRoomType from '../components/SideBarRoomType.vue';
+  import Timeline from '@/components/Timeline.vue';
+
   export default {
     name: 'Room',
     components: {
       ModalTemplate,
       PageTitle,
       RoomCard,
-        SideBarRoomType
+        SideBarRoomType,
+        Timeline
     },
-    data () {
+    data (){
+        
       return {
         roomList: [
           {
@@ -90,12 +98,12 @@ import SideBarRoomType from '../components/SideBarRoomType.vue';
     padding: 20px;
     background-color: var(--theme_white);
     min-height: calc(100vh - 100px);
-    display: flex;
-    justify-content: center;
+    
   }
 
   .card-container {
     width: 100%;
+    flex-basis: 80%;
   }
 
   .sidebar {
@@ -105,8 +113,13 @@ import SideBarRoomType from '../components/SideBarRoomType.vue';
   .page-container {
     width: 100%;
     max-width: 1140px;
-    
+    margin: 0 auto;
 
+  }
+
+  .title {
+    margin: 0 auto;
+    text-align: center;
   }
 
   .main {
@@ -117,8 +130,8 @@ import SideBarRoomType from '../components/SideBarRoomType.vue';
     display: flex;
     flex-direction: row;
     justify-content: center;
-    
-    
+    flex-basis: 100%;
+    margin: 0 auto;
   }
 
   .margin-item {
@@ -130,5 +143,12 @@ import SideBarRoomType from '../components/SideBarRoomType.vue';
           display: block;
         }
     }
+  .timeline {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    display: block;
+    
+  }
 </style>
 
