@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <div class="icon-bt"></div>
                 <div class="modal-title">{{title}}</div>
-                <div class="icon-bt"><theme-icon-button icon="clear"/></div>
+                <div class="icon-bt"><theme-icon-button icon="clear" @click.native="onClose()"/></div>
             </div>
             <stepper v-bind:step="step"/>
             <div class="modal-content">
@@ -19,19 +19,25 @@
                 </div>
             </div>
             <div class="modal-button-bar">
-                <theme-button v-bind="{
-                    msg: 'Cancel',
-                    height: '40px',
-                    width: '140px',
-                    border_radius: '15px'
-                }"></theme-button>
-                <theme-button v-bind="{
-                    msg: buttonTitle ? ((step === 0) ? buttonTitle[0] || '' : buttonTitle[step - 1] || '' ) : 'OK',
-                    background_color: 'var(--theme_jade)',
-                    height: '40px',
-                    width: '140px',
-                    border_radius: '15px'
-                }"></theme-button>
+                <div class="bt">
+                    <theme-button v-bind="{
+                        msg: 'Cancel',
+                        height: '40px',
+                        width: '100%',
+                        border_radius: '15px'
+                    }"
+                    @click.native="onCancel()"/>
+                </div>
+                <div class="bt">
+                    <theme-button v-bind="{
+                        msg: buttonTitle ? ((step === 0) ? buttonTitle[0] || '' : buttonTitle[step - 1] || '' ) : 'OK',
+                        background_color: 'var(--theme_jade)',
+                        height: '40px',
+                        width: '100%',
+                        border_radius: '15px'
+                    }"
+                    @click.native="onNextStep()"/>
+                </div>
             </div>
         </div>
     </div>
@@ -82,6 +88,17 @@
                 }
             }
         },
+        methods: {
+            onClose() {
+                this.$emit('onClose');
+            },
+            onCancel() {
+                this.$emit('onCancel');
+            },
+            onNextStep() {
+                this.$emit('onNextStep');
+            }
+        },
     }
 </script>
 
@@ -98,15 +115,16 @@
         background-color: rgba(17,17,17, 0.4);
         justify-content: center;
         align-items: center;
+        min-width: 320px;
     }
 
     .modal-container {
         background-color: var(--theme_white);
-        width: 80%;
+        width: 96%;
         height: 80vh;
         max-width: 1080px;
         border-radius: 20px;
-        padding-top: 20px;
+        padding-top: 28px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -133,6 +151,7 @@
         font-size: 32px;
         line-height: 40px;
         font-weight: 600;
+        text-align: center;
     }
 
     .modal-content {
@@ -141,7 +160,7 @@
         padding: 0 60px;
         overflow: hidden;
         height: calc(100% - 188px);
-        margin-bottom: 20px;
+        margin-bottom: 40px;
         width: 100%;
         overflow: overlay;
     }
@@ -152,5 +171,33 @@
         width: 100%;
         padding: 0 60px;
         justify-content: space-between;
+    }
+
+    .bt {
+        width: 140px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .modal-content {
+            padding: 0 20px;
+        }
+
+        .modal-button-bar {
+            padding: 0 20px;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        .bt {
+            width: 120px;
+        }
+
+        .modal-header {
+            padding: 0 5px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+        }
     }
 </style>

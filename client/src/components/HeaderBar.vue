@@ -190,12 +190,8 @@
 </script>
 
 <style scoped>
-    .container {
-        width: 100vw;
-        height: 100px;
-    }
-
     .header-bar {
+        min-width: 320px;
         position: fixed;
         z-index: 99;
         left: 0;
@@ -207,6 +203,11 @@
         box-shadow: 0 1px 2px 0px rgba(17, 17, 17, 0.1);
         padding: 0 20px;
         justify-content: center;
+    }
+
+    .container {
+        width: 100vw;
+        height: 100px;
     }
 
     .content-container {

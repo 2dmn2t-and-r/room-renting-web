@@ -1,5 +1,5 @@
 <template>
-    <div class="card_outer card_padding border card_background card_inner">
+    <div class="card_outer card_padding border card_background card_inner" @click="$router.push($router.history.current.path + '/' + id.toString()).catch(()=>{});">
         <div class="card_img border" :style="img_style"></div>
         <div class="divider"></div>
         <div class="column">
@@ -16,7 +16,8 @@ export default {
         img: String,
         title: String,
         uploaddate: String,
-        modified: String
+        modified: String,
+        id: Number,
     },
     computed: {
         img_style: function(){

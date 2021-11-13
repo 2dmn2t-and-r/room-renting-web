@@ -1,7 +1,7 @@
 <template>
     <div class="page-title">
         <div class="icon-bt">
-            <theme-icon-button :style="iconButton" icon="arrow_back"/>
+            <theme-icon-button :style="iconButton" icon="arrow_back" @click.native="onBack()"/>
         </div>
         <div class="container">
             {{title}}
@@ -31,6 +31,11 @@ export default {
                 "display": this.isBack ? "inline": "none",
             }
         }
+    },
+    methods: {
+        onBack() {
+            this.$emit('onBack')
+        },
     }
 }
 </script>
@@ -67,5 +72,22 @@ export default {
         height: 40px;
         display: flex;
         justify-content: center;
+    }
+
+    @media only screen and (max-width: 768px) {
+        
+    }
+
+    @media only screen and (max-width: 480px) {
+        .page-title {
+            height: 40px;
+        }
+        .container {
+            font-size: 28px;
+            line-height: 28px;
+        }
+        .line {
+            width: 90px;
+        }
     }
 </style>

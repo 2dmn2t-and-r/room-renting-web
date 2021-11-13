@@ -4,6 +4,7 @@
       <page-title title="News"/>
       <div class="main">
         <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
+          id: news.id,
           img: news.img,
           title: news.title,
           uploaddate: dateString(news.uploadDate),
@@ -34,18 +35,21 @@
       return {
         newsList: [
           {
+            id: 1,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),
             modified: new Date(),
           },
           {
+            id: 2,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),
             modified: new Date(),
           },
           {
+            id: 3,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),

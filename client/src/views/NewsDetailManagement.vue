@@ -1,7 +1,7 @@
 <template>
   <div class="news-detail-management">
     <div class="page-container">
-      <page-title title="News" v-bind:isBack="true"/>
+      <page-title title="News" v-bind:isBack="true" @onBack="$router.go(-1)"/>
       <div class="main">
         <div class="image-container">
           <div class="image-box">
@@ -19,47 +19,59 @@
               height: '40px',
               width: '45%',
               border_radius: '15px'
-            }"></theme-button>
+            }"
+            @click.native="setCommentsModalStep(0)"></theme-button>
             <theme-button v-bind="{
                 msg: 'Edit',
                 background_color: 'var(--theme_jade)',
                 height: '40px',
                 width: '45%',
                 border_radius: '15px'
-              }"></theme-button>
+              }"
+              @click.native="setEditModalStep(0)"
+            >
+            </theme-button>
           </div>
         </div>
         <div class="content-box">
-            <div class="news-title">Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.</div>
-            <div class="date">Modified: <span class="bold">20/10/2021</span></div>
-            <div class="news-content">
-              {{`
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-              `}}
-            </div>
-            <div class="bot-bt-container">
-              <theme-button v-bind="{
-                msg: 'Comments',
-                height: '40px',
-                width: '100%',
-                border_radius: '15px'
-              }"></theme-button>
-              <theme-button v-bind="{
-                msg: 'Edit',
-                background_color: 'var(--theme_jade)',
-                height: '40px',
-                width: '100%',
-                border_radius: '15px'
-              }"></theme-button>
-            </div>
+          <div class="news-title">Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.</div>
+          <div class="date">Modified: <span class="bold">20/10/2021</span></div>
+          <div class="news-content">
+            {{`
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
+            `}}
+          </div>
+          <div class="bot-bt-container">
+            <theme-button v-bind="{
+              msg: 'Comments',
+              height: '40px',
+              width: '100%',
+              border_radius: '15px'
+            }"
+            @click.native="setCommentsModalStep(0)"
+            ></theme-button>
+            <theme-button v-bind="{
+              msg: 'Edit',
+              background_color: 'var(--theme_jade)',
+              height: '40px',
+              width: '100%',
+              border_radius: '15px'
+            }"
+            @click.native="setEditModalStep(0)"
+            ></theme-button>
+          </div>
         </div>
       </div>
       <modal-template  v-bind="{
         title: 'Comments',
-        step: -1,
+        step: commentsModalStep,
         buttonTitle: ['Send']
-      }">
+      }"
+      @onClose="setCommentsModalStep(-1)"
+      @onCancel="setCommentsModalStep(commentsModalStep - 1)"
+      @onNextStep="setCommentsModalStep(-1)"
+      >
         <div slot="1" class="slot">
           <comment-box v-bind="{
             comments: comments
@@ -69,9 +81,13 @@
       </modal-template>
       <modal-template  v-bind="{
         title: 'News',
-        step: -1,
-        buttonTitle: ['Create']
-      }">
+        step: editModalStep,
+        buttonTitle: ['Edit']
+      }"
+      @onClose="setEditModalStep(-1)"
+      @onCancel="setEditModalStep(editModalStep - 1)"
+      @onNextStep="setEditModalStep(-1)"
+      >
         <div slot="1" class="slot">
           <create-edit-news
             v-bind="{
@@ -126,11 +142,19 @@
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
           }
         ],
+        commentsModalStep: -1,
+        editModalStep: -1,
       }
     },
     methods: {
       setCheck(state) {
-        this.check = state
+        this.check = state;
+      },
+      setCommentsModalStep(val) {
+        this.commentsModalStep = val;
+      },
+      setEditModalStep(val) {
+        this.editModalStep = val;
       },
       dateString(date) {
         if (date) {

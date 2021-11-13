@@ -254,3 +254,8 @@
 html {
     overflow-y: overlay;
 }
+
+body {
+    min-width: 320px;
+    width: 100vw;
+}

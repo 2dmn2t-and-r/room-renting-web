@@ -60,27 +60,37 @@
           >
           </theme-input>
           <div class="bt-bar">
-            <theme-button v-bind="{
+            <div class="button">
+              <theme-button v-bind="{
                 msg: 'Change Password',
                 height: '40px',
-                width: '140px',
+                width: '100%',
                 border_radius: '15px'
-            }"></theme-button>
-            <theme-button v-bind="{
+              }"
+              @click.native="setChangepassModalStep(0)"/>
+            </div>
+            <div class="button">
+              <theme-button v-bind="{
                 msg: 'Edit Profile',
                 background_color: 'var(--theme_jade)',
                 height: '40px',
-                width: '140px',
+                width: '100%',
                 border_radius: '15px'
-            }"></theme-button>
+              }"
+              @click.native="setProfileModalStep(0)"/>
+            </div>
           </div>
         </div>
       </div>
       <modal-template  v-bind="{
-        title: 'Reservation',
-        step: -1,
-        buttonTitle: ['Next', 'Next', 'OK']
-      }">
+        title: 'Edit Profile',
+        step: profileModalStep,
+        buttonTitle: ['Edit']
+      }"
+      @onClose="setProfileModalStep(-1)"
+      @onCancel="setProfileModalStep(profileModalStep - 1)"
+      @onNextStep="setProfileModalStep(-1)"
+      >
         <div slot="1" class="change-form">
           <theme-input
             class="input-box"
@@ -120,10 +130,14 @@
         </div>
       </modal-template>
       <modal-template  v-bind="{
-        title: 'Reservation',
-        step: -1,
-        buttonTitle: ['Next', 'Next', 'OK']
-      }">
+        title: 'Change Password',
+        step: changepassModalStep,
+        buttonTitle: ['Change']
+      }"
+      @onClose="setChangepassModalStep(-1)"
+      @onCancel="setChangepassModalStep(changepassModalStep - 1)"
+      @onNextStep="setChangepassModalStep(-1)"
+      >
         <div slot="1" class="change-form">
           <theme-input
             class="input-box"
@@ -167,6 +181,20 @@
       PageTitle,
       Avatar,
       ThemeButton,
+    },
+    data() {
+      return {
+        profileModalStep: -1,
+        changepassModalStep: -1,
+      }
+    },
+    methods: {
+      setProfileModalStep(val) {
+        this.profileModalStep = val;
+      },
+      setChangepassModalStep(val) {
+        this.changepassModalStep = val;
+      }
     }
   }
 </script>
@@ -221,6 +249,11 @@
     margin-top: 60px;
   }
 
+  
+  .button {
+    width: 140px;
+  }
+
   @media only screen and (max-width: 768px) {
     .content {
       flex-direction: column;
@@ -239,6 +272,13 @@
   }
 
   @media only screen and (max-width: 480px) {
-      
+    .bt-bar {
+      flex-direction: column;
+      height: 90px;
+      justify-content: space-between;
+    }
+    .button {
+      width: 100%;
+    }
   }
 </style>

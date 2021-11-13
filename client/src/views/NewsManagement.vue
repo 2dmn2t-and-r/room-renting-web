@@ -32,12 +32,14 @@
               height: '40px',
               width: '100%',
               border_radius: '15px'
-            }"></theme-button>
+            }"
+            @click.native="setModalStep(0)"></theme-button>
           </div>
         </div>
         <div class="list-box">
           <div class="list">
             <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
+              id: news.id,
               img: news.img,
               title: news.title,
               uploaddate: dateString(news.uploadDate),
@@ -49,8 +51,14 @@
       
       <modal-template  v-bind="{
         title: 'News',
-        step: -1,
+        step: modalStep,
         buttonTitle: ['Create']
+      }"
+      @onClose="setModalStep(-1)"
+      @onCancel="setModalStep(modalStep - 1)"
+      @onNextStep="function () {
+        setModalStep(-1)
+        $router.push($router.history.current.path + '/' + '4').catch(()=>{});
       }">
         <div slot="1" class="slot">
           <create-edit-news
@@ -90,29 +98,36 @@
         check: false,
         newsList: [
           {
+            id: 1,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),
             modified: new Date(),
           },
           {
+            id: 2,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),
             modified: new Date(),
           },
           {
+            id: 3,
             title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
             img: "https://picsum.photos/200/300",
             uploadDate: new Date(),
             modified: new Date(),
           }
         ],
+        modalStep: -1,
       }
     },
     methods: {
       setCheck(state) {
         this.check = state
+      },
+      setModalStep(val) {
+        this.modalStep = val;
       },
       dateString(date) {
         if (date) {

@@ -52,19 +52,24 @@
           >
           </theme-input>
           <div class="bt-bar">
-            <theme-button v-bind="{
+            <div class="button">
+              <theme-button v-bind="{
                 msg: 'Back',
                 height: '40px',
-                width: '140px',
+                width: '100%',
                 border_radius: '15px'
-            }"></theme-button>
-            <theme-button v-bind="{
+              }"
+              @click.native="$router.go(-1)"/>
+            </div>
+            <div class="button">
+              <theme-button v-bind="{
                 msg: 'Set Manager',
                 background_color: 'var(--theme_jade)',
                 height: '40px',
-                width: '140px',
+                width: '100%',
                 border_radius: '15px'
-            }"></theme-button>
+              }"/>
+            </div>
           </div>
         </div>
       </div>
@@ -209,6 +214,10 @@
     margin-top: 60px;
   }
 
+  .button {
+    width: 140px;
+  }
+
   @media only screen and (max-width: 768px) {
     .content {
       flex-direction: column;
@@ -227,6 +236,13 @@
   }
 
   @media only screen and (max-width: 480px) {
-      
+    .bt-bar {
+      flex-direction: column;
+      height: 90px;
+      justify-content: space-between;
+    }
+    .button {
+      width: 100%;
+    }
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="news-detail">
     <div class="page-container">
-      <page-title title="News" v-bind:isBack="true"/>
+      <page-title title="News" v-bind:isBack="true" @onBack="$router.go(-1)"/>
       <div class="main">
         <div class="image-container">
           <div class="image-box">
@@ -20,7 +20,8 @@
               height: '40px',
               width: '100%',
               border_radius: '15px'
-            }"></theme-button>
+            }"
+            @click="setModalStep(0)"></theme-button>
           </div>
         </div>
         <div class="content-box">
@@ -39,14 +40,26 @@
                 height: '40px',
                 width: '100%',
                 border_radius: '15px'
-              }"></theme-button>
+              }"
+              @click="setModalStep(0)"/>
             </div>
         </div>
       </div>
       <modal-template  v-bind="{
         title: 'Comments',
-        step: -1,
-        buttonTitle: ['Next']
+        step: modalStep,
+        buttonTitle: ['Send'],
+      }"
+      @onClose="setModalStep(-1)"
+      @onCancel="setModalStep(modalStep - 1)"
+      @onNextStep="function () {
+        if (modalStep != 1) {
+          //TODO
+          setModalStep(-1)
+        }
+        else {
+          setModalStep(-1)
+        }
       }">
         <div slot="1" class="slot">
           <comment-box v-bind="{
@@ -64,7 +77,7 @@
   import ModalTemplate from '../components/ModalTemplate.vue'
   import PageTitle from '../components/PageTitle.vue'
   import PictureFrame from '../components/PictureFrame.vue'
-import ThemeButton from '../components/ThemeButton.vue'
+  import ThemeButton from '../components/ThemeButton.vue'
 
   export default {
     name: 'Room',
@@ -97,8 +110,14 @@ import ThemeButton from '../components/ThemeButton.vue'
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
           }
         ],
+        modalStep: -1,
       }
-    }
+    },
+    methods: {
+      setModalStep(val) {
+        this.modalStep = val;
+      },
+    },
   }
 </script>
 
