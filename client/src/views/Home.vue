@@ -1,18 +1,41 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <section-1/>
+    <section-2/>
+    <section-3/>
+    <section-4/>
+    <!-- <modal-template v-bind="{
+      title: 'Room Information',
+      step: 0,
+      buttonTitle: ['Save']
+    }">
+      <room-information slot="1"/>
+    </modal-template> -->
+  </div> 
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Section1 from '@/components/home/Section1.vue'
+import Section4 from '../components/home/Section4.vue'
+import Section2 from '../components/home/Section2.vue'
+import Section3 from '../components/home/Section3.vue'
+import ModalTemplate from '../components/ModalTemplate.vue'
+import CustomerReservation from '../components/modals/reservation/CustomerReservation.vue'
+import RoomInformation from '../components/modals/room/RoomInformation.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    Section1,
+    Section4,
+    Section2,
+    Section3,
+    ModalTemplate,
+    CustomerReservation,
+    RoomInformation
   }
 }
 </script>
+<style scoped>
+
+</style>
