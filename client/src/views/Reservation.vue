@@ -17,22 +17,34 @@
               address: item.address,
               startdate: dateString(item.startdate),
               duration: item.duration
-            }"
+            }" @click.native="changeModal()"
             />
             <div style="min-height: 18px;"> </div>
           </div>
         </div>
       </div>
     </div>
+    <modal-template v-bind="{
+      title: 'Reservation',
+      step: showModal,
+      buttonTitle: ['Remove']
+    }" @onClose="changeModal()" @onCancel="changeModal()" @onNextStep="clickRemove()">
+      <customer-reservation slot="1" v-bind="{
+        title: 'Hall 1',
+        status: 'Unpaid'
+      }"/>
+    </modal-template>
   </div>
 </template>
 
 <script>
+import CustomerReservation from '../components/modals/reservation/CustomerReservation.vue'
+import ModalTemplate from '../components/ModalTemplate.vue'
 import PageTitle from '../components/PageTitle.vue'
 import ReservationCard from '../components/ReservationCard.vue'
 import SideBarReserveTime from '../components/SideBarReserveTime.vue'
 export default {
-  components: { PageTitle, SideBarReserveTime, ReservationCard },
+  components: { PageTitle, SideBarReserveTime, ReservationCard, ModalTemplate, CustomerReservation },
   data() {
     return {
       reserveList: [
@@ -63,7 +75,8 @@ export default {
           startdate: new Date(),
           duration: '4 hours'
         }
-      ]
+      ],
+      showModal: -1
     }
   },
   methods: {
@@ -79,6 +92,12 @@ export default {
         
         return month + '/' + day + '/' + year;
       }
+    },
+    changeModal: function() {
+      this.showModal = -1 - this.showModal;      
+    },
+    clickRemove: function() {
+      this.showModal = -1 - this.showModal;
     }
   }
 }

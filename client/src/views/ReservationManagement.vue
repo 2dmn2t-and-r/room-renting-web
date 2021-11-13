@@ -14,20 +14,32 @@
             price: item.price,
             img: item.img,
             paid: item.paid
-          }"/>
+          }" @click.native="changeModal()"/>
           <div class="divider_other"> </div>
         </div>
       </reservation-block>   
     </div>
+    <modal-template v-bind="{
+      title: 'Reservation',
+      step: showModal,
+      buttonTitle: ['Remove']
+    }" @onClose="changeModal()" @onCancel="changeModal()" @onNextStep="clickRemove()">
+      <customer-reservation slot="1" v-bind="{
+        title: 'Hall 1',
+        status: 'Unpaid'
+      }"/>
+    </modal-template>
   </div>
 </template>
 
 <script>
+import CustomerReservation from '../components/modals/reservation/CustomerReservation.vue';
+import ModalTemplate from '../components/ModalTemplate.vue';
 import PageTitle from '../components/PageTitle.vue'
 import ReservationBlock from '../components/ReservationBlock.vue';
 import ReservationInfo from '../components/ReservationInfo.vue';
 export default {
-  components: { PageTitle, ReservationBlock, ReservationInfo },
+  components: { PageTitle, ReservationBlock, ReservationInfo, ModalTemplate, CustomerReservation },
   data() {
     return {
       info_list: Array.from({length: 10}, (_, index) => {
@@ -42,7 +54,8 @@ export default {
           img: 'https://i.9mobi.vn/cf/images/2015/03/nkk/nhung-hinh-anh-dep-19.jpg',
           paid: false
         };
-      })
+      }),
+      showModal: -1
     }
   },
   methods: {
@@ -58,6 +71,12 @@ export default {
         
         return month + '/' + day + '/' + year;
       }
+    },
+    changeModal: function() {
+      this.showModal = -1 - this.showModal;      
+    },
+    clickRemove: function() {
+      this.showModal = -1 - this.showModal;
     }
   }
 }
