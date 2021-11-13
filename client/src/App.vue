@@ -7,7 +7,7 @@
       route: $router.history.current.path
     }"/>
     <router-view/>
-    <theme-footer/>
+    <theme-footer v-bind:route="$router.history.current.path"/>
   </div>
 </template>
 

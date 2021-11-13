@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div>Page này của Trung</div>
+    <!-- <div>Page này của Trung</div>
     <theme-button msg="Button"/>
     <section-1/>
     <theme-footer/>
@@ -44,8 +44,12 @@
       <reservation-block/>
       <information-block/>
     </div>
+    <section-4/> -->
+    <section-1/>
+    <section-2/>
+    <section-3/>
     <section-4/>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -61,6 +65,8 @@ import ReservationInfo from '../components/ReservationInfo.vue'
 import ReservationBlock from '../components/ReservationBlock.vue'
 import InformationBlock from '../components/InformationBlock.vue'
 import Section4 from '../components/home/Section4.vue'
+import Section2 from '../components/home/Section2.vue'
+import Section3 from '../components/home/Section3.vue'
 
 export default {
   name: 'Home',
@@ -75,7 +81,9 @@ export default {
     ReservationInfo,
     ReservationBlock,
     InformationBlock,
-    Section4
+    Section4,
+    Section2,
+    Section3
   }
 }
 </script>

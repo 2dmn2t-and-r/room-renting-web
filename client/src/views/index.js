@@ -1,6 +1,5 @@
 export { default as Home } from './Home';
 export { default as HomeManagement } from './HomeManagement';
-export { default as Authenticate } from './Authenticate';
 export { default as Room } from './Room';
 export { default as Reservation } from './Reservation';
 export { default as News } from './News';
@@ -13,3 +12,5 @@ export { default as NewsManagement } from './NewsManagement';
 export { default as NewsDetailManagement } from './NewsDetailManagement';
 export { default as ProfileManagement } from './ProfileManagement';
 export { default as UserProfileManagement } from './UserProfileManagement';
+export { default as Signin } from './Signin';
+export { default as Signup } from './Signup';

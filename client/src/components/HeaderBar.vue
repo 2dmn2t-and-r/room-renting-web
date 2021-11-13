@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container" :style="display">
         <div class="header-bar" :style="unauth">
             <div class="content-container">
-                <div class="logo">
+                <div class="logo" @click="$router.push('/').catch(()=>{})">
                     <img class="logo-img" src="../assets/logo/logo.png" alt="logo" width="60" height="60">
                     ROOM PRO
                 </div>
@@ -25,9 +25,9 @@
                         <div class="divider"></div>
                         <div class="item" v-on:click="routeTo('/news')">News</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/autheticate')">Sign In</div>
+                        <div class="item" v-on:click="routeTo('/auth/signup')">Sign In</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/autheticate')">Sign Up</div>
+                        <div class="item" v-on:click="routeTo('/auth/signin')">Sign Up</div>
                     </div>
                 </div>
                 <div class="buttons">
@@ -36,20 +36,22 @@
                         height: '30px',
                         width: '100px',
                         border_radius: '15px'
-                    }"></theme-button>
+                    }"
+                    @click.native="$router.push('/auth/signup').catch(()=>{})"/>
                     <theme-button v-bind="{
                         msg: 'Sign In',
                         background_color: 'var(--theme_jade)',
                         height: '30px',
                         width: '100px',
                         border_radius: '15px'
-                    }"></theme-button>
+                    }"
+                    @click.native="$router.push('/auth/signin').catch(()=>{})"/>
                 </div>
             </div>
         </div>
         <div class="header-bar" :style="auth">
             <div class="content-container">
-                <div class="logo">
+                <div class="logo" @click="$router.push('/').catch(()=>{})">
                     <img class="logo-img" src="../assets/logo/logo.png" alt="logo" width="60" height="60">
                     ROOM PRO
                 </div>
@@ -140,6 +142,11 @@
                     "color": this.isManager ? "var(--theme_jade)" : "var(--theme_white)"
                 }
             },
+            display: function() {
+                return {
+                    "display": this.route.split('/')[1] === 'auth' ? "none" : "flex"
+                }
+            },
             avt_style: function(){
                 return {
                     "width": "100%",
@@ -147,14 +154,13 @@
                     "display": this.avt === "" ? "none" : "inline",
                 }
             },
-            home: function(){
+            home: function() {
                 return {
                     "color": this.route === "/" || this.route === "/management" ? "var(--theme_jade)" : "var(--theme_black)",
                     "text-decoration": this.route === "/" || this.route === "/management" ? "underline" : "none",
                 }
             },
             room: function(){
-                
                 var index = this.route.split('/')[1] === 'management' ? 2 : 1
                 var splitRoute = this.route.split('/')[index]
                 return {
@@ -226,6 +232,10 @@
         font-size: 24px;
         font-weight: 300;
         width: 200px;
+    }
+
+    .logo:hover {
+        cursor: pointer;
     }
 
     .logo-img {

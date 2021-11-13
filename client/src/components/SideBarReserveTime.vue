@@ -4,21 +4,28 @@
         <div class="row">
             <div class="date_text">From:</div>
             <input type="date">
+            <!-- <div>
+                <theme-input type="date"/>
+            </div> -->
         </div>
         <div class="divider"></div>
         <div class="row">
             <div class="date_text">To:</div>
             <input type="date">
+            <!-- <div>
+                <theme-input type="date"/>
+            </div> -->
         </div>
         <div class="divider"></div>
-        <theme-button class="text_button" v-bind:msg="'OK'" v-bind:background_color="'var(--theme_jade)'" v-bind:width="'96%'" v-bind:height="'40px'"/>
+        <theme-button class="text_button" v-bind:msg="'OK'" v-bind:background_color="'var(--theme_jade)'" v-bind:width="'100%'" v-bind:height="'40px'"/>
     </div>
 </template>
 
 <script>
 import ThemeButton from './ThemeButton.vue'
+import ThemeInput from './ThemeInput.vue'
 export default {
-  components: { ThemeButton },
+  components: { ThemeButton, ThemeInput },
 }
 </script>
 
@@ -46,6 +53,7 @@ export default {
         line-height: 2.5;
         color: var(--theme_gray);
         width: 55px;
+        min-width: 55px;
     }
     input {
         display: block;
@@ -63,7 +71,9 @@ export default {
     }
     .divider {
         height: 10px;
+        min-height: 10px;
         width: 10px;
+        min-width: 10px;
     }
     @media only screen and (max-width: 768px) {
         .outer {

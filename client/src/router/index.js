@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {
-  Authenticate,
   Home, 
   HomeManagement, 
   News, 
@@ -15,7 +14,9 @@ import {
   Room, 
   RoomDetailManagement, 
   RoomManagement,
-  UserProfileManagement
+  UserProfileManagement,
+  Signin,
+  Signup
 } from '../views'
 
 Vue.use(VueRouter)
@@ -27,20 +28,24 @@ const routes = [
     component: Home,
   },
   {
+    path: '/auth/signin',
+    name: 'SignIn',
+    component: Signin,
+  },
+  {
+    path: '/auth/signup',
+    name: 'SignUp',
+    component: Signup,
+  },
+  {
     path: '/management',
     name: 'HomeManagemet',
     component: HomeManagement,
   },
   {
-    path: '/auth',
-    name: 'Authenticate',
-    component: Authenticate,
-  },
-  {
     path: '/room',
     name: 'Room',
     component: Room,
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/reservation',

@@ -1,5 +1,5 @@
 <template>
-    <div class="bare_footer">
+    <div class="bare_footer" :style="display">
         <div class="inner_footer" >
             <div style="width: 1%"></div>
             <div class="logo"></div>
@@ -34,11 +34,24 @@
 
 <script>
 export default {
+    props: {
+        route: {
+            type: String,
+            default: "",
+        }
+    },
     methods: {
       openLink: function (link) {   
           window.open(link, "_blank");    
       }
-    }
+    },
+    computed: {
+        display: function() {
+            return {
+                "display": this.route.split('/')[1] === 'auth' ? "none" : "flex"
+            }
+        },
+    },
 }
 </script>
 

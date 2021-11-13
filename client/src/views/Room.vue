@@ -1,12 +1,29 @@
 <template>
   <div class="room">
-    <theme-input
-      type="text"
-      value="12"
-      buttonTitle="clear"
-      buttonWidth = "50px"
-    >
-    </theme-input>
+    <div class="page-container">
+      <page-title title="Book Now" class="title"/>
+
+      <div class="main">
+        <div class="sidebar">
+          <side-bar-room-type :types='type'></side-bar-room-type>
+        </div>
+        <div class="card-container">
+          <room-card class="margin-item" v-for="(room, index) in roomList" :key="index" v-bind="{
+            img: room.img,
+            name: room.name,
+            floor: room.floor,
+            seat: room.seat,
+            address: room.address,
+            status: room.status 
+        }"/>
+        </div>
+        
+      </div>
+
+    </div>
+    <div class="timeline" >
+      <timeline ></timeline>
+    </div>
     
     <modal-template  v-bind="{
       title: 'Reservation',
@@ -22,25 +39,122 @@
 
 <script>
   import ModalTemplate from '@/components/ModalTemplate.vue';
-  import Custominput from '@/components/Custominput.vue';
-  import ThemeInput from '@/components/ThemeInput.vue';
-  import HeaderBar from '@/components/HeaderBar.vue';
+  import RoomCard from '@/components/RoomCard.vue';
+  import PageTitle from '../components/PageTitle.vue'
+  import SideBarRoomType from '../components/SideBarRoomType.vue';
+  import Timeline from '@/components/Timeline.vue';
 
   export default {
     name: 'Room',
     components: {
       ModalTemplate,
-      Custominput,
-      ThemeInput,
-      HeaderBar,
+      PageTitle,
+      RoomCard,
+        SideBarRoomType,
+        Timeline
+    },
+    data (){
+        
+      return {
+        roomList: [
+          {
+            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
+            name: 'Hall 1',
+            floor: 3,
+            seat: 80,
+            address: '1 Vo Van Ngan, Thu Duc City',
+            status: 'Available'
+          },
+          {
+            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
+            name: 'Hall 1',
+            floor: 3,
+            seat: 80,
+            address: '1 Vo Van Ngan, Thu Duc City',
+            status: 'Available'
+          },
+          {
+            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
+            name: 'Hall 1',
+            floor: 3,
+            seat: 80,
+            address: '1 Vo Van Ngan, Thu Duc City',
+            status: 'Unavailable'
+          }
+
+        ],
+        type: [
+          'Hall',
+          'Meeting room',
+          'Stage'
+        ]
+      }
     }
   }
 </script>
 
 <style>
   .room {
+    padding: 20px;
     background-color: var(--theme_white);
-    height: 1000px;
+    min-height: calc(100vh - 100px);
+    
   }
+
+  .card-container {
+    width: 100%;
+    flex-basis: 80%;
+  }
+
+  .sidebar {
+    flex-basis: 20%;
+  }
+
+  .page-container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+
+  }
+
+  .title {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .main {
+    width: 100%;
+    
+    padding: 18px 18px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-basis: 100%;
+    margin: 0 auto;
+  }
+
+  .margin-item {
+    margin-bottom: 18px;
+  }
+
+   @media only screen and (max-width: 768px) {
+        .main {
+          display: block;
+        }
+    }
+  .timeline {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    display: block;
+    
+  }
+
+   @media only screen and (max-width: 768px) {
+        .main {
+          display: block;
+        }
+    }
 </style>
 
