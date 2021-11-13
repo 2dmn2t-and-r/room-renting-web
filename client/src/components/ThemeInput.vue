@@ -19,7 +19,7 @@ export default {
     props: {
         type: String,
         label: String,          // Optional
-        value: String,          // Optional
+        value: String | Number,          // Optional
         buttonTitle: {
             type: String,
             default: "",

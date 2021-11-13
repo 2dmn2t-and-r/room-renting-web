@@ -140,5 +140,16 @@ export default {
         .full {
             flex-direction: column;
         }
+        .image-box {
+            height: 60vw;
+        }
+    }
+    @media only screen and (max-width: 450px) {
+        .half_col {
+            width: 100%;
+        }
+        .row {
+            flex-wrap: wrap;
+        }
     }
 </style>
