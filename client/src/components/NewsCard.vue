@@ -106,4 +106,20 @@ export default {
         flex-basis: 100%;
         height: 0;
     }
+    @media only screen and (max-width: 600px) {
+        .room_name {
+            font-size: 18px;
+        }
+        .room_descript {
+            font-size: 14px;
+        }
+    }
+    @media only screen and (max-width: 400px) {
+        .room_name {
+            font-size: 14px;
+        }
+        .room_descript {
+            font-size: 12px;
+        }
+    }
 </style>
