@@ -9,11 +9,11 @@
         <div class="inner col">
         <span v-if="!this.tagComment">
             <div class="font large bold stretch">Title</div>
-            <div class="row font medium">
+            <div class="row_k font medium">
                 <div class="half_col">Floor: <span class="bold">{{floor}}</span></div>
                 <div class="half_col">Status: <span class="bold" :style="status_style">{{status}}</span></div>
             </div>
-            <div class="row font medium">
+            <div class="row_k font medium">
                 <div class="half_col">Seat: <span class="bold">{{seat}}</span></div>
                 <div class="half_col">Type: <span class="bold">{{type}}</span></div>
             </div>
@@ -108,6 +108,10 @@ Comment scoped>
         display: flex;
         flex-direction: row;
     }
+    .row_k {
+        display: flex;
+        flex-direction: row;
+    }
     .baseline {
         align-items: baseline;
     }
@@ -180,5 +184,14 @@ Comment scoped>
     .divider {
         width: 20px;
         height: 20px;
+    }
+    @media only screen and (max-width: 500px) {
+        .row_k {
+            display: flex;
+            flex-direction: column;
+        }
+        .half_col {
+            flex-basis: 100%;
+        }
     }
 </style>

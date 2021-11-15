@@ -5,11 +5,13 @@
     <section-3/>
     <section-4/>
     <!-- <modal-template v-bind="{
-      title: 'Room Information',
-      step: 0,
+      title: 'Reservation',
+      step: 2,
       buttonTitle: ['Save']
     }">
-      <room-information slot="1"/>
+      <room-reserve-step-1 slot="1"/>
+      <room-reserve-step-2 slot="2"/>
+      <room-reserve-step-3 slot="3"/>
     </modal-template> -->
   </div> 
 </template>
@@ -22,6 +24,9 @@ import Section3 from '../components/home/Section3.vue'
 import ModalTemplate from '../components/ModalTemplate.vue'
 import CustomerReservation from '../components/modals/reservation/CustomerReservation.vue'
 import RoomInformation from '../components/modals/room/RoomInformation.vue'
+import RoomReserveStep1 from '../components/modals/room/RoomReserveStep1.vue'
+import RoomReserveStep3 from '../components/modals/room/RoomReserveStep3.vue'
+import RoomReserveStep2 from '../components/modals/room/RoomReserveStep2.vue'
 
 export default {
   name: 'Home',
@@ -32,7 +37,10 @@ export default {
     Section3,
     ModalTemplate,
     CustomerReservation,
-    RoomInformation
+    RoomInformation,
+    RoomReserveStep1,
+    RoomReserveStep3,
+    RoomReserveStep2
   }
 }
 </script>
