@@ -5,7 +5,7 @@
             <div style="min-height: 20px;"> </div>
             <img src="../../../assets/icon/success.png" alt="Success"/>
         </div>
-    </div>
+    </div> 
 </template>
 
 <script>

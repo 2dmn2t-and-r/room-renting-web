@@ -2,7 +2,7 @@
     <div class="theme-input">
         <div class="label">{{label}}</div>
         <div class="input-container">
-            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable"/>
+            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable" :placeholder="this.placeholder"/>
             <div :style="button_style" class="button">
                 {{title}}
                 <md-icon :style="icon_style">
@@ -20,7 +20,8 @@ export default {
         type: String,
         label: String,          // Optional
         value: String | Number,          // Optional
-        buttonTitle: {
+        placeholder: String,    // Optional
+        buttonTitle: { 
             type: String,
             default: "",
         },                      // Optional

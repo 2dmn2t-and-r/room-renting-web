@@ -8,9 +8,9 @@
                 <div class="font_info grow">Room type:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.name">
                 <div class="divider_other"> </div>
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.type">
             </div>
             <div class="row">
                 <div class="font_info grow">Floor:</div>
@@ -18,9 +18,9 @@
                 <div class="font_info grow">Seat:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.floor">
                 <div class="divider_other"> </div>
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.seat">
             </div>
             <div class="row">
                 <div class="font_info grow">Status:</div>
@@ -28,9 +28,9 @@
                 <div class="font_info grow">Price per 30 minutes:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.status">
                 <div class="divider_other"> </div>
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.price">
             </div>
             <div class="row">
                 <div class="font_info grow">Open:</div>
@@ -38,25 +38,26 @@
                 <div class="font_info grow">Close:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="'6:00'"> 
+                <!-- value = room.open -->
                 <div class="divider_other"> </div>
-                <input type="text">
+                <input type="text" :disabled="true" :value="'22:00'">
             </div>
             <div class="row">
                 <div class="font_info grow">Address:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.address">
             </div>
             <div class="row">
                 <div class="font_info grow">Description:</div>
             </div>
             <div class="row">
-                <input type="text">
+                <input type="text" :disabled="true" :value="room.description">
             </div>
         </div>
         <div class="date_box row date_box_row">
-            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="120px"/>
+            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="action"/>
         </div>
     </div>
 </template>
@@ -65,6 +66,7 @@
 import ThemeButton from './ThemeButton.vue'
 export default {
   components: { ThemeButton },
+  props: ['room', 'action']
   
 }
 </script>

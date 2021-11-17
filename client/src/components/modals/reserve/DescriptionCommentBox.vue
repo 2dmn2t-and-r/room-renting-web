@@ -8,7 +8,7 @@
         </div>
         <div class="inner col">
         <span v-if="!this.tagComment">
-            <div class="font large bold stretch">Title</div>
+            <div class="font large bold stretch">{{title}}</div>
             <div class="row_k font medium">
                 <div class="half_col">Floor: <span class="bold">{{floor}}</span></div>
                 <div class="half_col">Status: <span class="bold" :style="status_style">{{status}}</span></div>
@@ -50,10 +50,11 @@
                 }"/> -->
                 <theme-input
                     type="text"
-                    value="Write your comment here"
+                    value=""
+                    placeholder="Write your comment here"
                     buttonTitle="Send"
                     buttonWidth = "60px"
-                    isInputBgWhite=true
+                    isInputBgWhite="true"
                 >
                 </theme-input>
             </div>
@@ -68,6 +69,7 @@ import ThemeButton from '../../ThemeButton.vue';
 import ThemeInput from '../../ThemeInput.vue';
 export default {
     props: {
+        title: String,
         floor: Number,
         seat: Number,
         status: String,

@@ -5,7 +5,7 @@
             left: timeStartToIndex(),
             right: timeEndToIndex()
         }" @leftTime="startDate = $event" @rightTime="endDate = $event"/>
-        <div class="font black line row">
+        <div class="font black line row"> 
             <div class="half_col row">
                 <div> Open:</div>
                 <theme-select v-bind="{

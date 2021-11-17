@@ -5,20 +5,22 @@
                 <picture-frame v-bind="{
                     width: '100%',
                     height: '100%',
-                    width_img: 'calc(100% - 20px)',
-                    height_img: 'calc(100% - 20px)'
+                    width_img: 'calc(100% - 20px)', 
+                    height_img: 'calc(100% - 20px)',
+                    background_img: this.img
                 }"/>
             </div>
             <div style="min-width: 30px; min-height: 20px;"> </div>
             <div class="row">
                 <div class="font black line">Date: </div>
                 <div style="min-width: 10px; min-height: 10px;"> </div>
-                <theme-input :type="'date'"/>
+                <theme-input :type="'date'"/> 
             </div>
         </div>
         <div style="min-width: 30px; min-height: 20px;"> </div>
         <div class="half_col_right col">
             <description-comment-box v-bind="{
+                title: this.title,
                 floor: this.floor,
                 seat: this.seat,
                 status: this.status,
@@ -38,6 +40,8 @@ import DescriptionCommentBox from '../reserve/DescriptionCommentBox.vue';
 import ThemeInput from '../../ThemeInput.vue';
 export default {
     props: {
+        title: String,
+        img: String,
         floor: Number,
         seat: Number,
         status: String,
