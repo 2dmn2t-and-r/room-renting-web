@@ -110,7 +110,7 @@
   import ThemeButton from '../components/ThemeButton.vue'
 
   export default {
-    name: 'Room',
+    name: 'NewsDetailManagement',
     components: {
       ModalTemplate,
       CommentBox,

@@ -165,7 +165,7 @@
   import ThemeButton from '../components/ThemeButton.vue';
 
   export default {
-    name: 'Room',
+    name: 'Profile',
     components: {
       ModalTemplate,
       ThemeInput,

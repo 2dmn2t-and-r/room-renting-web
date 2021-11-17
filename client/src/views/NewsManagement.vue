@@ -83,7 +83,7 @@
   import ThemeInput from '../components/ThemeInput.vue'
 
   export default {
-    name: 'Room',
+    name: 'NewsManagement',
     components: {
       ModalTemplate,
       CommentBox,

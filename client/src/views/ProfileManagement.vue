@@ -174,7 +174,7 @@
   import ThemeInput from '../components/ThemeInput.vue';
 
   export default {
-    name: 'Room',
+    name: 'ProfileManagement',
     components: {
       ModalTemplate,
       ThemeInput,

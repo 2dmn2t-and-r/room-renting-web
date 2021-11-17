@@ -59,6 +59,7 @@ export default {
         font-size: 38px;
         line-height: 38px;
         font-weight: 600;
+        text-align: center;
     }
 
     .line {
