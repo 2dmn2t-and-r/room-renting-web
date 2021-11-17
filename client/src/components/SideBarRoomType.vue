@@ -74,4 +74,10 @@ export default {
             justify-content: space-around;
         }
     }
+
+    @media only screen and (max-width: 400px) {
+        .text_class {
+            font-size: 18px;
+        }
+    }
 </style>

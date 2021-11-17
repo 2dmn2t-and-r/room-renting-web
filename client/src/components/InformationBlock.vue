@@ -66,8 +66,12 @@
 import ThemeButton from './ThemeButton.vue'
 export default {
   components: { ThemeButton },
-  props: ['room', 'action']
-  
+  props: ['room'],
+  methods: {
+    action() {
+        this.$emit('changeInfo');
+    }
+  }  
 }
 </script>
 

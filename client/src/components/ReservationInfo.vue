@@ -13,11 +13,16 @@
             <div class="font">Start: <span class="bold">{{convertDate(startDate)}}</span></div>
         </div>
         <div style="min-width: 10px" v-if="this.showMiddle"> </div>
-        <div class="not_show col part linespace">
+        <div class="not_show col part linespace" v-if="this.showMiddle">
             <div class="font">Duration: <span class="bold">{{duration}}</span></div>
             <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
         </div>
-        <div style="min-width: 10px"> </div>
+        <div style="min-width: 10px" v-if="this.showMiddle"> </div>
+        <div class="col part linespace" v-if="!this.showMiddle">
+            <div class="font">Duration: <span class="bold">{{duration}}</span></div>
+            <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
+        </div>
+        <div style="min-width: 10px" v-if="!this.showMiddle"> </div>
         <img v-if="this.paid" src="../assets/icon/paid.png" class="pay" alt="pay">
         <img v-else src="../assets/icon/unpaid.png" class="pay" alt="pay">
         <div style="min-width: 10px"> </div>
@@ -164,7 +169,7 @@ export default {
             display: none;
         }
         .pay {
-            width: 25px;
+            width: 16px;
         }
     }
 </style>

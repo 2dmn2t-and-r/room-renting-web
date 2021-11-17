@@ -156,10 +156,12 @@
     flex-basis: 80%;
     background-color: var(--theme_fore);
     padding: 18px 18px 0px 18px;
+    border-radius: 10px;
   }
 
   .sidebar {
     flex-basis: 20%;
+    min-width: 200px;
   }
 
   .page-container {
@@ -176,8 +178,6 @@
 
   .main {
     width: 100%;
-    
-    padding: 18px 18px;
     border-radius: 10px;
     display: flex;
     flex-direction: row;
