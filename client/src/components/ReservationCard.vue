@@ -12,7 +12,7 @@
                     <div class="room_descript text_line">Start date: <span class="bold">{{startdate}}</span></div>
                 </div>
             </div>
-            <div class="two_cols">
+            <div class="two_cols"> 
                 <div class="text_box room_descript text_line">
                     Seat: <span class="bold">{{seat}}</span>
                 </div>

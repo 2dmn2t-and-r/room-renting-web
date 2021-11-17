@@ -13,7 +13,8 @@
 export default {
     props: {
         label: String,          // Optional
-        values: Array 
+        values: Array,
+        value: String
     },
     computed: {
         input_value: {
@@ -31,7 +32,7 @@ export default {
                 "background-color": this.isInputBgWhite ? "var(--theme_white)" : "var(--theme_fore)",
                 "box-shadow": this.isInputBgWhite ? "0 1px 2px 0px rgba(17, 17, 17, 0.1)" : "none"
             };
-        },
+        }
     },
     data() {
         return {

@@ -23,7 +23,7 @@
   import PageTitle from '../components/PageTitle.vue'
 
   export default {
-    name: 'Room',
+    name: 'News',
     components: {
       ModalTemplate,
       CommentBox,
@@ -96,6 +96,8 @@
     background-color: var(--theme_fore);
     padding: 18px 18px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   .margin-item {
