@@ -14,7 +14,9 @@
 <script>
   import HeaderBar from '@/components/HeaderBar.vue';
   import ThemeFooter from './components/ThemeFooter.vue';
-  
+  import {getDataAPI, postDataAPI} from './utils/fetchData';
+  import axios from 'axios'
+
   export default {
     name: 'Room',
     components: {
@@ -22,6 +24,13 @@
       ThemeFooter,
     }
   }
+
+  async function getData() {
+    let res = await getDataAPI('example');
+    console.log(res.data)
+  }
+  getData();
+
 </script>
 
 
