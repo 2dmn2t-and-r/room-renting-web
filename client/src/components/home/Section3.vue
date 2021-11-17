@@ -32,6 +32,7 @@ export default {
 .bare_section {
     /* height: 79.30vw;
     max-height: 904px; */
+    background-color: var(--theme_white);
     width: 100%;
     display: flex;
     flex-direction: row;

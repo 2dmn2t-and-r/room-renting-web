@@ -65,7 +65,7 @@ import InformationBlock from '@/components/InformationBlock.vue'
 import ReservationBlock from '@/components/ReservationBlock.vue'
 import ModalTemplate from '@/components/ModalTemplate.vue';
 import PageTitle from '../components/PageTitle.vue'
-import Reservation from '../../../../New folder/web-assignment/client/src/views/Reservation.vue';
+import Reservation from './Reservation.vue';
 import ReservationInfo from '../components/ReservationInfo.vue';
 import moment from 'moment'
 import CustomerReservation from '../components/modals/reservation/CustomerReservation.vue';
