@@ -7,6 +7,7 @@
     header('Access-Control-Max-Age: 1000');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 
+
 	$router = new Route();
     
     require_once('router/ExampleRoute.php');

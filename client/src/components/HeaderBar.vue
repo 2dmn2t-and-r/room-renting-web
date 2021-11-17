@@ -9,7 +9,6 @@
                 <div class="nav-bar">
                     <div class="nav-item" :style="home" v-on:click="routeTo('/')">HOME</div>
                     <div class="nav-item" :style="room" v-on:click="routeTo('/room')">ROOM</div>
-                    <div class="nav-item" :style="reservation" v-on:click="routeTo('/reservation')">RESERVATION</div>
                     <div class="nav-item" :style="news" v-on:click="routeTo('/news')">NEWS</div>
                 </div>
                 <div class="menu">
@@ -20,8 +19,6 @@
                         <div class="item" v-on:click="routeTo('/')">Home</div>
                         <div class="divider"></div>
                         <div class="item" v-on:click="routeTo('/room')">Room</div>
-                        <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/reservation')">Reservation</div>
                         <div class="divider"></div>
                         <div class="item" v-on:click="routeTo('/news')">News</div>
                         <div class="divider"></div>
@@ -76,16 +73,16 @@
                         <div class="divider"></div>
                         <div class="item" v-on:click="routeTo('/profile')">Profile</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="1">Sign Out</div>
+                        <div class="item" v-on:click="signOut">Sign Out</div>
                     </div>
                 </div>
                 <div class="buttons">
                     <div class="avt-button">
                         <div class="avt">
-                            <img v-bind:src="avt" alt="avt" :style="avt_style">
+                            <img v-bind:src="avt === '' ? image : avt" alt="avt" :style="avt_style">
                         </div>
                         <div class="username" :style="manager">
-                            Numcumeo
+                            {{username}}
                         </div>
                         <md-icon class="expand-icon" :style="manager">
                             expand_more
@@ -93,7 +90,7 @@
                         <div class="list">
                             <div class="item" v-on:click="routeTo('/profile')">Profile</div>
                             <div class="divider"></div>
-                            <div class="item" @click="1">Sign Out</div>
+                            <div class="item" @click="signOut">Sign Out</div>
                         </div>
                     </div>
                 </div>
@@ -104,27 +101,17 @@
 
 <script>
     import ThemeButton from './ThemeButton.vue';
+    import img from '../assets/icon/default-avatar.png';
+    import {getDataAPI, postDataAPI} from '../utils/fetchData';
 
     export default {
         components: { ThemeButton },
         name: 'ModalTemplate',
         props: {
-            isAuth: {
-                type: Boolean,
-                default: true,
-            },
-            isManager: {
-                type: Boolean,
-                default: false,
-            },
-            avt: {
-                type: String,
-                default: "",
-            },
             route: {
                 type: String,
                 default: "",
-            }
+            },
         },
         computed: {
             auth: function(){
@@ -186,12 +173,44 @@
             },
 
         },
+        data() {
+            return {
+                image: img,
+                username: "",
+                isAuth: false,
+                avt: "",
+                isManager: false,
+            }
+        },
         methods: {
             routeTo: function(path) {
                 this.$router.push(path).catch(()=>{});
+            },
+            signOut: function() {
+                localStorage.removeItem("token");
+                this.$router.push('auth/signin').catch(()=>{});
             }
-        }
-
+        },
+        mounted() {
+            (async () => {
+                var token = localStorage.getItem("token");
+                if (token) {
+                    let res = await getDataAPI('auth/get', token);
+                    if (res.data["status"] === 200) {
+                        this.isAuth = true;
+                        this.username = res.data["user"]["username"];
+                        this.isManager = res.data["user"]["type"] === 'M';
+                        this.avt = res.data["user"]["avatar"]
+                    }
+                }
+                else {
+                    this.isAuth = false;
+                    this.username = "";
+                    this.isManager = false;
+                    this.avt = "";
+                }
+            })()
+        },
     }
 </script>
 

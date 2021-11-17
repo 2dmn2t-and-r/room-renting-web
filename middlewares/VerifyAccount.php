@@ -11,9 +11,9 @@
             
             $token = null;
             
-            if(isset($headers['Authorization'])) {
-                if (!empty($headers['Authorization'])) {
-                    if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+            if(isset($headers['authorization'])) {
+                if (!empty($headers['authorization'])) {
+                    if (preg_match('/Bearer\s(\S+)/', $headers['authorization'], $matches)) {
                         $token = $matches[1];
                     }
                 }
@@ -32,8 +32,6 @@
             $account = mysqli_query($db, $query);
             $row = mysqli_fetch_assoc($account);
             if(!$row) return null;
-            $row['email'] = '';
-            $row['password'] = '';
             return $row;
         }
 

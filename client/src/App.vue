@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <header-bar v-bind="{
-      isAuth: true,
-      isManager: false,
-      avt: 'https://picsum.photos/200/300',
-      route: $router.history.current.path
-    }"/>
+      route: $router.history.current.path,
+    }"
+    :key="getKey()"/>
     <router-view/>
     <theme-footer v-bind:route="$router.history.current.path"/>
   </div>
@@ -17,20 +15,30 @@
   import {getDataAPI, postDataAPI} from './utils/fetchData';
   import axios from 'axios'
 
+  // (async () => {
+  //   var token = localStorage.getItem("token");
+  //   // var data = await getDataAPI('auth/get', token);
+  //   let res = await getDataAPI('auth/get', token);
+  //   console.log(res)
+  // })()
+
   export default {
-    name: 'Room',
+    name: 'App',
     components: {
       HeaderBar,
       ThemeFooter,
-    }
+    },
+    methods: {
+      getKey() {
+        return localStorage.getItem('token');
+      }
+    },
+    data() {
+      return {
+        username: ""
+      }
+    },
   }
-
-  async function getData() {
-    let res = await getDataAPI('example');
-    console.log(res.data)
-  }
-  getData();
-
 </script>
 
 

@@ -31,31 +31,31 @@
               class="input-box"
               label="Username:"
               type="text"
-              value=""
+              :value.sync="username"
             /> 
             <theme-input
               class="input-box"
               label="Email:"
-              type="text"
-              value=""
+              type="email"
+              :value.sync="email"
             /> 
             <theme-input
               class="input-box"
               label="Password:"
               type="password"
-              value=""
+              :value.sync="password"
             /> 
             <theme-input
               class="input-box"
               label="Confirm Password:"
               type="password"
-              value=""
+              :value.sync="cPassword"
             /> 
             <theme-input
               class="input-box"
               label="Birthday:"
               type="date"
-              value=""
+              :value.sync="date"
             /> 
           </div>
         </div>
@@ -66,7 +66,8 @@
             height: '40px',
             width: '100%',
             border_radius: '15px'
-          }"/>
+          }"
+          @click="signUp"/>
         </div>
       </div>
     </div>
@@ -74,6 +75,7 @@
 <script>
 import ThemeButton from '../components/ThemeButton.vue'
 import ThemeInput from '../components/ThemeInput.vue'
+import { getDataAPI, postDataAPI } from '../utils/fetchData'
 
 export default {
   name: "Login",
@@ -83,36 +85,30 @@ export default {
   },
   data() {
     return {
-      inputs: [
-        {
-          label: "Username",
-          value: "",
-          type: 'text'
-        },
-        {
-          label: "Email",
-          value: "",
-          type: 'email'
-        },
-        {
-          label: 'Password',
-          value: "",
-          type: 'password'
-        },
-        {
-          label: 'Confirm password',
-          value: "",
-          type: 'password'
-        },
-        {
-          label: 'Birthday',
-          value: "",
-          type: 'date'
-        }
-      ],
-      agree: {
-        label: "I have agreed with the term of use of this site",
-        value: false,
+      username: "",
+      email: '',
+      password: '',
+      cPassword: '',
+      date: '',
+      sex: 'M',
+      phone: '',
+      address: '',
+    }
+  },
+  methods: {
+    async signUp() {
+      var res = await postDataAPI('auth/register', {
+        username: this.username,
+        password: this.password,
+        email: this.email,
+        birthday: this.date,
+        sex: this.sex,
+        phone: this.phone,
+        address: this.address,
+        avatar: ""
+      })
+      if (res.data["status"] === 200) {
+        this.$router.push('/auth/signin').catch(()=>{})
       }
     }
   }   

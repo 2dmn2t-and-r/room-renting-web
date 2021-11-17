@@ -32,13 +32,13 @@
               class="input-box"
               label="Email:"
               type="text"
-              value=""
+              :value.sync="email"
             /> 
             <theme-input
               class="input-box"
               label="Password:"
               type="password"
-              value=""
+              :value.sync="password"
             />
           </div>
         </div>
@@ -54,8 +54,9 @@
             background_color: 'var(--theme_jade)',
             height: '40px',
             width: '100%',
-            border_radius: '15px'
-          }"/>
+            border_radius: '15px',            
+          }"
+          @click="signIn"/>
         </div>
       </div>
     </div>
@@ -63,6 +64,7 @@
 <script>
 import ThemeButton from '../components/ThemeButton.vue'
 import ThemeInput from '../components/ThemeInput.vue'
+import { getDataAPI, postDataAPI } from '../utils/fetchData'
 
 export default {
   name: "Login",
@@ -73,11 +75,23 @@ export default {
   data() {
     return {
       checked: false,
+      email: "",
+      password: "",
     }
   },
   methods: {
     setChecked() {
       this.checked = !this.checked
+    },
+    async signIn() {
+      var res = await postDataAPI('auth/login', {
+        email: this.email,
+        password: this.password,
+      });
+      if (typeof(Storage) !== "undefined") {
+        localStorage.setItem("token", res.data["token"]);
+        this.$router.push('/').catch(()=>{});
+      }
     }
   } 
 }
