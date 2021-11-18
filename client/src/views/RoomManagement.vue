@@ -1,8 +1,7 @@
 <template>
   <div class="room-management">
     <div class="page-container">
-      <page-title title="Choose A Room To Manage" class="title"/>
-
+      <page-title title="Room Manage"/>
       <div class="main"> 
         <div class="sidebar">
           <side-bar-room-type :types='type'></side-bar-room-type>
@@ -156,6 +155,7 @@ export default {
     flex-basis: 80%;
     background-color: var(--theme_fore);
     padding: 18px 18px 0px 18px;
+    border-radius: 10px;
   }
 
   .sidebar {
@@ -182,8 +182,7 @@ export default {
 
   .main {
     width: 100%;
-    
-    padding: 18px 18px;
+
     border-radius: 10px;
     display: flex;
     flex-direction: row;

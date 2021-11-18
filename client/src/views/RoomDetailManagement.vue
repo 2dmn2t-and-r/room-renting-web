@@ -1,21 +1,23 @@
 <template>
   <div class="room-detail-management">
     <div class="page-container">
-      <page-title title="Room Detail" class="title" v-bind:isBack="true" @onBack="$router.go(-1)"/>
+      <page-title title="Room Detail" v-bind:isBack="true" @onBack="$router.go(-1)"/>
       <div class="main">
-        <reservation-block > 
-          <reservation-info v-for="(item,index) in reservationsList" :key="index"
-            v-bind="{
-            user: item.user,
-            reserveDate: item.reserveDate,
-            duration: item.duration,
-            price: item.price,
-            paid: item.paid,
-            showMiddle: item.showMiddle,
-          }" @click.native="showReservation(index)">  </reservation-info>  
+        <reservation-block class="half_col" > 
+          <div v-for="(item, index) in reservationsList" :key="index">
+            <reservation-info v-bind="{
+              user: item.user,
+              reserveDate: item.reserveDate,
+              duration: item.duration,
+              price: item.price,
+              paid: item.paid,
+              showMiddle: item.showMiddle,
+            }" @click.native="showReservation(index)">  </reservation-info> 
+            <div style="min-height: 10px; min-width: 10px"> </div>
+          </div>
         </reservation-block>
-
-         <information-block :room="getRoom()" @click.native="showRoomModal()">   </information-block>
+        <div style="min-height: 10px; min-width: 10px"> </div>
+         <information-block class="half_col" :room="getRoom()" @changeInfo="showRoomModal()">   </information-block>
       </div>
     </div>
     <modal-template v-bind="{
@@ -259,17 +261,24 @@ export default {
 
 .main {
   display: flex;
-  width: 95%;
+  width: 100%;
 }
 
 .title {
   margin: 0 auto;
   text-align: center;
 }
-
- @media only screen and (max-width: 768px) {
+.half_col {
+    width: 50%;
+  }
+ @media only screen and (max-width: 1000px) {
         .main {
           display: block;
         }
+        .half_col {
+          width: 100%;
+        }
     }
+  
+  
 </style>
