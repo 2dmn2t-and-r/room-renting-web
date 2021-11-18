@@ -47,20 +47,21 @@
 
             $news = json_decode(file_get_contents('php://input'), true);
             $title = $news['title'];
-            $createDate = $news['createDate'];
             $modifyDate = $news['modifyDate'];
             $content = $news['content'];
             $image = $news['image'];
+            $public = $news['public'];
 
             if (array_key_exists('newsId', $news)) {
                 $newsId = $news['newsId'];
                 $query =   "UPDATE WEB_DATABASE.NEWS
-                            SET title = '$title', createDate = '$createDate', modifyDate = '$modifyDate', content = '$content', image = '$image'
+                            SET title = '$title', modifyDate = '$modifyDate', content = '$content', image = '$image', public ='$public'
                             WHERE newsId = '$newsId';";
             }
             else {
-                $query =   "INSERT INTO WEB_DATABASE.NEWS (title, createDate, modifyDate, content, image)
-                            VALUES ('$title', '$createDate', '$modifyDate', '$content', '$image')";
+                $createDate = $news['createDate'];
+                $query =   "INSERT INTO WEB_DATABASE.NEWS (title, createDate, modifyDate, content, image, public)
+                            VALUES ('$title', '$createDate', '$modifyDate', '$content', '$image', '$public')";
             }
             
             $result = mysqli_query($db, $query);
@@ -95,21 +96,9 @@
             $date = $comment["date"]; 
             $content = $comment["content"];
             $newsId = $comment["newsId"]; 
-            $userId = $comment["ownerId"];
-
-            $user = $authorization['userId'];
-            $type = $authorization['type'];
-            if($user != $userId && $type != 'M') {
-                echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
-                return;
-            }
+            $userId = $authorization['userId'];
 
             $db = 'Database'::getInstance();
-
-            $date = $comment["date"]; 
-            $content = $comment["content"];
-            $newsId = $comment["newsId"]; 
-            $userId = $comment["ownerId"];
             
             if (array_key_exists('commentId', $comment)) {
                 $commentId = $comment["commentId"]; 

@@ -56,6 +56,7 @@ create table NEWS (
     modifyDate	date,
     content		varchar(200),
     image		varchar(1024),
+    public		boolean,
     primary key (newsId)
 );
 
@@ -78,34 +79,5 @@ create table NEWS_COMMENT (
     newsId		int	not null,
     primary key	(commentId),
     foreign key (userId) references USER (userId) on delete cascade,
-    foreign key (newsId) references NEWS (newsId) on delete cascade
-);
-
-create table MANAGER (
-	managerId	int AUTO_INCREMENT,
-    setDate		date,
-    primary key (managerId),
-    foreign key (managerId) references USER (userId) on delete cascade
-);
-
-create trigger REMOVE_MANAGER after delete on MANAGER for each row
-	update USER set type = 'C' where userId = managerId;
-    
-create trigger CREATE_MANAGER after insert on MANAGER for each row
-	update USER set type = 'M' where userId = managerId;
-    
-create table MANAGE_ROOM (
-	managerId	int,
-    roomId		int,
-    primary key (managerId, roomId),
-    foreign key (managerId) references MANAGER (managerId) on delete cascade,
-    foreign key (roomId) references ROOM (roomId) on delete cascade
-);
-
-create table MANAGE_NEWS (
-	managerId	int,
-    newsId		int,
-    primary key (managerId, newsId),
-    foreign key (managerId) references MANAGER (managerId) on delete cascade,
     foreign key (newsId) references NEWS (newsId) on delete cascade
 );
