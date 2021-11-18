@@ -4,11 +4,11 @@
       <page-title title="News"/>
       <div class="main">
         <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
-          id: news.id,
-          img: news.img,
+          id: news.newsId,
+          img: news.image,
           title: news.title,
-          uploaddate: dateString(news.uploadDate),
-          modified: dateString(news.modified),
+          uploaddate: dateString(new Date(news.createDate)),
+          modified: dateString(new Date(news.modifyDate)),
         }"/>
       </div>
     </div>
@@ -16,11 +16,12 @@
 </template>
 
 <script>
-  import CommentBox from '../components/modals/news/CommentBox.vue'
-  import CreateEditNews from '../components/modals/news/CreateEditNews.vue'
-  import ModalTemplate from '../components/ModalTemplate.vue'
-  import NewsCard from '../components/NewsCard.vue'
-  import PageTitle from '../components/PageTitle.vue'
+  import CommentBox from '../components/modals/news/CommentBox.vue';
+  import CreateEditNews from '../components/modals/news/CreateEditNews.vue';
+  import ModalTemplate from '../components/ModalTemplate.vue';
+  import NewsCard from '../components/NewsCard.vue';
+  import PageTitle from '../components/PageTitle.vue';
+  import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
     name: 'News',
@@ -33,46 +34,30 @@
     },
     data() {
       return {
-        newsList: [
-          {
-            id: 1,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          },
-          {
-            id: 2,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          },
-          {
-            id: 3,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          }
-        ],
+        newsList: [],
       }
     },
     methods: {
       dateString(date) {
         if (date) {
           var year = date.getFullYear();
-
           var month = (1 + date.getMonth()).toString();
           month = month.length > 1 ? month : '0' + month;
-
           var day = date.getDate().toString();
           day = day.length > 1 ? day : '0' + day;
-          
           return month + '/' + day + '/' + year;
         }
-      }
-    }
+      },
+    },
+    mounted() {
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/load', token);
+        if (res.data["status"] === 200) {
+          this.newsList = res.data["news"];
+        }
+      })()
+    },
   }
 </script>
 

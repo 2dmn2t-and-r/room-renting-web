@@ -21,28 +21,26 @@
               width: '100%',
               border_radius: '15px'
             }"
-            @click="setModalStep(0)"></theme-button>
+            @click="loadComments()"></theme-button>
           </div>
         </div>
         <div class="content-box">
-            <div class="news-title">Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.</div>
-            <div class="date">Modified: <span class="bold">20/10/2021</span></div>
-            <div class="news-content">
-              {{`
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-              `}}
-            </div>
-            <div class="bot-bt-container">
-              <theme-button v-bind="{
-                msg: 'Comments',
-                background_color: 'var(--theme_jade)',
-                height: '40px',
-                width: '100%',
-                border_radius: '15px'
-              }"
-              @click="setModalStep(0)"/>
-            </div>
+          <div class="news-title">{{news.title}}</div>
+          <div class="date">Created: <span class="bold">{{dateString(new Date(news.createDate))}}</span></div>
+          <div class="date">Modified: <span class="bold">{{dateString(new Date(news.modifyDate))}}</span></div>
+          <div class="news-content">
+            {{news.content}}
+          </div>
+          <div class="bot-bt-container">
+            <theme-button v-bind="{
+              msg: 'Comments',
+              background_color: 'var(--theme_jade)',
+              height: '40px',
+              width: '100%',
+              border_radius: '15px'
+            }"
+            @click="loadComments()"/>
+          </div>
         </div>
       </div>
       <modal-template  v-bind="{
@@ -52,19 +50,13 @@
       }"
       @onClose="setModalStep(-1)"
       @onCancel="setModalStep(modalStep - 1)"
-      @onNextStep="function () {
-        if (modalStep != 1) {
-          //TODO
-          setModalStep(-1)
-        }
-        else {
-          setModalStep(-1)
-        }
-      }">
+      @onNextStep="upLoadComment"
+      >
         <div slot="1" class="slot">
           <comment-box v-bind="{
             comments: comments
           }"
+          :newComment.sync="newComment"
           />
         </div>
       </modal-template>
@@ -73,11 +65,12 @@
 </template>
 
 <script>
-  import CommentBox from '../components/modals/news/CommentBox.vue'
-  import ModalTemplate from '../components/ModalTemplate.vue'
-  import PageTitle from '../components/PageTitle.vue'
-  import PictureFrame from '../components/PictureFrame.vue'
-  import ThemeButton from '../components/ThemeButton.vue'
+  import CommentBox from '../components/modals/news/CommentBox.vue';
+  import ModalTemplate from '../components/ModalTemplate.vue';
+  import PageTitle from '../components/PageTitle.vue';
+  import PictureFrame from '../components/PictureFrame.vue';
+  import ThemeButton from '../components/ThemeButton.vue';
+  import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
     name: 'NewsDetail',
@@ -86,30 +79,20 @@
       CommentBox,
       PageTitle,
       PictureFrame,
-        ThemeButton,
+      ThemeButton,
     },
     data() {
       return {
-        comments: [
-          {
-            name: 'Num',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          },
-          {
-            name: 'Duke',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          },
-          {
-            name: 'Hoang',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          }
-        ],
+        news: {
+          newsId: "",
+          title: "",
+          createDate: "2001-01-01",
+          modifyDate: "2001-01-01",
+          image: "",
+          content: ""
+        },
+        newComment: "",
+        comments: [],
         modalStep: -1,
       }
     },
@@ -117,6 +100,46 @@
       setModalStep(val) {
         this.modalStep = val;
       },
+      async loadComments() {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/comments/load/' + this.$route.params.newsId, token);
+        if (res.data["status"] === 200) {
+          this.comments = res.data["news_comments"]
+          this.setModalStep(0);
+        }
+      },
+      dateString(date) {
+        if (date) {
+          var year = date.getFullYear();
+          var month = (1 + date.getMonth()).toString();
+          month = month.length > 1 ? month : '0' + month;
+          var day = date.getDate().toString();
+          day = day.length > 1 ? day : '0' + day;
+          return month + '/' + day + '/' + year;
+        }
+      },
+      async upLoadComment() {
+        if (this.newComment !== "") {
+          var token = localStorage.getItem("token");
+          let res = await postDataAPI('news/comment/upload', {
+            content: this.newComment,
+            date: (new Date()).toISOString().split('T')[0],
+            newsId: this.$route.params.newsId,
+          }, token);
+          if (res.data["status"] === 200) {
+            this.setModalStep(-1);
+          }
+        }
+      }
+    },
+    mounted() {
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/load/' + this.$route.params.newsId, token);
+        if (res.data["status"] === 200) {
+          this.news = res.data["news"]
+        }
+      })()
     },
   }
 </script>

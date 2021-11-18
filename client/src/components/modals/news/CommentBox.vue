@@ -4,10 +4,10 @@
             <div v-for="(comment, index) in comments" :key="index">
                 <comment
                     v-bind="{
-                        name: comment['name'],
-                        time: comment['time'],
+                        name: comment['username'],
+                        time: new Date(comment['date']),
                         content: comment['content'],
-                        img: comment['img']
+                        img: comment['avatar']
                     }"
                 />
                 <div class="divider"></div>
@@ -16,7 +16,7 @@
         <theme-input
             class="input-box"
             type="text"
-            value=""
+            :value.sync="input_value"
             v-bind="{
                 isInputBgWhite: true
             }"
@@ -30,14 +30,27 @@ import ThemeButton from '../../ThemeButton.vue';
 import ThemeInput from '../../ThemeInput.vue';
 export default {
     props: {
-        comments: Array // {name: string, time: date, content: string, img: string url}
+        comments: Array,
+        newComment: {
+            type: String,
+            default: "",
+        }
     },
     components: {
         Comment,
         ThemeButton,
         ThemeInput
     },
-    
+    computed: {
+        input_value: {
+            get() {
+                return this.newComment
+            },
+            set(value) {
+                this.$emit('update:newComment', value)
+            }
+        },
+    },
 }
 </script>
 

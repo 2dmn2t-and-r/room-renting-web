@@ -20,7 +20,7 @@
               width: '45%',
               border_radius: '15px'
             }"
-            @click.native="setCommentsModalStep(0)"></theme-button>
+            @click.native="loadComments()"></theme-button>
             <theme-button v-bind="{
                 msg: 'Edit',
                 background_color: 'var(--theme_jade)',
@@ -34,13 +34,11 @@
           </div>
         </div>
         <div class="content-box">
-          <div class="news-title">Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.</div>
-          <div class="date">Modified: <span class="bold">20/10/2021</span></div>
+          <div class="news-title">{{news.title}}</div>
+          <div class="date">Created: <span class="bold">{{dateString(new Date(news.createDate))}}</span></div>
+          <div class="date">Modified: <span class="bold">{{dateString(new Date(news.modifyDate))}}</span></div>
           <div class="news-content">
-            {{`
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.\n\n
-            `}}
+            {{news.content}}
           </div>
           <div class="bot-bt-container">
             <theme-button v-bind="{
@@ -49,7 +47,7 @@
               width: '100%',
               border_radius: '15px'
             }"
-            @click.native="setCommentsModalStep(0)"
+            @click.native="loadComments()"
             ></theme-button>
             <theme-button v-bind="{
               msg: 'Edit',
@@ -70,12 +68,13 @@
       }"
       @onClose="setCommentsModalStep(-1)"
       @onCancel="setCommentsModalStep(commentsModalStep - 1)"
-      @onNextStep="setCommentsModalStep(-1)"
+      @onNextStep="upLoadComment()"
       >
         <div slot="1" class="slot">
           <comment-box v-bind="{
             comments: comments
           }"
+          :newComment.sync="newComment"
           />
         </div>
       </modal-template>
@@ -86,13 +85,13 @@
       }"
       @onClose="setEditModalStep(-1)"
       @onCancel="setEditModalStep(editModalStep - 1)"
-      @onNextStep="setEditModalStep(-1)"
+      @onNextStep="upLoadNews()"
       >
         <div slot="1" class="slot">
           <create-edit-news
-            v-bind="{
-              checked: check,
-            }"
+            :checked="check"
+            :content.sync="content"
+            :title.sync="title"
             @on-check="setCheck"
           />
         </div>
@@ -102,12 +101,13 @@
 </template>
 
 <script>
-  import CommentBox from '../components/modals/news/CommentBox.vue'
-  import CreateEditNews from '../components/modals/news/CreateEditNews.vue'
-  import ModalTemplate from '../components/ModalTemplate.vue'
-  import PageTitle from '../components/PageTitle.vue'
-  import PictureFrame from '../components/PictureFrame.vue'
-  import ThemeButton from '../components/ThemeButton.vue'
+  import CommentBox from '../components/modals/news/CommentBox.vue';
+  import CreateEditNews from '../components/modals/news/CreateEditNews.vue';
+  import ModalTemplate from '../components/ModalTemplate.vue';
+  import PageTitle from '../components/PageTitle.vue';
+  import PictureFrame from '../components/PictureFrame.vue';
+  import ThemeButton from '../components/ThemeButton.vue';
+  import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
     name: 'NewsDetailManagement',
@@ -122,26 +122,19 @@
     data() {
       return {
         check: false,
-        comments: [
-          {
-            name: 'Num',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          },
-          {
-            name: 'Duke',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          },
-          {
-            name: 'Hoang',
-            time: new Date(),
-            content: 'Loremipsum ba chon heo',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRddkWsqQoGL8aY3bzzCdNCDYyK4zvW4yTL_Q&usqp=CAU'
-          }
-        ],
+        news: {
+          newsId: "",
+          title: "",
+          createDate: "2001-01-01",
+          modifyDate: "2001-01-01",
+          image: "",
+          content: ""
+        },
+        title: "",
+        content: "",
+        image: "",
+        comments: [],
+        newComment: "",
         commentsModalStep: -1,
         editModalStep: -1,
       }
@@ -154,6 +147,10 @@
         this.commentsModalStep = val;
       },
       setEditModalStep(val) {
+        if (val === 0) {
+          this.content = this.news.content;
+          this.title = this.news.title;
+        }
         this.editModalStep = val;
       },
       dateString(date) {
@@ -168,8 +165,68 @@
           
           return month + '/' + day + '/' + year;
         }
-      }
-    }
+      },
+      async loadComments() {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/comments/load/' + this.$route.params.newsId, token);
+        if (res.data["status"] === 200) {
+          this.comments = res.data["news_comments"]
+          this.setCommentsModalStep(0);
+        }
+      },
+      async upLoadComment() {
+        if (this.newComment !== "") {
+          var token = localStorage.getItem("token");
+          let res = await postDataAPI('news/comment/upload', {
+            content: this.newComment,
+            date: (new Date()).toISOString().split('T')[0],
+            newsId: this.$route.params.newsId,
+          }, token);
+          if (res.data["status"] === 200) {
+            this.setCommentsModalStep(-1);
+          }
+        }
+      },
+      async upLoadNews() {
+        if (this.title !== "") {
+          var date = (new Date()).toISOString().split('T')[0]
+          var token = localStorage.getItem("token");
+          let res = await postDataAPI('news/upload', {
+            title: this.title,
+            image: this.image,
+            content: this.content,
+            modifyDate: date,
+            newsId: this.$route.params.newsId,
+            public: this.check ? '1' : '0',
+          }, token);
+          if (res.data["status"] === 200) {
+            this.news = {
+              newsId: this.newsId,
+              title: this.title,
+              createDate: this.news.createDate,
+              modifyDate: date,
+              image: this.image,
+              content: this.content,
+            }
+            this.setEditModalStep(-1);
+          }
+        }
+      },
+    },
+    mounted() {
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/load/' + this.$route.params.newsId, token);
+        if (res.data["status"] === 200) {
+          
+          this.news = res.data["news"];
+          this.content = this.news.content;
+          this.title = this.news.title;
+          this.image = this.news.image;
+          this.check = this.news.public === '1';
+        }
+      })()
+    },
   }
 </script>
 

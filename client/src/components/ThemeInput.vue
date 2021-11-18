@@ -3,7 +3,7 @@
         <div class="label">{{label}}</div>
         <div class="input-container">
             <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable" :placeholder="this.placeholder"/>
-            <div :style="button_style" class="button">
+            <div :style="button_style" class="button" @click="onClickButton">
                 {{title}}
                 <md-icon :style="icon_style">
                     {{icon}}
@@ -84,6 +84,11 @@ export default {
         return {
             title: this.isIconTitle ? "" :  this.buttonTitle,
             icon: !this.isIconTitle ? "" :  this.buttonTitle,
+        }
+    },
+    methods: {
+        onClickButton() {
+            this.$emit('onClickButton')
         }
     }
 }

@@ -248,7 +248,7 @@
         var token = localStorage.getItem("token");
         if (token) {
           let res = await getDataAPI('auth/get', token);
-          if (res.status === 200) {
+          if (res.data["status"] === 200) {
             this.userId = res.data["user"]["userId"]
             this.email = res.data["user"]["email"]
             this.address = res.data["user"]["address"]

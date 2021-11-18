@@ -13,12 +13,14 @@
             <theme-textarea v-bind="{
                 height: '60px',
                 label: 'Title:',
-            }"/>
+            }"
+            :value.sync="title_value"/>
             <div class="divider"></div>
             <theme-textarea v-bind="{
                 height: '150px',
                 label: 'Content:',
-            }"/>
+            }"
+            :value.sync="content_value"/>
             <div class="checkbox">
                 <div class="check-icon" @click="statusChanged()">
                     <md-icon class="icon">{{checked ? "check_box" : "check_box_outline_blank"}}</md-icon>
@@ -41,6 +43,14 @@ export default {
         checked: {
             type: Boolean,
             default: false,
+        },
+        title: {
+            type: String,
+            default: "",
+        },
+        content: {
+            type: String,
+            default: "",
         }
     },
     components: {
@@ -53,6 +63,24 @@ export default {
     methods: {
         statusChanged() {
             this.$emit('on-check', !this.checked);
+        },
+    },
+    computed: {
+        title_value: {
+            get() {
+                return this.title
+            },
+            set(value) {
+                this.$emit('update:title', value)
+            }
+        },
+        content_value: {
+            get() {
+                return this.content
+            },
+            set(value) {
+                this.$emit('update:content', value)
+            }
         },
     },
 }
