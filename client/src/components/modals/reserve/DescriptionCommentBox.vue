@@ -24,7 +24,7 @@
                 <div class="stretch">{{description}}</div>
             </div>
         </span>
-        <span v-else>
+        <span v-else :key="refresh">
             <div v-for="(comment, index) in comments" :key="index">
                 <comment
                     v-bind="{
@@ -37,24 +37,14 @@
                 <div class="divider"></div>
             </div>
             <div class="row baseline">
-                <!-- <md-field md-inline>
-                    <label>Write your comment</label>
-                    <md-input v-model="inline">Write your comment</md-input>
-                </md-field>
-                <theme-button v-bind="{
-                    msg: 'Send',
-                    background_color: 'var(--theme_jade)',
-                    width: '60px',
-                    height: '40px',
-                    border_radius: '10px'
-                }"/> -->
                 <theme-input
                     type="text"
-                    value=""
+                    :value.sync="comment"
                     placeholder="Write your comment here"
                     buttonTitle="Send"
-                    buttonWidth = "60px"
-                    isInputBgWhite="true"
+                    buttonWidth="60px"
+                    :isInputBgWhite="true"
+                    @onClickButton="postComment"
                 >
                 </theme-input>
             </div>
@@ -67,20 +57,24 @@
 import Comment from '../../Comment.vue'
 import ThemeButton from '../../ThemeButton.vue';
 import ThemeInput from '../../ThemeInput.vue';
+import { getDataAPI, postDataAPI } from '../../../utils/fetchData';
 export default {
     props: {
+        roomId: Number,
         title: String,
         floor: Number,
         seat: Number,
         status: String,
         type: String,
         address: String,
-        description: String,
-        comments: Array // {name: string, time: date, content: string, img: string url}
+        description: String
     },
     data() {
         return {
-            tagComment: false
+            tagComment: false,
+            refresh: 0,
+            comment: '',
+            comments: [] // {name: string, time: date, content: string, img: string url}
         }
     },
     components: {
@@ -91,7 +85,44 @@ export default {
     methods: {
         changeTag: function() {
             this.tagComment = !this.tagComment;
-        }
+            if (this.tagComment) this.loadComments();
+        },
+        postComment: function() {
+            (async () => {
+                let token = localStorage.getItem("token");
+                let data = {
+                    date: new Date(),
+                    content: this.comment,
+                    roomId: this.roomId
+                };
+                let res = await postDataAPI('/room/comment/upload', data, token);
+                if (res.data["status"] === 200) {
+                    this.loadComments();
+                    this.comment = '';
+                }
+            })()
+        },
+        loadComments: function() {
+            (async () => {
+            let token = localStorage.getItem("token");
+            let res = await getDataAPI(`room/comments/load/${this.roomId}`, token);
+            this.comments = [];
+            let temp = [];
+            if (res.data["status"] === 200) {
+                temp = res.data["room_comments"];
+            }
+            if (temp)
+                for (let item of temp) {
+                    this.comments.push({
+                        name: item.username,
+                        time: new Date(item.date),
+                        content: item.content,
+                        img: item.avatar
+                    });
+                }
+            this.refresh = 1 - this.refresh;
+            })()
+        },
     },
     computed: {
         status_style: function(){

@@ -1,30 +1,30 @@
 <template>
     <div class="full">
-        <div class="title_font bold line black">Timeline: {{ convertDate(chosenDate) }}</div>
+        <div class="title_font bold line black">Timeline: {{ convertDate(chosenDate) }}</div> 
         <choosetime v-bind="{
-            left: timeStartToIndex(),
-            right: timeEndToIndex()
-        }" @leftTime="startDate = $event" @rightTime="endDate = $event"/>
+            inleft: timeStartToIndex(),
+            inright: timeEndToIndex()
+        }" @leftTime="chosenStartInput = $event" @rightTime="chosenEndInput = $event"/>
         <div class="font black line row"> 
             <div class="half_col row">
                 <div> Open:</div>
                 <theme-select v-bind="{
                     values: timeRange(true),
-                }" :value.sync="startDate"/>
+                }" :value.sync="chosenStartInput"/>
             </div>
             <div style="min-width: 20px;"> </div>
             <div class="half_col row">
                 <div> Close:</div>
                 <theme-select v-bind="{
                     values: timeRange(false)
-                }" :value.sync="endDate"/>
+                }" :value.sync="chosenEndInput"/>
             </div>
         </div>
         <div class="font black line">
             Price: <span class="bold">{{ price }}.000 VND</span>
         </div>
         <div class="font black line">
-            Total price: <span class="jade bold">{{ price }}.000 VND</span>
+            Total price: <span class="jade bold">{{ totalPrice }}.000 VND</span>
         </div>
     </div>
 </template>
@@ -43,12 +43,22 @@ export default {
     props: {
         chosenDate: Date,
         price: Number,
-        totalPrice: Number
-    },
-    data() {
-        return {
-            startDate: '6:00',
-            endDate: '6:30'
+        totalPrice: Number,
+        startDate: {
+            type: String,
+            default: '6:00'
+        },
+        endDate: {
+            type: String,
+            default: '18:00'
+        },
+        chosenStartTime: {
+            type: String,
+            default: '6:00'
+        },
+        chosenEndTime: {
+            type: String,
+            default: '6:30'
         }
     },
     computed: {
@@ -56,7 +66,23 @@ export default {
             return {
                 "color": this.status == "Unpaid" ? "var(--theme_brown)" : "var(--theme_jade)",
             }
-        }
+        },
+        chosenStartInput: {
+            get() {
+                return this.chosenStartTime
+            },
+            set(value) {
+                this.$emit('update:chosenStartTime', value)
+            }
+        },
+        chosenEndInput: {
+            get() {
+                return this.chosenEndTime
+            },
+            set(value) {
+                this.$emit('update:chosenEndTime', value)
+            }
+        },
     },
     methods: {
         convertDate: function(day) {

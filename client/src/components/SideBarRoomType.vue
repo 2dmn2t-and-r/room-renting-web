@@ -13,17 +13,16 @@
 
 <script>
 export default {
-    data() {
-        return {
-            chosen_index: 0
-        }
-    },
     props: {
-        types: Array
+        types: Array,
+        chosen_index: {
+            type: Number,
+            default: 0
+        }
     },
     methods: {
         change_chosen_index: function(index) {
-            this.chosen_index = index;
+            this.$emit('updateIndex', index);
         }
     }
 }

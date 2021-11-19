@@ -31,23 +31,25 @@
 <script>
 export default {
     props: {
-        left: {
+        inleft: {
             type: Number,
             default: 0
         },
-        right: {
+        inright: {
             type: Number,
             default: 0
         }
     },
     data() {
         return {
+            left: this.inleft,
+            right: this.inleft,
             whole: 0,
             pre: -1,
             prepre: -1,
             leftTime: Array.from({length: 32}, (_, index) => `${Math.floor((12 + index) / 2)}:${((12 + index) % 2 == 0) ? '00' : '30'}`),
             rightTime: Array.from({length: 32}, (_, index) => `${Math.floor((13 + index) / 2)}:${((13 + index) % 2 == 0) ? '00' : '30'}`),
-            status: Array.from({length: 32}, (_, index) => 0) // -1 disabled, 0 empty, 1 chosen
+            status: Array.from({length: 32}, (_, index) => ((index >= this.inleft && index <= this.inright) ? 0 : -1)) // -1 disabled, 0 empty, 1 chosen
         }
     },
     methods: {

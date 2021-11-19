@@ -14,12 +14,13 @@
             <div class="row">
                 <div class="font black line">Date: </div>
                 <div style="min-width: 10px; min-height: 10px;"> </div>
-                <theme-input :type="'date'"/> 
+                <theme-input :type="'date'" :value.sync="chosenDateInput"/> 
             </div>
         </div>
         <div style="min-width: 30px; min-height: 20px;"> </div>
         <div class="half_col_right col">
             <description-comment-box v-bind="{
+                roomId: this.roomId,
                 title: this.title,
                 floor: this.floor,
                 seat: this.seat,
@@ -27,7 +28,6 @@
                 type: this.type,
                 address: this.address,
                 description: this.description,
-                comments: this.comments
             }"/>
         </div>
     </div>
@@ -40,6 +40,7 @@ import DescriptionCommentBox from '../reserve/DescriptionCommentBox.vue';
 import ThemeInput from '../../ThemeInput.vue';
 export default {
     props: {
+        roomId: Number,
         title: String,
         img: String,
         floor: Number,
@@ -48,7 +49,8 @@ export default {
         type: String,
         address: String,
         description: String,
-        comments: Array // {name: string, time: date, content: string, img: string url}
+        comments: Array, // {name: string, time: date, content: string, img: string url}
+        chosenDate: String
     },
     components: { PictureFrame, DescriptionCommentBox, ThemeInput },
     computed: {
@@ -56,7 +58,15 @@ export default {
             return {
                 "color": this.status == "Unpaid" ? "var(--theme_brown)" : "var(--theme_jade)",
             }
-        }
+        },
+        chosenDateInput: {
+            get() {
+                return this.chosenDate
+            },
+            set(value) {
+                this.$emit('update:chosenDate', value)
+            }
+        },
     },
     methods: {
         convertDate: function(day) {

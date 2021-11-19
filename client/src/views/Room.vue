@@ -5,22 +5,23 @@
 
       <div class="main"> 
         <div class="sidebar">
-          <side-bar-room-type :types='type'></side-bar-room-type>
+          <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList();"> </side-bar-room-type>
         </div>
-        <div class="card-container" >
-          <div class="card" v-for="(room, index) in roomList" :key="index" :id="index" >
-            <room-card class="margin-item"  v-bind="{
-              img: room.img,
-              name: room.name,
-              floor: room.floor,  
-              seat: room.seat,
-              address: room.address,
-              status: room.status 
-            }" 
-              @click.native="showModal(index)"
-            />
-          </div>
-          
+        <div class="card-container" :key="refresh">
+            <div v-for="(room, index) in roomList" :key="index" :id="index">
+              <room-card v-bind="{
+                img: room.image,
+                name: room.roomName,
+                floor: parseInt(room.floor),  
+                seat: parseInt(room.seat),
+                address: room.address,
+                status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
+              }" 
+                @click.native="showModal(index)"
+              />
+              <div style="min-height: 18px;"> </div>
+            </div>
+          <div style="min-height: 1px;"> </div>
         </div>
         
       </div>
@@ -33,22 +34,26 @@
       buttonTitle: ['Next', 'Next', 'OK']
     }" @onClose="hide()" @onCancel="hide()" @onNextStep="next()">
       <room-reserve-step-1 slot="1" v-bind="{
-        title: this.roomList[this.selected].name,
-        img: this.roomList[this.selected].img,
-        floor: this.roomList[this.selected].floor,
-        seat: this.roomList[this.selected].seat,
-        status: this.roomList[this.selected].status,
-        type: this.roomList[this.selected].type,
-        address: this.roomList[this.selected].address,
-        description: this.roomList[this.selected].description,
-        comments: this.roomList[this.selected].comments,
-      }">   </room-reserve-step-1>
+        roomId: parseInt(this.chosenRoom.roomId),
+        title: this.chosenRoom.roomName,
+        img: this.chosenRoom.image,
+        floor: parseInt(chosenRoom.floor),
+        seat: parseInt(chosenRoom.seat),
+        status: this.chosenRoom.statusRo == 'A' ? 'Available' : 'Unavailable',
+        type: typeCharFull[this.chosenRoom.type],
+        address: this.chosenRoom.address,
+        description: this.chosenRoom.description,
+        comments: comments,
+      }" :chosenDate.sync="chosenDate">   </room-reserve-step-1>
 
       <room-reserve-step-2 slot="2" v-bind="{
-        chosenDate: Date(),
-        price: 100,
-       
-      }">  </room-reserve-step-2> 
+        chosenDate: new Date(this.chosenDate),
+        startDate: startTime,
+        endDate: endTime,
+        price: parseInt(this.chosenRoom.price),
+        totalPrice: (timeToIndex(this.chosenEndTime) - timeToIndex(this.chosenStartTime)) * parseInt(this.chosenRoom.price)
+      }" :key="refresh" :chosenStartTime.sync="chosenStartTime" :chosenEndTime.sync="chosenEndTime">  </room-reserve-step-2> 
+      
       <room-reserve-step-3 slot="3"> </room-reserve-step-3> 
     </modal-template>
   </div>
@@ -63,6 +68,9 @@
   import RoomReserveStep3 from '@/components/modals/room/RoomReserveStep3.vue'
   import RoomReserveStep2 from '@/components/modals/room/RoomReserveStep2.vue'
   import RoomReserveStep1 from '@/components/modals/room/RoomReserveStep1.vue'
+  import { getDataAPI, postDataAPI } from '../utils/fetchData';
+import moment from 'moment';
+
   export default {
     name: 'Room',
     components: {
@@ -75,55 +83,55 @@
       RoomReserveStep1
     },
     data (){
-        
       return {
-        roomList: [
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 1',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Available',
-            type: 'Hall',
-            comments: [],
-            id: 1
-          },
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 2',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Available',
-            type: 'Hall',
-            id: 2
-          },
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 3',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Unavailable',
-            type: 'Hall',
-            id: 3
-          }
-
-        ],
+        roomList: [],
+        chosenRoom: {
+          roomId: 0,
+          roomName: '', 
+          type: '',
+          floor: 0,
+          seat: 0,
+          price: 0,
+          statusRo: 'A',
+          openTime: new Date(),
+          closeTime:	new Date(),
+          address: '',
+          description: '',
+          image: '',
+        },
+        comments: [],
         type: [
           'Hall',
           'Meeting room',
           'Stage'
         ],
+        typeChar: ['hall', 'meeting_room', 'stage'],
+        typeCharFull: {
+          'H': 'Hall',
+          'M': 'Meeting room',
+          'S': 'Stage'
+        },
         step: Number,
         selected: 0,
+        chosenIndex: 0,
+        refresh: 0,
+        chosenDate: moment(new Date()).format("YYYY-MM-DD"),
+        startTime: '06:00',
+        endTime: '06:30',
+        chosenStartTime: '06:00',
+        chosenEndTime: '06:30',
       }
     },
     methods: {
       showModal: function(index) {
           if (this.step == -1) this.step = 1;
           this.selected = index;
+          this.chosenRoom = this.roomList[index];
+          this.startTime = this.chosenRoom.openTime;
+          this.endTime = this.chosenRoom.endTime;
+          this.chosenStartTime = this.startTime;
+          this.chosenEndTime = this.startTime;
+          this.refresh = 1 - this.refresh;
       },
 
       hide: function() {
@@ -131,15 +139,52 @@
       },
 
       next: function() {
+        if (this.step == 2) {
+          (async () => {
+            var token = localStorage.getItem("token");
+            let res = await postDataAPI('reservation/upload', {
+              useDate: this.chosenDate, 
+              startTime: this.chosenStartTime, 
+              endTime: this.chosenEndTime,
+              totalPrice: (this.timeToIndex(this.chosenEndTime) - this.timeToIndex(this.chosenStartTime)) * parseInt(this.chosenRoom.price),
+              statusR: 'U',
+              roomId: this.chosenRoom.roomId
+            }, token);
+            if (res.data["status"] === 200) {
+              if (res.data["result"] !== false) {
+                this.step += 1;
+              }
+              else {
+                alert(res.data["msg"]);
+              }
+            }
+          })();
+          return;
+        }
         this.step += 1;
         if (this.step > 3) this.step = -1;
-      }
+      },
+
+      refreshList: function() {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI(`rooms/load/${this.typeChar[this.chosenIndex]}`, token);
+          if (res.data["status"] === 200) {
+            this.roomList = res.data["rooms"];
+          }
+          this.refresh = 1 - this.refresh;
+        })()
+      },
       
+      timeToIndex: function(time) {
+        var res = time.split(':');
+        return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
+      }
     },
     beforeMount: function(){
       this.step = -1;
+      this.refreshList();
     }
-
   }
 </script>
 
