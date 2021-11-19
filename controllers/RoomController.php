@@ -55,6 +55,7 @@ require_once('models/Room.php');
             $roomName = $room['roomName'];
             $roomType = $room['type'];
             $floor = $room['floor'];
+            $seat = $room['seat'];
             $price = $room['price'];
             $statusRo = $room['statusRo'];
             $openTime = $room['openTime'];
@@ -66,12 +67,12 @@ require_once('models/Room.php');
             if (array_key_exists('roomId', $room)) {
                 $roomId = $room['roomId'];
                 $query =   "UPDATE WEB_DATABASE.ROOM
-                            SET roomName = '$roomName', type = '$roomType', floor = '$floor', price = '$price', statusRo = '$statusRo', openTime= '$openTime', closeTime = '$closeTime', address = '$address', description = '$description', image = '$image'
+                            SET roomName = '$roomName', type = '$roomType', floor = '$floor', price = '$price', seat = '$seat', statusRo = '$statusRo', openTime= '$openTime', closeTime = '$closeTime', address = '$address', description = '$description', image = '$image'
                             WHERE roomId = '$roomId';";
             }
             else {
-                $query =   "INSERT INTO WEB_DATABASE.ROOM (roomName, type, floor, price, statusRo, openTime, closeTime, address, description, image)
-                            VALUES ('$roomName', '$roomType', '$floor', '$price', '$statusRo', '$openTime', '$closeTime', '$address', '$description', '$image')";
+                $query =   "INSERT INTO WEB_DATABASE.ROOM (roomName, type, floor, price, seat, statusRo, openTime, closeTime, address, description, image)
+                            VALUES ('$roomName', '$roomType', '$floor', '$price', '$seat', '$statusRo', '$openTime', '$closeTime', '$address', '$description', '$image')";
             }
 
             $result = mysqli_query($db, $query);
@@ -106,21 +107,11 @@ require_once('models/Room.php');
             $date = $comment["date"]; 
             $content = $comment["content"];
             $roomId = $comment["roomId"]; 
-            $userId = $comment["ownerId"];
+            $userId = $authorization['userId'];
 
-            $user = $authorization['userId'];
             $type = $authorization['type'];
-            if($user != $userId && $type != 'M') {
-                echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
-                return;
-            }
 
             $db = 'Database'::getInstance();
-
-            $date = $comment["date"]; 
-            $content = $comment["content"];
-            $roomId = $comment["roomId"]; 
-            $userId = $comment["ownerId"];
             
             if (array_key_exists('commentId', $comment)) {
                 $commentId = $comment["commentId"]; 

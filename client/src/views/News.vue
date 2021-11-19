@@ -54,7 +54,9 @@
         var token = localStorage.getItem("token");
         let res = await getDataAPI('news/load', token);
         if (res.data["status"] === 200) {
-          this.newsList = res.data["news"];
+          this.newsList = res.data["news"].sort((a, b) => {
+            return (new Date(b.modifyDate)).getTime() - (new Date(a.modifyDate)).getTime()
+          });;
         }
       })()
     },

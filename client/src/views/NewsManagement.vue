@@ -10,13 +10,13 @@
               class="input-box"
               label="From:"
               type="date"
-              value=""
+              :value.sync="from"
             />
             <theme-input
               class="input-box"
               type="date"
               label="To:"
-              value=""
+              :value.sync="to"
             />
           </div>
           <div class="bt-bar">
@@ -25,7 +25,8 @@
               height: '40px',
               width: '100%',
               border_radius: '15px'
-            }"></theme-button>
+            }"
+            @click.native="filt()"/>
             <theme-button class="bt" v-bind="{
               msg: 'Create',
               background_color: 'var(--theme_jade)',
@@ -33,17 +34,17 @@
               width: '100%',
               border_radius: '15px'
             }"
-            @click.native="setModalStep(0)"></theme-button>
+            @click.native="setModalStep(0)"/>
           </div>
         </div>
         <div class="list-box">
           <div class="list">
             <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
-              id: news.id,
-              img: news.img,
+              id: news.newsId,
+              img: news.image,
               title: news.title,
-              uploaddate: dateString(news.uploadDate),
-              modified: dateString(news.modified),
+              uploaddate: dateString(new Date(news.createDate)),
+              modified: dateString(new Date(news.modifyDate)),
             }"/>
           </div>
         </div>
@@ -56,15 +57,12 @@
       }"
       @onClose="setModalStep(-1)"
       @onCancel="setModalStep(modalStep - 1)"
-      @onNextStep="function () {
-        setModalStep(-1)
-        $router.push($router.history.current.path + '/' + '4').catch(()=>{});
-      }">
+      @onNextStep="upLoadNews()">
         <div slot="1" class="slot">
           <create-edit-news
-            v-bind="{
-              checked: check,
-            }"
+            :checked="check"
+            :content.sync="content"
+            :title.sync="title"
             @on-check="setCheck"
           />
         </div>
@@ -81,6 +79,7 @@
   import PageTitle from '../components/PageTitle.vue'
   import ThemeButton from '../components/ThemeButton.vue'
   import ThemeInput from '../components/ThemeInput.vue'
+  import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
     name: 'NewsManagement',
@@ -96,30 +95,14 @@
     data() {
       return {
         check: false,
-        newsList: [
-          {
-            id: 1,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          },
-          {
-            id: 2,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          },
-          {
-            id: 3,
-            title: "Một số nghiên cứu chỉ ra rằng, ăn tiết canh có thể trị được bệnh ung thư.",
-            img: "https://picsum.photos/200/300",
-            uploadDate: new Date(),
-            modified: new Date(),
-          }
-        ],
+        newsList: [],
+        newsCache: [],
         modalStep: -1,
+        title: "",
+        content: "",
+        image: "",
+        from: "",
+        to: "",
       }
     },
     methods: {
@@ -141,8 +124,62 @@
           
           return month + '/' + day + '/' + year;
         }
+      },
+      async upLoadNews() {
+        if (this.title !== "") {
+          var date = (new Date()).toISOString().split('T')[0]
+          var token = localStorage.getItem("token");
+          let res = await postDataAPI('news/upload', {
+            title: this.title,
+            image: this.image,
+            content: this.content,
+            modifyDate: date,
+            createDate: date,
+            public: this.check ? '1' : '0',
+          }, token);
+          console.log(res);
+          if (res.data["status"] === 200) {
+            console.log(res);
+            let loadRes = await getDataAPI('news/load', token);
+            if (loadRes.data["status"] === 200) {
+              this.newsList = loadRes.data["news"].sort((a, b) => {
+                return (new Date(b.modifyDate)).getTime() - (new Date(a.modifyDate)).getTime();
+              });
+              this.newsCache = this.newsList;
+              this.from = "";
+              this.to = "";
+            }
+            this.setModalStep(-1);
+          }
+        }
+      },
+      filt () {
+        var temp = this.newsCache
+        if (this.from !== "") {
+          temp = temp.filter((ele) => {
+            return (new Date(ele.modifyDate)).getTime() >= (new Date(this.from)).getTime()
+          })
+        }
+        if (this.to !== "") {
+          temp = temp.filter((ele) => {
+            return (new Date(ele.modifyDate)).getTime() <= (new Date(this.to)).getTime()
+          })
+        }
+        this.newsList = temp;
       }
-    }
+    },
+    mounted() {
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('news/load', token);
+        if (res.data["status"] === 200) {
+          this.newsList = res.data["news"].sort((a, b) => {
+            return (new Date(b.modifyDate)).getTime() - (new Date(a.modifyDate)).getTime()
+          });
+          this.newsCache = this.newsList;
+        }
+      })()
+    },
   }
 </script>
 

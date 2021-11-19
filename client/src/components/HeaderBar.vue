@@ -53,25 +53,25 @@
                     ROOM PRO
                 </div>
                 <div class="nav-bar">
-                    <div class="nav-item" :style="home" v-on:click="routeTo('/')">HOME</div>
-                    <div class="nav-item" :style="room" v-on:click="routeTo('/room')">ROOM</div>
-                    <div class="nav-item" :style="reservation" v-on:click="routeTo('/reservation')">RESERVATION</div>
-                    <div class="nav-item" :style="news" v-on:click="routeTo('/news')">NEWS</div>
+                    <div class="nav-item" :style="home" v-on:click="routeTo(manager + '/')">HOME</div>
+                    <div class="nav-item" :style="room" v-on:click="routeTo(manager + '/room')">ROOM</div>
+                    <div class="nav-item" :style="reservation" v-on:click="routeTo(manager + '/reservation')">RESERVATION</div>
+                    <div class="nav-item" :style="news" v-on:click="routeTo(manager + '/news')">NEWS</div>
                 </div>
                 <div class="menu">
                     <md-icon class=" menu-icon md-size-2x">
                         menu
                     </md-icon>
                     <div class="list">
-                        <div class="item" v-on:click="routeTo('/')">Home</div>
+                        <div class="item" v-on:click="routeTo(manager + '/')">Home</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/room')">Room</div>
+                        <div class="item" v-on:click="routeTo(manager + '/room')">Room</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/reservation')">Reservation</div>
+                        <div class="item" v-on:click="routeTo(manager + '/reservation')">Reservation</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/news')">News</div>
+                        <div class="item" v-on:click="routeTo(manager + '/news')">News</div>
                         <div class="divider"></div>
-                        <div class="item" v-on:click="routeTo('/profile')">Profile</div>
+                        <div class="item" v-on:click="routeTo(manager + '/profile')">Profile</div>
                         <div class="divider"></div>
                         <div class="item" v-on:click="signOut">Sign Out</div>
                     </div>
@@ -81,14 +81,14 @@
                         <div class="avt">
                             <img v-bind:src="avt === '' ? image : avt" alt="avt" :style="avt_style">
                         </div>
-                        <div class="username" :style="manager">
+                        <div class="username" :style="manager_style">
                             {{username}}
                         </div>
-                        <md-icon class="expand-icon" :style="manager">
+                        <md-icon class="expand-icon" :style="manager_style">
                             expand_more
                         </md-icon>
                         <div class="list">
-                            <div class="item" v-on:click="routeTo('/profile')">Profile</div>
+                            <div class="item" v-on:click="routeTo(manager + '/profile')">Profile</div>
                             <div class="divider"></div>
                             <div class="item" @click="signOut">Sign Out</div>
                         </div>
@@ -113,6 +113,15 @@
                 default: "",
             },
         },
+        data() {
+            return {
+                image: img,
+                username: "",
+                isAuth: false,
+                avt: "",
+                manager: "",
+            }
+        },
         computed: {
             auth: function(){
                 return {
@@ -124,9 +133,9 @@
                     "display": this.isAuth ? "none" : "flex",
                 }
             },
-            manager: function(){
+            manager_style: function(){
                 return {
-                    "color": this.isManager ? "var(--theme_jade)" : "var(--theme_white)"
+                    "color": this.manager === "/management" ? "var(--theme_jade)" : "var(--theme_white)"
                 }
             },
             display: function() {
@@ -142,9 +151,10 @@
                 }
             },
             home: function() {
+                var cond = this.route === "/" || this.route === "/management" || this.route === "/management/"
                 return {
-                    "color": this.route === "/" || this.route === "/management" ? "var(--theme_jade)" : "var(--theme_black)",
-                    "text-decoration": this.route === "/" || this.route === "/management" ? "underline" : "none",
+                    "color": cond ? "var(--theme_jade)" : "var(--theme_black)",
+                    "text-decoration": cond ? "underline" : "none",
                 }
             },
             room: function(){
@@ -173,22 +183,13 @@
             },
 
         },
-        data() {
-            return {
-                image: img,
-                username: "",
-                isAuth: false,
-                avt: "",
-                isManager: false,
-            }
-        },
         methods: {
             routeTo: function(path) {
                 this.$router.push(path).catch(()=>{});
             },
             signOut: function() {
                 localStorage.removeItem("token");
-                this.$router.push('auth/signin').catch(()=>{});
+                this.$router.push('/auth/signin').catch(()=>{});
             }
         },
         mounted() {
@@ -199,14 +200,14 @@
                     if (res.data["status"] === 200) {
                         this.isAuth = true;
                         this.username = res.data["user"]["username"];
-                        this.isManager = res.data["user"]["type"] === 'M';
+                        this.manager = res.data["user"]["type"] === 'M' ? "/management" : "";
                         this.avt = res.data["user"]["avatar"]
                     }
                 }
                 else {
                     this.isAuth = false;
                     this.username = "";
-                    this.isManager = false;
+                    this.manager = "";
                     this.avt = "";
                 }
             })()

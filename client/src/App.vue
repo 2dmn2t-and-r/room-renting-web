@@ -35,8 +35,19 @@
     },
     data() {
       return {
-        username: ""
+        isManager: false,
       }
+    },
+    mounted() {
+      (async () => {
+        var token = localStorage.getItem("token");
+        if (token) {
+          let res = await getDataAPI('auth/get', token);
+          if (res.data["status"] === 200) {
+            this.isManager = res.data["user"]["type"] === 'M';
+          }
+        }
+      })()
     },
   }
 </script>

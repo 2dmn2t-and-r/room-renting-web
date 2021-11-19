@@ -10,6 +10,7 @@ create table ROOM (
     roomName    varchar(100), 
     type 		char(1),
     floor		int,
+    seat        int,
     price		int,
     statusRo	char(1),
     openTime	time,
