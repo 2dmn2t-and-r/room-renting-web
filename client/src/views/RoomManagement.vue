@@ -4,7 +4,7 @@
       <page-title title="Room Manage"/>
       <div class="main"> 
         <div class="sidebar">
-          <side-bar-room-type :types='type'></side-bar-room-type>
+          <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList();"></side-bar-room-type>
           <theme-button class="btn" v-bind="{
             msg: 'Create',
             color: 'var(--theme_white)',
@@ -13,17 +13,17 @@
             height: '5vh'
           }" @click.native="showModal()"></theme-button>
         </div>
-        <div class="card-container" >
+        <div class="card-container" :key="refresh">
           <div class="card" v-for="(room, index) in roomList" :key="index" :id="index" >
             <room-card class="margin-item"  v-bind="{
-              img: room.img,
-              name: room.name,
-              floor: room.floor,  
-              seat: room.seat,
+              img: room.image,
+              name: room.roomName,
+              floor: parseInt(room.floor),  
+              seat: parseInt(room.seat),
               address: room.address,
-              status: room.status 
+              status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
             }" 
-              @click.native="$router.push($router.history.current.path + '/' + roomList[index].id.toString()).catch(()=>{})"
+              @click.native="$router.push($router.history.current.path + '/' + chosenId.toString()).catch(()=>{})"
             />
           </div>
           
@@ -34,7 +34,20 @@
         step: this.step,
         buttonTitle: ['Add']
       }" @onClose="hideModal()" @onCancel="hideModal()" @onNextStep="add()">
-      <add-room slot="1" v-model="addedRoom"></add-room>
+        <add-room slot="1"
+          :img.sync="addedRoom.image"
+          :roomName.sync="addedRoom.roomName"
+          :roomType.sync="addedRoom.type"
+          :floor.sync="addedRoom.floor"
+          :seat.sync="addedRoom.seat"
+          :status.sync="addedRoom.status"
+          :price.sync="addedRoom.price"
+          :openTime.sync="addedRoom.openTime"
+          :closeTime.sync="addedRoom.closeTime"
+          :address.sync="addedRoom.address"
+          :description.sync="addedRoom.description"
+          :types="type"
+        ></add-room>
 
       </modal-template>
     </div>
@@ -48,6 +61,9 @@
 import ThemeButton from '@/components/ThemeButton.vue';
 
 import AddRoom from '@/components/modals/room/AddRoom.vue';
+import moment from 'moment';
+import { getDataAPI, postDataAPI } from '../utils/fetchData';
+import { uploadImage } from '../utils/uploadImage';
 
 export default {
   components: {
@@ -57,65 +73,40 @@ export default {
     SideBarRoomType,
     ThemeButton,
     AddRoom,
-
   },
   data (){
         
       return {
-        roomList: [
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 1',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Available',
-            type: 'Hall',
-            comments: [],
-            id: 1,
-            description: 'Lorem ipsum',
-          },
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 2',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Available',
-            type: 'Hall',
-            id: 2,
-            description: 'Lorem ipsum',
-          },
-          {
-            img: 'https://st.depositphotos.com/3386033/5109/i/600/depositphotos_51097627-stock-photo-banquet-hall-with-colorful-lights.jpg',
-            name: 'Hall 3',
-            floor: 3,
-            seat: 80,
-            address: '1 Vo Van Ngan, Thu Duc City',
-            status: 'Unavailable',
-            type: 'Hall',
-            id: 3,
-            description: 'Lorem ipsum',
-          }
-
-        ],
+        roomList: [],
+        step: -1,
+        selected: 0,
+        addedRoom: {
+          roomName: '', 
+          type: '',
+          floor: 0,
+          seat: 0,
+          price: 0,
+          statusRo: 'Available',
+          openTime: '6:00',
+          closeTime: '22:00',
+          address: '',
+          description: '',
+          image: '',
+        },
         type: [
           'Hall',
           'Meeting room',
           'Stage'
         ],
-        step: -1,
-        selected: 0,
-        addedRoom: {
-            img: '',
-            name: '',
-            floor: Number,
-            seat: Number,
-            address: '',
-            status: '',
-            type: '',
-            
-        }
+        typeChar: ['hall', 'meeting_room', 'stage'],
+        typeCharFull: {
+          'H': 'Hall',
+          'M': 'Meeting room',
+          'S': 'Stage'
+        },
+        chosenIndex: 0,
+        refresh: 0,
+        chosenId: 0
       }
     },
     methods: {
@@ -128,17 +119,36 @@ export default {
       },
 
       add: function(){
-        //prototype
-        let added = true;
+        (async () => {
+          var token = localStorage.getItem("token");
+          this.addedRoom.type = this.addedRoom.type.substring(0, 1);
+          this.addedRoom.statusRo = this.addedRoom.statusRo.substring(0, 1);
+          let res = await postDataAPI('room/upload', this.addedRoom, token);
+          if (res.data["status"] === 200) {
+            this.step = -1;
+            this.refreshList();
+          }
+          else {
+            alert(res.data["msg"]);
+          }
+          
+        })()
+      },
 
-        if (added) {
-          // add room to db
-        }
-        else {
-          // noti for add
-        }
-        this.step = -1;
+      refreshList: function() {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI(`rooms/load/${this.typeChar[this.chosenIndex]}`, token);
+          if (res.data["status"] === 200) {
+            this.roomList = res.data["rooms"];
+          }
+          this.refresh = 1 - this.refresh;
+        })()
       }
+    },
+    beforeMount: function(){
+      this.step = -1;
+      this.refreshList();
     }
 }
 </script>

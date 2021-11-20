@@ -4115,6 +4115,11 @@ ignore@^4.0.3:
   resolved "https://registry.npmjs.org/ignore/-/ignore-4.0.6.tgz"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+imagekit-javascript@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/imagekit-javascript/-/imagekit-javascript-1.4.2.tgz#6452ce85eb7879e5e8f09720df4cd52aec7ce43c"
+  integrity sha512-/jknE88iwSX4lPxonlydHu4/oH1DIQVK1a1wuyuxQOUzMIotPtAF+LNsp9vIn4uVxt0FYysBeCCCQZJEapC+yA==
+
 import-cwd@^2.0.0:
   version "2.1.0"
   resolved "https://registry.nlark.com/import-cwd/download/import-cwd-2.1.0.tgz"

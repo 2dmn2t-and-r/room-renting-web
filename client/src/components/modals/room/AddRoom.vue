@@ -18,16 +18,14 @@
                     <div> Room name:</div>
                     <theme-input v-bind="{
                         type: 'input',
-                        value: this.roomName
-                    }"/>
+                    }" :value.sync="inputRoomName"/>
                 </div>
                 <div style="min-width: 10px;"> </div>
                 <div class="half_col">
                     <div> Room type:</div>
-                    <theme-input v-bind="{
-                        type: 'input',
-                        value: this.roomType
-                    }"/>
+                    <theme-select v-bind="{
+                        values: types
+                    }" :value.sync="inputRoomType"/>
                 </div>
             </div>
             <div class="font black line row">
@@ -35,16 +33,14 @@
                     <div> Floor:</div>
                     <theme-input v-bind="{
                         type: 'number',
-                        value: this.floor
-                    }"/>
+                    }" :value.sync="inputFloor"/>
                 </div>
                 <div style="min-width: 10px;"> </div>
                 <div class="half_col">
                     <div> Seat:</div>
                     <theme-input v-bind="{
                         type: 'number',
-                        value: this.seat
-                    }"/>
+                    }" :value.sync="inputSeat"/>
                 </div>
             </div>
             <div class="font black line row">
@@ -52,15 +48,14 @@
                     <div> Status:</div>
                     <theme-select v-bind="{
                         values: ['Available', 'Unavailable']
-                    }"/>
+                    }" :value.sync="inputStatus"/>
                 </div>
                 <div style="min-width: 10px;"> </div>
                 <div class="half_col">
                     <div> Price per 30 mins:</div>
                     <theme-input v-bind="{
                         type: 'number',
-                        value: this.price
-                    }"/>
+                    }" :value.sync="inputPrice"/>
                 </div>
             </div>
             <div class="font black line row">
@@ -68,14 +63,14 @@
                     <div> Open:</div>
                     <theme-select v-bind="{
                         values: timeRange(true)
-                    }"/>
+                    }" :value.sync="inputOpenTime"/>
                 </div>
                 <div style="min-width: 10px;"> </div>
                 <div class="half_col">
                     <div> Close:</div>
                     <theme-select v-bind="{
                         values: timeRange(false)
-                    }"/>
+                    }" :value.sync="inputCloseTime"/>
                 </div>
             </div>
             <div class="font black line row">
@@ -83,8 +78,7 @@
                     <div> Address:</div>
                     <theme-input v-bind="{
                         type: 'input',
-                        value: this.address
-                    }"/>
+                    }" :value.sync="inputAddress"/>
                 </div>
             </div>
 
@@ -92,9 +86,8 @@
                 <div class="col" style="width: 100%;">
                     <div> Image:</div>
                     <theme-input v-bind="{
-                        type: 'input',
-                        value: this.img
-                    }"/>
+                        type: 'file'
+                    }" @onFileChange="changeImage"/>
                 </div>
             </div>
 
@@ -103,8 +96,7 @@
                     <div> Description:</div>
                     <theme-input v-bind="{
                         type: 'input',
-                        value: this.description
-                    }"/>
+                    }" :value.sync="inputDescription"/>
                 </div>
             </div>
         </div>
@@ -116,6 +108,8 @@ import moment from 'moment';
 import PictureFrame from '../../PictureFrame.vue'
 import ThemeInput from '../../ThemeInput.vue';
 import ThemeSelect from '../../ThemeSelect.vue';
+import { uploadImage } from '../../../utils/uploadImage';
+
 export default {
     props: {
         img: String,
@@ -128,7 +122,8 @@ export default {
         openTime: String,
         closeTime: String,
         address: String,
-        description: String
+        description: String,
+        types: Array
     },
     components: { PictureFrame, ThemeInput, ThemeSelect },
     computed: {
@@ -136,7 +131,18 @@ export default {
             return {
                 "color": this.status == "Unpaid" ? "var(--theme_brown)" : "var(--theme_jade)",
             }
-        }
+        },
+        inputImg: { get() { return this.img }, set(value) { this.$emit('update:img', value) } },
+        inputRoomName: { get() { return this.roomName }, set(value) { this.$emit('update:roomName', value) } },
+        inputRoomType: { get() { return this.roomType }, set(value) { this.$emit('update:roomType', value) } },
+        inputFloor: { get() { return this.floor }, set(value) { this.$emit('update:floor', parseInt(value)) } },
+        inputSeat: { get() { return this.seat }, set(value) { this.$emit('update:seat', parseInt(value)) } },
+        inputStatus: { get() { return this.status }, set(value) { this.$emit('update:status', value) } },
+        inputPrice: { get() { return this.price }, set(value) { this.$emit('update:price', parseInt(value)) } },
+        inputOpenTime: { get() { return this.openTime }, set(value) { this.$emit('update:openTime', value) } },
+        inputCloseTime: { get() { return this.closeTime }, set(value) { this.$emit('update:closeTime', value) } },
+        inputAddress: { get() { return this.address }, set(value) { this.$emit('update:address', value) } },
+        inputDescription: { get() { return this.description }, set(value) { this.$emit('update:description', value) } },
     },
     methods: {
         convertDate: function(day) {
@@ -155,6 +161,11 @@ export default {
                 }
             }
             return res;
+        },
+        changeImage: function(file) {
+            uploadImage(file, `${this.roomType}${this.floor.toString()}${this.seat.toString()}`, (value) => {
+                this.inputImg = value;
+            });
         }
     }
 }

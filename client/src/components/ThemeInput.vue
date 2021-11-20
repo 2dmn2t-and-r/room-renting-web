@@ -2,7 +2,7 @@
     <div class="theme-input">
         <div class="label">{{label}}</div>
         <div class="input-container">
-            <input class="box" :style="input_style" :type="type" v-model="input_value" :disabled="disable" :placeholder="this.placeholder"/>
+            <input class="box" :style="input_style" @change="onFileChange" :type="type" v-model="input_value" :disabled="disable" :placeholder="this.placeholder"/>
             <div :style="button_style" class="button" @click="onClickButton">
                 {{title}}
                 <md-icon :style="icon_style">
@@ -89,7 +89,15 @@ export default {
     methods: {
         onClickButton() {
             this.$emit('onClickButton')
-        }
+        },
+        onFileChange(e) {
+            if (this.type == 'file') {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                return;
+                this.$emit('onFileChange', files[0]);
+            }
+        },
     }
 }
 </script>
