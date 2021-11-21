@@ -6,6 +6,7 @@
         public $roomName;
         public $type;
         public $floor;
+        public $seat;
         public $price;
         public $statusRo;
         public $openTime;
@@ -14,11 +15,12 @@
         public $description;
         public $image;
 
-        public function __construct($roomId, $roomName, $type, $floor, $price, $statusRo, $openTime, $closeTime, $address, $description, $image) {
+        public function __construct($roomId, $roomName, $type, $floor, $seat, $price, $statusRo, $openTime, $closeTime, $address, $description, $image) {
             $this->roomId = $roomId;
             $this->roomName = $roomName;
             $this->type = $type;
             $this->floor = $floor;
+            $this->seat = $seat;
             $this->price = $price;
             $this->statusRo = $statusRo;
             $this->openTime = $openTime;

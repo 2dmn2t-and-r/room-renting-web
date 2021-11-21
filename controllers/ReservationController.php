@@ -63,7 +63,7 @@
             $list = [];
             while($row = mysqli_fetch_assoc($result)){
                 $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
+                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
                 $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
                 $i++;
             }
@@ -97,7 +97,7 @@
             $list = [];
             while($row = mysqli_fetch_assoc($result)){
                 $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
+                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
                 $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
                 $i++;
             }
@@ -131,7 +131,7 @@
             $list = [];
             while($row = mysqli_fetch_assoc($result)){
                 $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
+                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
                 $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
                 $i++;
             }
@@ -151,7 +151,7 @@
             $Reservation = 'Models\\Reservation';
             $User = 'Models\\User';
 
-            $query = "SELECT *, ro.address as ro_address
+            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
                         FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
                         WHERE re.userId = $userId";
             $result = mysqli_query($db, $query);
@@ -159,7 +159,7 @@
             $list = [];
             while($row = mysqli_fetch_assoc($result)){
                 $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['type'], $row['floor'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
+                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
                 $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
                 $i++;
             }

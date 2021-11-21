@@ -8,7 +8,7 @@
                 <div class="font_info grow">Room type:</div>
             </div>
             <div class="row">
-                <input type="text" :disabled="true" :value="room.name">
+                <input type="text" :disabled="true" :value="room.roomName">
                 <div class="divider_other"> </div>
                 <input type="text" :disabled="true" :value="room.type">
             </div>
@@ -28,7 +28,7 @@
                 <div class="font_info grow">Price per 30 minutes:</div>
             </div>
             <div class="row">
-                <input type="text" :disabled="true" :value="room.status">
+                <input type="text" :disabled="true" :value="room.statusRo">
                 <div class="divider_other"> </div>
                 <input type="text" :disabled="true" :value="room.price">
             </div>
@@ -38,10 +38,10 @@
                 <div class="font_info grow">Close:</div>
             </div>
             <div class="row">
-                <input type="text" :disabled="true" :value="'6:00'"> 
+                <input type="text" :disabled="true" :value="room.openTime"> 
                 <!-- value = room.open -->
                 <div class="divider_other"> </div>
-                <input type="text" :disabled="true" :value="'22:00'">
+                <input type="text" :disabled="true" :value="room.closeTime">
             </div>
             <div class="row">
                 <div class="font_info grow">Address:</div>
@@ -66,7 +66,9 @@
 import ThemeButton from './ThemeButton.vue'
 export default {
   components: { ThemeButton },
-  props: ['room'],
+  props: {
+      room: Object
+  },
   methods: {
     action() {
         this.$emit('changeInfo');

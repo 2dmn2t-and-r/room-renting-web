@@ -23,7 +23,7 @@
               address: room.address,
               status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
             }" 
-              @click.native="$router.push($router.history.current.path + '/' + chosenId.toString()).catch(()=>{})"
+              @click.native="intoDetail(index)"
             />
           </div>
           
@@ -115,6 +115,7 @@ export default {
       },
 
       showModal: function() {
+        this.resetAddedRoom();
         this.step = 0;
       },
 
@@ -144,6 +145,26 @@ export default {
           }
           this.refresh = 1 - this.refresh;
         })()
+      },
+
+      intoDetail: function(index) {
+        this.$router.push(this.$router.history.current.path + '/' + this.roomList[index].roomId.toString()).catch(()=>{});
+      },
+
+      resetAddedRoom: function() {
+        this.addedRoom = {
+          roomName: '', 
+          type: '',
+          floor: 0,
+          seat: 0,
+          price: 0,
+          statusRo: 'Available',
+          openTime: '6:00',
+          closeTime: '22:00',
+          address: '',
+          description: '',
+          image: '',
+        }
       }
     },
     beforeMount: function(){
@@ -198,6 +219,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     flex-basis: 100%;
+    align-items: flex-start;
     margin: 0 auto;
   }
 

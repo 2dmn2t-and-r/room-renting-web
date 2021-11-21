@@ -227,6 +227,7 @@ import moment from 'moment';
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
     flex-basis: 100%;
     margin: 0 auto;
   }
