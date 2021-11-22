@@ -10,4 +10,8 @@
     $router->get('/reservation/load/{from}/{to}', 'ReservationController.loadReservations');
 
     $router->get('/reservation/individual', 'ReservationController.loadReservation');
+
+    $router->get('/reservation/interval/{from}/{to}', 'ReservationController.loadIntervalReservation');
+
+    $router->get('/reservation/remove/{id}', 'ReservationController.removeReservation');
 ?>

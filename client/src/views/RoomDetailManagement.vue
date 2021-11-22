@@ -6,17 +6,18 @@
         v-bind:isBack="true"
         @onBack="$router.go(-1)"
       />
-      <div class="main">
-        <reservation-block class="half_col">
+      <div class="main" :key="refresh">
+        <reservation-block class="half_col" :filterStart.sync="filterStart" :filterEnd.sync="filterEnd" @triggerFilter="refreshList">
           <div v-for="(item, index) in reservationsList" :key="index">
             <reservation-info
               v-bind="{
-                user: item.user,
-                reserveDate: item.reserveDate,
-                duration: item.duration,
-                price: item.price,
-                paid: item.paid,
-                showMiddle: item.showMiddle,
+                img: item.user.avatar,
+                user: item.user.username,
+                startDate: new Date(item.reservation.useDate),
+                duration: getDuration(item.reservation.startTime, item.reservation.endTime).toString() + ' mins',
+                totalPrice: getDuration(item.reservation.startTime, item.reservation.endTime) / 30 * parseInt(item.room.price),
+                paid: (item.reservation.statusR === 'P'),
+                showMiddle: false,
               }"
               @click.native="showReservation(index)"
             >
@@ -29,12 +30,11 @@
           class="half_col"
           :room="curRoom"
           @changeInfo="showRoomModal()"
-          :key="refresh"
         >
         </information-block>
       </div>
     </div>
-    <!-- <modal-template
+    <modal-template
       v-bind="{
         title: 'Customer Reservaion',
         step: this.reservation,
@@ -47,24 +47,25 @@
       <customer-reservation
         slot="1"
         v-bind="{
-          title: room.name,
-          owner: this.reservationsList[selectedReservation].user,
-          floor: room.floor,
-          seat: room.seat,
-          type: room.type,
-          price: room.price,
-          bookDate: Date(),
-          startDate: Date(),
-          duration: this.reservationsList[selectedReservation].duration,
-          totalPrice: this.reservationsList[selectedReservation].price,
-          status: this.reservationsList[selectedReservation].paid
-            ? 'Paid'
-            : 'Unpaid',
-          address: room.address,
-          description: room.description,
+          title: chosenReserve.room.roomName,
+          owner: chosenReserve.user.username,
+          floor: parseInt(chosenReserve.room.floor),
+          seat: parseInt(chosenReserve.room.seat),
+          type: roomTypes[chosenReserve.room.type],
+          price: parseInt(chosenReserve.room.price),
+          bookDate: new Date(chosenReserve.reservation.bookDate),
+          startDate: new Date(chosenReserve.reservation.useDate),
+          duration: getDuration(chosenReserve.reservation.startTime, chosenReserve.reservation.endTime).toString() + ' mins',
+          totalPrice: getDuration(chosenReserve.reservation.startTime, chosenReserve.reservation.endTime) / 30 * parseInt(chosenReserve.room.price),
+          status: payStatus[chosenReserve.reservation.statusR],
+          address: chosenReserve.room.address,
+          description: chosenReserve.room.description,
+          img: chosenReserve.room.image,
+          startTime: shortenTime(chosenReserve.reservation.startTime),
+          endTime: shortenTime(chosenReserve.reservation.endTime)
         }"
       ></customer-reservation>
-    </modal-template> -->
+    </modal-template>
 
     <modal-template
       v-bind="{
@@ -89,6 +90,7 @@
         :address.sync="modifiedRoom.address"
         :description.sync="modifiedRoom.description"
         :types="type"
+        :key="refresh"
       ></add-room>
     </modal-template>
   </div>
@@ -120,62 +122,45 @@ export default {
   props: {},
   data() {
     return {
-      reservationsList: [
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 100,
-          img: String,
-          paid: true,
-          showMiddle: false,
+      reservationsList: [],
+      chosenReserve: {
+        reservation: {
+          resId: 0,
+          bookDate: "2021-10-10",
+          useDate: "2021-10-10",
+          startTime: "9:00",
+          endTime: "12:00",
+          totalPrice: 2000,
+          statusR: "Paid",
+          roomId: 0,
+          userId: 0,
         },
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 100,
-          img: String,
-          paid: false,
-          showMiddle: false,
+        room: {
+          roomId: 0,
+          roomName: "Hall 1",
+          type: "Hall",
+          floor: 0,
+          price: 0,
+          statusRo: "Unpaid",
+          openTime: "9:00",
+          closeTime: "18:00",
+          address: "Some address",
+          description: "Some description",
+          image: "",
         },
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 100,
-          img: String,
-          paid: true,
-          showMiddle: false,
+        user: {
+          userId: 0,
+          username: "",
+          password: "",
+          sex: "M",
+          birthday: "2000-10-10",
+          phone: "",
+          address: "",
+          email: "",
+          type: "",
+          avatar: "",
         },
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 100,
-          img: String,
-          paid: false,
-          showMiddle: false,
-        },
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 120,
-          img: String,
-          paid: true,
-          showMiddle: false,
-        },
-        {
-          user: "Cu Meo",
-          reserveDate: Date(),
-          duration: "4hr",
-          price: 100,
-          img: String,
-          paid: false,
-          showMiddle: false,
-        },
-      ],
+      },
       curRoom: {
         roomId: 0,
         roomName: "",
@@ -212,19 +197,32 @@ export default {
       reservation: -1,
       selectedReservation: -1,
       roomChange: -1,
-      refresh: 0
+      refresh: 0,
+      filterStart: '2000-01-01',
+      filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return moment(t).format('YYYY-MM-DD');})(),
+      payStatus: {
+        'U': "Unpaid",
+        'P': "Paid",
+        'R': "Removed"
+      },
+      roomTypes: {
+        'H': 'Hall',
+        'M': 'Meeting room',
+        'S': 'Stage'
+      }
     };
   },
 
   methods: {
     remove: function () {
-      let removed = true;
-      if (removed) {
-        // remove from db
-      } else {
-        //back
-      }
-      this.reservation = -1;
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`reservation/remove/${this.chosenReserve.reservation.resId}`, token);
+        if (res.data["status"] === 200) {
+          await this.refreshList();
+          this.reservation = -1;
+        }
+      })()
     },
     async save() {
       var token = localStorage.getItem("token");
@@ -236,7 +234,7 @@ export default {
       }
     },
     showReservation: function (index) {
-      this.selectedReservation = index;
+      this.chosenReserve = this.reservationsList[index]
       this.reservation = 0;
     },
 
@@ -246,11 +244,37 @@ export default {
     },
     showRoomModal: function () {
       this.modifiedRoom = Object.assign({}, this.curRoom);
+      this.refresh = 1 - this.refresh;
       this.roomChange = 0;
-    }
+    },
+    async refreshList() {
+      var token = localStorage.getItem("token");
+      let res = await getDataAPI(`reservation/loadRoom/${this.$route.params.roomId}/${this.filterStart}/${this.filterEnd}`, token);
+      if (res.data["status"] === 200) {
+        this.reservationsList = res.data["reversations"];
+        // this.refresh = 1 - this.refresh;
+      }
+      this.refresh = 1 - this.refresh;
+    },
+    getDuration(openTime, closeTime) {
+      var op = openTime.split(":");
+      var cl = closeTime.split(":");
+      var dur =
+        (parseInt(cl[0]) - parseInt(op[0])) * 60 +
+        (parseInt(cl[1]) - parseInt(op[1]));
+      return dur;
+    },
+    dateFormat(date) {
+      return moment(Date(date)).format("DD/MM/YYYY");
+    },
+    shortenTime(time) {
+      return time.charAt(0) == "0"
+        ? time.substring(1, 5)
+        : time.substring(0, 5);
+    },
   },
 
-  beforeMount: function(){
+  mounted: function(){
     (async () => {
       var token = localStorage.getItem("token");
       let res = await getDataAPI(`room/load/${this.$route.params.roomId}`, token);
@@ -264,6 +288,7 @@ export default {
         this.curRoom.statusRo = ((this.curRoom.statusRo == 'A') ? "Available" : "Unavailable");
         this.curRoom.type = ((val) => {if (val == 'H') return "Hall"; else if (val == 'M') return "Meeting room"; else return "Stage";})(this.curRoom.type);
         this.modifiedRoom = Object.assign({}, this.curRoom);
+        await this.refreshList();
       }
       this.refresh = 1 - this.refresh;
     })()

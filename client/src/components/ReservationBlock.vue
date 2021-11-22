@@ -19,11 +19,13 @@ import moment from 'moment'
 import ReservationInfo from './ReservationInfo.vue'
 import ThemeInput from './ThemeInput.vue'
 export default {
-    data() {
-        return {
-            dateStart: '1970-02-01',
-            dateEnd: moment(new Date()).format('YYYY-MM-DD')
-        }
+    props: {
+        filterStart: String,
+        filterEnd: String
+    },
+    computed: {
+        dateStart: { get() { return this.filterStart }, set(value) { this.$emit('update:filterStart', value); this.$emit('triggerFilter'); } },
+        dateEnd: { get() { return this.filterEnd }, set(value) { this.$emit('update:filterEnd', value); this.$emit('triggerFilter'); } }
     },
     components: { ReservationInfo, ThemeInput },
 }

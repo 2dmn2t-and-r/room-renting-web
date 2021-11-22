@@ -8,7 +8,7 @@
                         <img src="../../assets/icon/door.png" alt="None">
                         <div class="button_text">
                             <div style="font-weight: bold">Meeting room</div>
-                            <div>Super comfortable</div>
+                            <div>Comfortable</div>
                         </div>
                     </div>
                 </md-button>
@@ -18,7 +18,7 @@
                         <img src="../../assets/icon/house.png" alt="None">
                         <div class="button_text">
                             <div style="font-weight: bold">Hall</div>
-                            <div>Amazingly comfortable</div>
+                            <div>Modern</div>
                         </div>
                     </div>
                 </md-button>
@@ -28,7 +28,7 @@
                         <img src="../../assets/icon/chair.png" alt="None">
                         <div class="button_text">
                             <div style="font-weight: bold">Stage</div>
-                            <div>Ultra comfortable</div>
+                            <div>Professional</div>
                         </div>
                     </div>
                 </md-button>

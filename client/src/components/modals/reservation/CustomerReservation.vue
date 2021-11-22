@@ -6,7 +6,8 @@
                     width: '100%',
                     height: '100%',
                     width_img: 'calc(100% - 20px)',
-                    height_img: 'calc(100% - 20px)'
+                    height_img: 'calc(100% - 20px)',
+                    background_img: img
                 }"/>
             </div>
         </div>
@@ -15,22 +16,26 @@
             <div class="title_font bold black line">{{ title }}</div>
             <div class="font black line row">
                 <div class="half_col">By: <span class="bold">{{ owner }}</span></div>
-                <div class="half_col">Book date: <span class="bold">{{ convertDate(bookDate) }}</span></div>
+                <div class="half_col">Type: <span class="bold">{{ type }}</span></div>
             </div>
             <div class="font black line row">
                 <div class="half_col">Floor: <span class="bold">{{ floor }}</span></div>
+                <div class="half_col">Seat: <span class="bold">{{ seat }}</span></div>
+            </div>
+            <div class="font black line row">
+                <div class="half_col">Book date: <span class="bold">{{ convertDate(bookDate) }}</span></div>
                 <div class="half_col">Start date: <span class="bold">{{ convertDate(startDate) }}</span></div>
             </div>
             <div class="font black line row">
-                <div class="half_col">Seat: <span class="bold">{{ seat }}</span></div>
-                <div class="half_col">Duration: <span class="bold">{{ duration }}</span></div>
-            </div>
-            <div class="font black line row">
-                <div class="half_col">Type: <span class="bold">{{ type }}</span></div>
-                <div class="half_col">Total price: <span class="bold jade">{{ totalPrice }}.000 VND</span></div>
+                <div class="half_col">Start time: <span class="bold">{{ startTime }}</span></div>
+                <div class="half_col">End time: <span class="bold">{{ endTime }}</span></div>
             </div>
             <div class="font black line row">
                 <div class="half_col">Price: <span class="bold">{{ price }}.000 VND</span></div>
+                <div class="half_col">Duration: <span class="bold">{{ duration }}</span></div>
+            </div>
+            <div class="font black line row">
+                <div class="half_col">Total price: <span class="bold jade">{{ totalPrice }}.000 VND</span></div>
                 <div class="half_col">Status: <span class="bold" :style="pay_style">{{ status }}</span></div>
             </div>
             <div class="font black line">Address: <span class="bold">{{ address }}</span></div>
@@ -56,7 +61,10 @@ export default {
         totalPrice: Number,
         status: String,
         address: String,
-        description: String
+        description: String,
+        img: String,
+        startTime: String,
+        endTime: String
     },
     components: { PictureFrame },
     computed: {

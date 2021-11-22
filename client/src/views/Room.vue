@@ -44,7 +44,7 @@
         address: this.chosenRoom.address,
         description: this.chosenRoom.description,
         comments: comments,
-      }" :chosenDate.sync="chosenDate">   </room-reserve-step-1>
+      }" :chosenDate.sync="chosenDate" :key="refresh">   </room-reserve-step-1>
 
       <room-reserve-step-2 slot="2" v-bind="{
         chosenDate: new Date(this.chosenDate),
@@ -136,6 +136,8 @@ import moment from 'moment';
 
       hide: function() {
         this.step = -1;
+        this.chosenDate = moment(new Date()).format("YYYY-MM-DD");
+        this.comments = [];
       },
 
       next: function() {
@@ -162,7 +164,9 @@ import moment from 'moment';
           return;
         }
         this.step += 1;
-        if (this.step > 3) this.step = -1;
+        if (this.step > 3) {
+          this.hide();
+        }
       },
 
       refreshList: function() {

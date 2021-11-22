@@ -17,6 +17,7 @@
                     border_radius: '1.32vw'
                 }" class='sign_up' style="font-weight: bold"/>
             </div> -->
+            <div style="min-height: 20px"> </div>
             <theme-input :buttonTitle="'Sign up'" :buttonWidth="'100px'" :value="'Enter your email address'"/>
         </div>
     </div>

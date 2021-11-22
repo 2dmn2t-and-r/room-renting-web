@@ -3,7 +3,7 @@
         <div class="text_class text_normal">Date filter</div>
         <div class="row">
             <div class="date_text">From:</div>
-            <input type="date">
+            <input type="date" v-model="filterStart">
             <!-- <div>
                 <theme-input type="date"/>
             </div> -->
@@ -11,21 +11,33 @@
         <div class="divider"></div>
         <div class="row">
             <div class="date_text">To:</div>
-            <input type="date">
+            <input type="date" v-model="filterEnd">
             <!-- <div>
                 <theme-input type="date"/>
             </div> -->
         </div>
         <div class="divider"></div>
-        <theme-button class="text_button" v-bind:msg="'OK'" v-bind:background_color="'var(--theme_jade)'" v-bind:width="'100%'" v-bind:height="'40px'"/>
+        <theme-button class="text_button" v-bind:msg="'OK'" v-bind:background_color="'var(--theme_jade)'" v-bind:width="'100%'" v-bind:height="'40px'" @click="triggerFilter"/>
     </div>
 </template>
 
 <script>
 import ThemeButton from './ThemeButton.vue'
 import ThemeInput from './ThemeInput.vue'
+import moment from "moment";
 export default {
   components: { ThemeButton, ThemeInput },
+  data() {
+      return {
+        filterStart: '2000-01-01',
+        filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return moment(t).format('YYYY-MM-DD');})(),
+      }
+  },
+  methods: {
+      triggerFilter() {
+          this.$emit('triggerFilter', this.filterStart, this.filterEnd);
+      }
+  }
 }
 </script>
 

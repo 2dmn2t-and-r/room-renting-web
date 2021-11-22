@@ -167,7 +167,7 @@ export default {
         }
       }
     },
-    beforeMount: function(){
+    mounted: function(){
       this.step = -1;
       this.refreshList();
     }

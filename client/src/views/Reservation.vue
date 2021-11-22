@@ -4,7 +4,7 @@
       <page-title title="Reservation History" />
       <div class="mai">
         <div class="grow1">
-          <side-bar-reserve-time />
+          <side-bar-reserve-time @triggerFilter="triggerFilter"/>
         </div>
         <div style="min-height: 10px; min-width: 10px"></div>
         <div class="grow4" :key="refresh">
@@ -16,7 +16,7 @@
                 floor: parseInt(item.room.floor),
                 seat: parseInt(item.room.seat),
                 address: item.room.address,
-                startdate: dateFormat(item.room.useDate),
+                startdate: dateFormat(item.reservation.useDate),
                 duration: getDuration(
                   item.reservation.startTime,
                   item.reservation.endTime
@@ -46,15 +46,18 @@
             owner: chosenResere.user.username,
             floor: parseInt(chosenResere.room.floor),
             seat: parseInt(chosenResere.room.seat),
-            type: chosenResere.room.type,
+            type: roomTypes[chosenResere.room.type],
             price: parseInt(chosenResere.room.price),
             bookDate: new Date(chosenResere.reservation.bookDate),
             startDate: new Date(chosenResere.reservation.useDate),
             duration: getDuration(chosenResere.reservation.startTime, chosenResere.reservation.endTime).toString() + ' mins',
             totalPrice: getDuration(chosenResere.reservation.startTime, chosenResere.reservation.endTime) / 30 * parseInt(chosenResere.room.price),
-            status: chosenResere.reservation.statusR,
+            status: payStatus[chosenResere.reservation.statusR],
             address: chosenResere.room.address,
-            description: chosenResere.room.description
+            description: chosenResere.room.description,
+            img: chosenResere.room.image,
+            startTime: shortenTime(chosenResere.reservation.startTime),
+            endTime: shortenTime(chosenResere.reservation.endTime)
         }"
       />
     </modal-template>
@@ -85,7 +88,7 @@ export default {
           resId: 0,
           bookDate: "2021-10-10",
           useDate: "2021-10-10",
-          startTime: "9:00",
+          startTime: "09:00",
           endTime: "12:00",
           totalPrice: 2000,
           statusR: "Paid",
@@ -120,6 +123,16 @@ export default {
       },
       showModal: -1,
       refresh: 0,
+      payStatus: {
+        'U': "Unpaid",
+        'P': "Paid",
+        'R': "Removed"
+      },
+      roomTypes: {
+        'H': 'Hall',
+        'M': 'Meeting room',
+        'S': 'Stage'
+      }
     };
   },
   methods: {
@@ -143,16 +156,32 @@ export default {
       this.showModal = -1 - this.showModal;
     },
     clickRemove: function () {
-      this.showModal = -1 - this.showModal;
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`reservation/remove/${this.chosenResere.reservation.resId}`, token);
+        if (res.data["status"] === 200) {
+          await this.refreshList();
+          this.showModal = -1 - this.showModal;
+        }
+      })()
     },
     async refreshList() {
       var token = localStorage.getItem("token");
       let res = await getDataAPI("reservation/individual", token);
       if (res.data["status"] === 200) {
         this.reserveList = res.data["reversations"];
-        console.log(this.reserveList);
       }
       this.refresh = 1 - this.refresh;
+    },
+    triggerFilter(startTime, endTime) {
+      (async () => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`reservation/interval/${startTime}/${endTime}`, token);
+        if (res.data["status"] === 200) {
+          this.reserveList = res.data["reversations"];
+        }
+        this.refresh = 1 - this.refresh;
+      })();
     },
     shortenTime(time) {
       return time.charAt(0) == "0"
@@ -168,8 +197,7 @@ export default {
       return dur;
     },
     dateFormat(date) {
-      return moment(Date(date)).format("DD/MM/YYYY");
-      console.log(moment(Date(date)).format("DD/MM/YYYY"));
+      return moment(new Date(date)).format("DD/MM/YYYY");
     },
   },
   beforeMount: function () {

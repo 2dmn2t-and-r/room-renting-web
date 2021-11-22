@@ -5,22 +5,22 @@
         <div style="min-width: 10px"> </div>
         <div class="col part linespace">
             <div class="font">By: <span class="bold">{{user}}</span></div>
-            <div class="font">Date: <span class="bold">{{convertDate(reserveDate)}}</span></div>
+            <div class="font">Start: <span class="bold">{{convertDate(startDate)}}</span></div>
         </div>
         <div style="min-width: 10px"> </div>
         <div v-if="this.showMiddle" class="col part linespace">
             <div class="font">Room: <span class="bold">{{roomName}}</span></div>
-            <div class="font">Start: <span class="bold">{{convertDate(startDate)}}</span></div>
+            <div class="font">Date: <span class="bold">{{convertDate(reserveDate)}}</span></div>
         </div>
         <div style="min-width: 10px" v-if="this.showMiddle"> </div>
         <div class="not_show col part linespace" v-if="this.showMiddle">
             <div class="font">Duration: <span class="bold">{{duration}}</span></div>
-            <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
+            <div class="font">Price: <span class="bold cost">{{totalPrice}}.000 VND</span></div>
         </div>
         <div style="min-width: 10px" v-if="this.showMiddle"> </div>
         <div class="col part linespace" v-if="!this.showMiddle">
             <div class="font">Duration: <span class="bold">{{duration}}</span></div>
-            <div class="font">Price: <span class="bold cost">{{price}}.000 VND</span></div>
+            <div class="font">Total: <span class="bold cost">{{totalPrice}}.000 VND</span></div>
         </div>
         <div style="min-width: 10px" v-if="!this.showMiddle"> </div>
         <img v-if="this.paid" src="../assets/icon/paid.png" class="pay" alt="pay">
@@ -34,15 +34,16 @@ import moment from 'moment';
 export default {
     props: {
         user: String,
-        reserveDate: Date,
+        reserveDate: Date, // Optional if showMiddle
         showMiddle: {
             type: Boolean,
             default: false
         },
         roomName: String, // Optional if showMiddle
-        startDate: Date, // Optional if showMiddle
+        startDate: Date, 
         duration: String,
         price: Number,
+        totalPrice: Number,
         img: String,
         paid: {
             type: Boolean,
