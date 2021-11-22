@@ -17,12 +17,18 @@ import {
   RoomManagement,
   UserProfileManagement,
   Signin,
-  Signup
+  Signup,
+  Page404
 } from '../views'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '*',
+    name: '404',
+    component: Page404,
+  },
   {
     path: '/',
     name: 'Home',

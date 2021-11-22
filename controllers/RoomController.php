@@ -12,9 +12,17 @@ require_once('models/Room.php');
                 echo json_encode(['msg' => 'Invalid room type.', 'status'=>401]); 
                 return;
             }
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $authorization = $VerifyAccount::checkAuthState();
+            $type = $authorization['type'];
+
             $db = 'Database'::getInstance();
             $roomType = strtoupper(substr($type, 0, 1));
-            $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType'";
+            $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType' AND statusR != 'R'";
+            if ($type == 'M') {
+                $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType'";
+            }
+
             $rooms = mysqli_query($db, $query);
             $row = mysqli_fetch_all($rooms, MYSQLI_ASSOC);
             
@@ -75,6 +83,30 @@ require_once('models/Room.php');
                             VALUES ('$roomName', '$roomType', '$floor', '$price', '$seat', '$statusRo', '$openTime', '$closeTime', '$address', '$description', '$image')";
             }
 
+            $result = mysqli_query($db, $query);
+            echo json_encode(['result' => $result, 'status'=>200]);
+        }
+
+        public function deleteRoom() {
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $authorization = $VerifyAccount::checkAuthState();
+            if(!$authorization) {
+                echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
+                return;
+            }
+            
+            $type = $authorization['type'];
+            if($type != 'M') {
+                echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
+                return;
+            }
+            $room = json_decode(file_get_contents('php://input'), true);
+            $roomId = $room['roomId'];
+
+            $query =   "UPDATE WEB_DATABASE.ROOM
+                        SET statusRo = 'R'
+                        WHERE roomId = '$roomId';";
+            $db = 'Database'::getInstance();
             $result = mysqli_query($db, $query);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
