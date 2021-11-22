@@ -1,4 +1,5 @@
 export { default as Home } from './Home';
+export { default as Page404 } from './404';
 export { default as HomeManagement } from './HomeManagement';
 export { default as Room } from './Room';
 export { default as Reservation } from './Reservation';
