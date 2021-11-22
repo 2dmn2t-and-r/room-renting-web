@@ -7,7 +7,11 @@
                         name: comment['username'],
                         time: new Date(comment['date']),
                         content: comment['content'],
-                        img: comment['avatar']
+                        img: comment['avatar'],
+                        deletable: manager || userId === comment['userId'],
+                    }"
+                    @onDelete="() => {
+                        onDelete(index)
                     }"
                 />
                 <div class="divider"></div>
@@ -18,7 +22,8 @@
             type="text"
             :value.sync="input_value"
             v-bind="{
-                isInputBgWhite: true
+                isInputBgWhite: true,
+                disable: !manager && userId === '',
             }"
         />
     </div>
@@ -32,6 +37,14 @@ export default {
     props: {
         comments: Array,
         newComment: {
+            type: String,
+            default: "",
+        },
+        manager: {
+            type: Boolean,
+            default: false,
+        },
+        userId: {
             type: String,
             default: "",
         }
@@ -51,6 +64,11 @@ export default {
             }
         },
     },
+    methods: {
+        onDelete: function(index) {
+            this.$emit('onDelete', index);
+        }
+    }
 }
 </script>
 

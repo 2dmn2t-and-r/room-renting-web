@@ -54,9 +54,14 @@
       >
         <div slot="1" class="slot">
           <comment-box v-bind="{
-            comments: comments
+            comments: comments,
+            manager: false,
+            userId: userId,
           }"
           :newComment.sync="newComment"
+          @onDelete="(index) => {
+            deleteComment(index)
+          }"
           />
         </div>
       </modal-template>
@@ -94,6 +99,7 @@
         newComment: "",
         comments: [],
         modalStep: -1,
+        userId: "",
       }
     },
     methods: {
@@ -130,6 +136,15 @@
             this.setModalStep(-1);
           }
         }
+      },
+      async deleteComment(index) {
+        var token = localStorage.getItem("token");
+        let res = await postDataAPI('news/comment/delete', {
+          commentId: this.comments[index]['commentId'],
+        }, token);
+        if (res.data["status"] === 200) {
+          this.comments.splice(index, 1);
+        }
       }
     },
     mounted() {
@@ -137,7 +152,11 @@
         var token = localStorage.getItem("token");
         let res = await getDataAPI('news/load/' + this.$route.params.newsId, token);
         if (res.data["status"] === 200) {
-          this.news = res.data["news"]
+          this.news = res.data["news"];
+        }
+        res = await getDataAPI('auth/get', token);
+        if (res.data["status"] === 200) {
+          this.userId = res.data["user"]["userId"];
         }
       })()
     },

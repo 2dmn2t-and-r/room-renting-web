@@ -16,7 +16,11 @@
                     
                     return month + '/' + day + '/' + year;
                 })(time)}}</div>
-                <div v-if="this.deletable" class="medium font close bold" v-on:click="executeDelete">X</div>
+                <div v-if="this.deletable" class="medium font close bold baseline row">
+                    <span class="material-icons close-icon" v-on:click="executeDelete">
+                        close
+                    </span>
+                </div>
             </div>
             <div class="medium font stretch">{{content}}</div>
         </div>
@@ -57,7 +61,7 @@ export default {
         flex-direction: row;
     }
     .baseline {
-        align-items: baseline;
+        align-items: center;
     }
     .col {
         display: flex;
@@ -100,5 +104,9 @@ export default {
     }
     .close {
         margin-left: 20px;
+    }
+    .close-icon {
+        font-size: 18px;
+        cursor: pointer;
     }
 </style>
