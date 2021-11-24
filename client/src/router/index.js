@@ -38,11 +38,49 @@ const routes = [
     path: '/auth/signin',
     name: 'SignIn',
     component: Signin,
+    beforeEnter: async (to, from, next) => {
+      var token = localStorage.getItem("token");
+      if (token) {
+        let res = await getDataAPI('auth/get', token);
+        if (res.data["status"] === 200) {
+          if (res.data["user"]["type"] === 'M') {
+            next('/management');
+          }
+          else {
+            next('/');
+          }
+        }
+        else {
+          localStorage.removeItem("token");
+          next();
+        }
+      }
+      else next();
+    }
   },
   {
     path: '/auth/signup',
     name: 'SignUp',
     component: Signup,
+    beforeEnter: async (to, from, next) => {
+      var token = localStorage.getItem("token");
+      if (token) {
+        let res = await getDataAPI('auth/get', token);
+        if (res.data["status"] === 200) {
+          if (res.data["user"]["type"] === 'M') {
+            next('/management');
+          }
+          else {
+            next('/');
+          }
+        }
+        else {
+          localStorage.removeItem("token");
+          next();
+        }
+      }
+      else next();
+    }
   },
   {
     path: '/management',

@@ -96,7 +96,32 @@ export default {
     }
   },
   methods: {
+    verify() {
+      if (this.username === "") {
+        alert("Username is required!");
+        return false;
+      }
+      else if (this.email.split('@').length !== 2 || this.email.split('@')[1].split('.').length !== 2) {
+        alert("Email is invalid!");
+        return false;
+      }
+      else if (this.password.length < 6) {
+        alert("Password length is at least 6");
+        return false;
+      }
+      else if (this.password !== this.cPassword) {
+        alert("Confirm password does not match");
+        return false;
+      }
+      else if (this.date === "") {
+        alert("Birthday is required!");
+        return false;
+      }
+      return true;
+    },
     async signUp() {
+      var checkForm = this.verify();
+      if (!checkForm) return;
       var res = await postDataAPI('auth/register', {
         username: this.username,
         password: this.password,
@@ -110,7 +135,11 @@ export default {
       if (res.data["status"] === 200) {
         this.$router.push('/auth/signin').catch(()=>{})
       }
-    }
+      else {
+        alert("Sign up failed!");
+      }
+    },
+    
   }   
 }
 </script>
