@@ -4,7 +4,7 @@
       <page-title title="Room Manage"/>
       <div class="main"> 
         <div class="sidebar">
-          <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList();"></side-bar-room-type>
+          <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList(); curPage = 1"></side-bar-room-type>
           <theme-button class="btn" v-bind="{
             msg: 'Create',
             color: 'var(--theme_white)',
@@ -13,20 +13,26 @@
             height: '5vh'
           }" @click.native="showModal()"></theme-button>
         </div>
-        <div class="card-container" :key="refresh">
-          <div class="card" v-for="(room, index) in roomList" :key="index" :id="index" >
-            <room-card class="margin-item"  v-bind="{
-              img: room.image,
-              name: room.roomName,
-              floor: parseInt(room.floor),  
-              seat: parseInt(room.seat),
-              address: room.address,
-              status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
-            }" 
-              @click.native="intoDetail(index)"
-            />
+        <div class="right-bar">
+          <div class="card-container" :key="refresh">
+            <div class="card" v-for="(room, index) in roomListFilter" :key="index" :id="index" >
+              <room-card class="margin-item"  v-bind="{
+                img: room.image,
+                name: room.roomName,
+                floor: parseInt(room.floor),  
+                seat: parseInt(room.seat),
+                address: room.address,
+                status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
+              }" 
+                @click.native="intoDetail(index)"
+              />
+            </div>
           </div>
-          
+          <div style="min-height: 20px"> </div>
+          <theme-pagination v-bind="{
+            totalItem: roomList.length,
+            pageItem: pageItem,
+          }" :curPage.sync="curPageChangable" :key="refreshPagination"/>
         </div>
       </div>
       <modal-template v-bind="{
@@ -64,6 +70,7 @@ import AddRoom from '@/components/modals/room/AddRoom.vue';
 import moment from 'moment';
 import { getDataAPI, postDataAPI } from '../utils/fetchData';
 import { uploadImage } from '../utils/uploadImage';
+import ThemePagination from '../components/ThemePagination.vue';
 
 export default {
   components: {
@@ -73,6 +80,7 @@ export default {
     SideBarRoomType,
     ThemeButton,
     AddRoom,
+    ThemePagination,
   },
   data (){
         
@@ -106,7 +114,25 @@ export default {
         },
         chosenIndex: 0,
         refresh: 0,
-        chosenId: 0
+        chosenId: 0,
+        curPage: 1,
+        pageItem: 5,
+        refreshPagination: 2
+      }
+    },
+    computed: {
+      curPageChangable: {
+        get() {return this.curPage},
+        set(val) {this.curPage = val; this.refresh = 1 - this.refresh;}
+      },
+      firstItem() {
+        return (this.curPage - 1) * this.pageItem;
+      },
+      lastItem() {
+        return this.curPage * this.pageItem - 1;
+      },
+      roomListFilter() {
+        return this.roomList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))
       }
     },
     methods: {
@@ -127,7 +153,8 @@ export default {
           let res = await postDataAPI('room/upload', this.addedRoom, token);
           if (res.data["status"] === 200) {
             this.step = -1;
-            this.refreshList();
+            await this.refreshList();
+            this.refreshPagination = 1 - this.refreshPagination;
           }
           else {
             alert(res.data["msg"]);
@@ -136,15 +163,13 @@ export default {
         })()
       },
 
-      refreshList: function() {
-        (async () => {
-          var token = localStorage.getItem("token");
-          let res = await getDataAPI(`rooms/load/${this.typeChar[this.chosenIndex]}`, token);
-          if (res.data["status"] === 200) {
-            this.roomList = res.data["rooms"];
-          }
-          this.refresh = 1 - this.refresh;
-        })()
+      async refreshList() {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`rooms/load/${this.typeChar[this.chosenIndex]}`, token);
+        if (res.data["status"] === 200) {
+          this.roomList = res.data["rooms"];
+        }
+        this.refresh = 1 - this.refresh;
       },
 
       intoDetail: function(index) {
@@ -181,9 +206,13 @@ export default {
     
   }
 
+.right-bar {
+  width: 100%;
+  flex-basis: 80%;
+}
+
   .card-container {
     width: 100%;
-    flex-basis: 80%;
     background-color: var(--theme_fore);
     padding: 18px 18px 0px 18px;
     border-radius: 10px;

@@ -1,9 +1,11 @@
 <?php
     namespace Controllers;
 
-use mysqli_result;
+    use mysqli_result;
 
-require_once('models/Room.php');
+    require_once('models/Room.php');
+    require_once('jwtGeneration.php');
+    require_once('middlewares/VerifyAccount.php');
 
     class RoomController {
         public function loadRooms($type) {
@@ -12,16 +14,17 @@ require_once('models/Room.php');
                 echo json_encode(['msg' => 'Invalid room type.', 'status'=>401]); 
                 return;
             }
-            $VerifyAccount = 'Middlewares\\VerifyAccount';
-            $authorization = $VerifyAccount::checkAuthState();
-            $type = $authorization['type'];
+            // $VerifyAccount = 'Middlewares\\VerifyAccount';
+            // $authorization = $VerifyAccount::checkAuthState();
+            // $type = $authorization['type'];
 
             $db = 'Database'::getInstance();
             $roomType = strtoupper(substr($type, 0, 1));
-            $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType' AND statusR != 'R'";
-            if ($type == 'M') {
-                $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType'";
-            }
+
+            $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType' AND statusRo <> 'R'";
+            // if ($type == 'M') {
+            //     $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType'";
+            // }
 
             $rooms = mysqli_query($db, $query);
             $row = mysqli_fetch_all($rooms, MYSQLI_ASSOC);

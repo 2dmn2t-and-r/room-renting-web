@@ -7,25 +7,32 @@
           <side-bar-reserve-time @triggerFilter="triggerFilter"/>
         </div>
         <div style="min-height: 10px; min-width: 10px"></div>
-        <div class="grow4" :key="refresh">
-          <div v-for="(item, index) in reserveList" :key="index">
-            <reservation-card
-              v-bind="{
-                img: item.room.image,
-                name: item.room.roomName,
-                floor: parseInt(item.room.floor),
-                seat: parseInt(item.room.seat),
-                address: item.room.address,
-                startdate: dateFormat(item.reservation.useDate),
-                duration: getDuration(
-                  item.reservation.startTime,
-                  item.reservation.endTime
-                ).toString() + ' mins',
-              }"
-              @click.native="changeModal(index)"
-            />
-            <div style="min-height: 18px"></div>
+        <div class="right-bar">
+          <div class="grow4" :key="refresh">
+            <div v-for="(item, index) in reserveListFilter" :key="index">
+              <reservation-card
+                v-bind="{
+                  img: item.room.image,
+                  name: item.room.roomName,
+                  floor: parseInt(item.room.floor),
+                  seat: parseInt(item.room.seat),
+                  address: item.room.address,
+                  startdate: dateFormat(item.reservation.useDate),
+                  duration: getDuration(
+                    item.reservation.startTime,
+                    item.reservation.endTime
+                  ).toString() + ' mins',
+                }"
+                @click.native="changeModal(index)"
+              />
+              <div style="min-height: 18px"></div>
+            </div>
           </div>
+          <div style="min-height: 20px"> </div>
+          <theme-pagination v-bind="{
+            totalItem: reserveList.length,
+            pageItem: pageItem,
+          }" :curPage.sync="curPageChangable" :key="refreshPagination"/>
         </div>
       </div>
     </div>
@@ -72,6 +79,7 @@ import PageTitle from "../components/PageTitle.vue";
 import ReservationCard from "../components/ReservationCard.vue";
 import SideBarReserveTime from "../components/SideBarReserveTime.vue";
 import { getDataAPI, postDataAPI } from "../utils/fetchData";
+import ThemePagination from '../components/ThemePagination.vue';
 export default {
   components: {
     PageTitle,
@@ -79,6 +87,7 @@ export default {
     ReservationCard,
     ModalTemplate,
     CustomerReservation,
+    ThemePagination,
   },
   data() {
     return {
@@ -132,8 +141,26 @@ export default {
         'H': 'Hall',
         'M': 'Meeting room',
         'S': 'Stage'
-      }
+      },
+      curPage: 1,
+      pageItem: 5,
+      refreshPagination: 2
     };
+  },
+  computed: {
+      curPageChangable: {
+        get() {return this.curPage},
+        set(val) {this.curPage = val; this.refresh = 1 - this.refresh;}
+      },
+      firstItem() {
+        return (this.curPage - 1) * this.pageItem;
+      },
+      lastItem() {
+        return this.curPage * this.pageItem - 1;
+      },
+      reserveListFilter() {
+        return this.reserveList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))
+      }
   },
   methods: {
     dateString(date) {
@@ -161,6 +188,7 @@ export default {
         let res = await getDataAPI(`reservation/remove/${this.chosenResere.reservation.resId}`, token);
         if (res.data["status"] === 200) {
           await this.refreshList();
+          this.refreshPagination = 1 - this.refreshPagination;
           this.showModal = -1 - this.showModal;
         }
       })()
@@ -179,6 +207,7 @@ export default {
         let res = await getDataAPI(`reservation/interval/${startTime}/${endTime}`, token);
         if (res.data["status"] === 200) {
           this.reserveList = res.data["reversations"];
+          this.curPage = 1;
         }
         this.refresh = 1 - this.refresh;
       })();
@@ -241,8 +270,12 @@ export default {
   width: 20%;
 }
 
+.right-bar {
+  width: 80%
+}
+
 .grow4 {
-  width: 80%;
+  width: 100%;
   border-radius: 10px;
   background-color: var(--theme_fore);
   padding: 18px 18px 0px 18px;

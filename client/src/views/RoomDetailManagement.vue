@@ -30,6 +30,7 @@
           class="half_col"
           :room="curRoom"
           @changeInfo="showRoomModal()"
+          @deleteInfo="deleteRoom()"
         >
         </information-block>
       </div>
@@ -246,6 +247,15 @@ export default {
       this.modifiedRoom = Object.assign({}, this.curRoom);
       this.refresh = 1 - this.refresh;
       this.roomChange = 0;
+    },
+    deleteRoom() {
+      (async() => {
+        var token = localStorage.getItem("token");
+        let res = await postDataAPI(`room/delete`, {'roomId': this.$route.params.roomId}, token);
+        if (res.data["status"] === 200) {
+          this.$router.go(-1);
+        }
+      })();
     },
     async refreshList() {
       var token = localStorage.getItem("token");

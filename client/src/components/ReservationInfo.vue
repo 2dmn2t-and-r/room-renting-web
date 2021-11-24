@@ -10,7 +10,7 @@
         <div style="min-width: 10px"> </div>
         <div v-if="this.showMiddle" class="col part linespace">
             <div class="font">Room: <span class="bold">{{roomName}}</span></div>
-            <div class="font">Date: <span class="bold">{{convertDate(reserveDate)}}</span></div>
+            <div class="font">Book: <span class="bold">{{convertDate(reserveDate)}}</span></div>
         </div>
         <div style="min-width: 10px" v-if="this.showMiddle"> </div>
         <div class="not_show col part linespace" v-if="this.showMiddle">

@@ -57,7 +57,9 @@
             </div>
         </div>
         <div class="date_box row date_box_row">
-            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="action"/>
+            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="actionChange"/>
+            <div class="divider_other"> </div>
+            <theme-button msg="Delete" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="actionDelete"/>
         </div>
     </div>
 </template>
@@ -70,8 +72,11 @@ export default {
       room: Object
   },
   methods: {
-    action() {
+    actionChange() {
         this.$emit('changeInfo');
+    },
+    actionDelete() {
+        this.$emit('deleteInfo');
     }
   }  
 }

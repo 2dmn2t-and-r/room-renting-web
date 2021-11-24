@@ -7,21 +7,28 @@
         <div class="sidebar">
           <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList();"> </side-bar-room-type>
         </div>
-        <div class="card-container" :key="refresh">
-            <div v-for="(room, index) in roomList" :key="index" :id="index">
+        <div class="left-side" :key="refresh">
+          <div class="card-container">
+            <div v-for="(room, index) in roomListFilter" :key="index" :id="index">
               <room-card v-bind="{
                 img: room.image,
                 name: room.roomName,
                 floor: parseInt(room.floor),  
                 seat: parseInt(room.seat),
                 address: room.address,
-                status: (room.statusRo == 'A' ? 'Available' : 'Unavailable')
+                status: (room.statusRo == 'A' ? 'Available' : (room.statusRo == 'U' ? 'Unavailable' : 'Removed'))
               }" 
                 @click.native="showModal(index)"
               />
               <div style="min-height: 18px;"> </div>
             </div>
-          <div style="min-height: 1px;"> </div>
+            <div style="min-height: 1px;"> </div>
+          </div>
+          <div style="min-height: 20px"> </div>
+          <theme-pagination v-bind="{
+            totalItem: roomList.length,
+            pageItem: pageItem,
+          }" :curPage.sync="curPageChangable"/>
         </div>
         
       </div>
@@ -39,7 +46,7 @@
         img: this.chosenRoom.image,
         floor: parseInt(chosenRoom.floor),
         seat: parseInt(chosenRoom.seat),
-        status: this.chosenRoom.statusRo == 'A' ? 'Available' : 'Unavailable',
+        status: this.chosenRoom.statusRo == 'A' ? 'Available' : (this.chosenRoom.statusRo == 'U' ? 'Unavailable' : 'Removed'),
         type: typeCharFull[this.chosenRoom.type],
         address: this.chosenRoom.address,
         description: this.chosenRoom.description,
@@ -70,6 +77,7 @@
   import RoomReserveStep1 from '@/components/modals/room/RoomReserveStep1.vue'
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
 import moment from 'moment';
+import ThemePagination from '../components/ThemePagination.vue';
 
   export default {
     name: 'Room',
@@ -80,7 +88,8 @@ import moment from 'moment';
       SideBarRoomType,
       RoomReserveStep3, 
       RoomReserveStep2,
-      RoomReserveStep1
+      RoomReserveStep1,
+        ThemePagination
     },
     data (){
       return {
@@ -111,7 +120,7 @@ import moment from 'moment';
           'M': 'Meeting room',
           'S': 'Stage'
         },
-        step: Number,
+        step: -1,
         selected: 0,
         chosenIndex: 0,
         refresh: 0,
@@ -120,6 +129,23 @@ import moment from 'moment';
         endTime: '06:30',
         chosenStartTime: '06:00',
         chosenEndTime: '06:30',
+        curPage: 1,
+        pageItem: 5
+      }
+    },
+    computed: {
+      curPageChangable: {
+        get() {return this.curPage},
+        set(val) {this.curPage = val; this.refresh = 1 - this.refresh;}
+      },
+      firstItem() {
+        return (this.curPage - 1) * this.pageItem;
+      },
+      lastItem() {
+        return this.curPage * this.pageItem - 1;
+      },
+      roomListFilter() {
+        return this.roomList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))
       }
     },
     methods: {
@@ -176,6 +202,7 @@ import moment from 'moment';
           if (res.data["status"] === 200) {
             this.roomList = res.data["rooms"];
           }
+          this.curPage = 1;
           this.refresh = 1 - this.refresh;
         })()
       },
@@ -185,7 +212,7 @@ import moment from 'moment';
         return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
       }
     },
-    beforeMount: function(){
+    mounted: function(){
       this.step = -1;
       this.refreshList();
     }
@@ -200,9 +227,13 @@ import moment from 'moment';
     
   }
 
+  .left-side {
+    flex-basis: 80%;
+    width: 100%;
+  }
+
   .card-container {
     width: 100%;
-    flex-basis: 80%;
     background-color: var(--theme_fore);
     padding: 18px 18px 0px 18px;
     border-radius: 10px;
