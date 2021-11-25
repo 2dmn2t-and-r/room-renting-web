@@ -36,7 +36,10 @@
                 />
                 <div class="divider"></div>
             </div>
-            <div class="row baseline">
+            <div class="row font medium" v-if="comments.length == 0">
+                No comments here.
+            </div>
+            <div class="row baseline" v-if="canComment">
                 <theme-input
                     type="text"
                     :value.sync="comment"
@@ -67,7 +70,11 @@ export default {
         status: String,
         type: String,
         address: String,
-        description: String
+        description: String,
+        canComment: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -210,6 +217,7 @@ Comment scoped>
     .border {
         border-radius: 10px;
         background-color: var(--theme_fore);
+        min-height: 300px;
     }
     .inner {
         padding: 20px;

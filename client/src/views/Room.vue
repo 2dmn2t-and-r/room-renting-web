@@ -51,6 +51,7 @@
         address: this.chosenRoom.address,
         description: this.chosenRoom.description,
         comments: comments,
+        canComment: userId != ''
       }" :chosenDate.sync="chosenDate" :key="refresh">   </room-reserve-step-1>
 
       <room-reserve-step-2 slot="2" v-bind="{
@@ -130,7 +131,8 @@ import ThemePagination from '../components/ThemePagination.vue';
         chosenStartTime: '06:00',
         chosenEndTime: '06:30',
         curPage: 1,
-        pageItem: 5
+        pageItem: 5,
+        userId: ""
       }
     },
     computed: {
@@ -167,6 +169,10 @@ import ThemePagination from '../components/ThemePagination.vue';
       },
 
       next: function() {
+        if (this.userId == '') {
+          this.$router.push('/auth/signin').catch(()=>{});
+          return;
+        }
         if (this.step == 2) {
           (async () => {
             var token = localStorage.getItem("token");
@@ -215,6 +221,13 @@ import ThemePagination from '../components/ThemePagination.vue';
     mounted: function(){
       this.step = -1;
       this.refreshList();
+      (async() => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI('auth/get', token);
+          if (res.data["status"] === 200) {
+            this.userId = res.data["user"]["userId"];
+        }
+      })()
     }
   }
 </script>

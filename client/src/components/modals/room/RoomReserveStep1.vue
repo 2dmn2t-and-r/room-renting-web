@@ -28,6 +28,7 @@
                 type: this.type,
                 address: this.address,
                 description: this.description,
+                canComment: this.canComment
             }"/>
         </div>
     </div>
@@ -50,7 +51,8 @@ export default {
         address: String,
         description: String,
         comments: Array, // {name: string, time: date, content: string, img: string url}
-        chosenDate: String
+        chosenDate: String,
+        canComment: Boolean
     },
     components: { PictureFrame, DescriptionCommentBox, ThemeInput },
     computed: {

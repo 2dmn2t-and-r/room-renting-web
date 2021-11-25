@@ -18,7 +18,7 @@
                 }" class='sign_up' style="font-weight: bold"/>
             </div> -->
             <div style="min-height: 20px"> </div>
-            <theme-input :buttonTitle="'Sign up'" :buttonWidth="'100px'" :value="'Enter your email address'"/>
+            <theme-input :buttonTitle="'Sign up'" :buttonWidth="'100px'" :placeholder="'Enter your email address'" @onClickButton="$router.push('/auth/signup').catch(()=>{});"/>
         </div>
     </div>
     </div>

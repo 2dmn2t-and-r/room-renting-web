@@ -109,7 +109,7 @@
   .main {
     width: 100%;
     background-color: var(--theme_fore);
-    padding: 18px 18px;
+    padding: 18px 18px 0px 18px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;

@@ -39,13 +39,16 @@
         </div>
         <div class="list-box">
           <div class="list">
-            <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
-              id: news.newsId,
-              img: news.image,
-              title: news.title,
-              uploaddate: dateString(new Date(news.createDate)),
-              modified: dateString(new Date(news.modifyDate)),
-            }"/>
+            <div v-for="(news, index) in newsList" :key="index">
+              <news-card class="margin-item" v-bind="{
+                id: news.newsId,
+                img: news.image,
+                title: news.title,
+                uploaddate: dateString(new Date(news.createDate)),
+                modified: dateString(new Date(news.modifyDate)),
+              }"/>
+              <div style="min-height: 18px"> </div>
+            </div>
           </div>
           <div style="min-height: 20px"> </div>
           <theme-pagination v-bind="{
@@ -238,12 +241,12 @@
   .list {
     width: 100%;
     background-color: var(--theme_fore);
-    padding: 18px 18px;
+    padding: 18px 18px 0px 18px;
     border-radius: 10px;
   }
 
   .margin-item {
-    margin-bottom: 18px
+    margin-bottom: 0px
   }
 
   .slot {
