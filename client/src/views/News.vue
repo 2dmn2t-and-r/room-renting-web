@@ -3,7 +3,7 @@
     <div class="page-container">
       <page-title title="News"/>
       <div class="main">
-        <news-card class="margin-item" v-for="(news, index) in newsList" :key="index" v-bind="{
+        <news-card class="margin-item" v-for="(news, index) in newsListFilter" :key="index" v-bind="{
           id: news.newsId,
           img: news.image,
           title: news.title,
@@ -11,6 +11,12 @@
           modified: dateString(new Date(news.modifyDate)),
         }"/>
       </div>
+      <div style="min-height: 20px"> </div>
+      <theme-pagination v-bind="{
+        totalItem: newsList.length,
+        pageItem: pageItem,
+      }" :curPage.sync="curPageChangable"
+      />
     </div>
   </div>
 </template>
@@ -21,6 +27,7 @@
   import ModalTemplate from '../components/ModalTemplate.vue';
   import NewsCard from '../components/NewsCard.vue';
   import PageTitle from '../components/PageTitle.vue';
+  import ThemePagination from '../components/ThemePagination.vue';
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
@@ -31,10 +38,30 @@
       PageTitle,
       CreateEditNews,
       NewsCard,
+      refresh: 0,
+      ThemePagination,
     },
     data() {
       return {
         newsList: [],
+        curPage: 1,
+        pageItem: 5,
+        refresh: 0,
+      }
+    },
+    computed: {
+      curPageChangable: {
+        get() {return this.curPage},
+        set(val) {this.curPage = val; this.refresh = 1 - this.refresh;}
+      },
+      firstItem() {
+        return (this.curPage - 1) * this.pageItem;
+      },
+      lastItem() {
+        return this.curPage * this.pageItem - 1;
+      },
+      newsListFilter() {
+        return this.newsList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))
       }
     },
     methods: {
@@ -48,6 +75,7 @@
           return month + '/' + day + '/' + year;
         }
       },
+      
     },
     mounted() {
       (async () => {

@@ -83,14 +83,33 @@ export default {
     setChecked() {
       this.checked = !this.checked
     },
+    verify() {
+      if (this.email.split('@').length !== 2 || this.email.split('@')[1].split('.').length !== 2) {
+        alert("Email is invalid!");
+        return false;
+      }
+      else if (this.password.length < 6) {
+        alert("Password length is at least 6");
+        return false;
+      }
+      return true;
+    },
     async signIn() {
+      var checkForm = this.verify();
+      if (!checkForm) return;
       var res = await postDataAPI('auth/login', {
         email: this.email,
         password: this.password,
       });
-      if (typeof(Storage) !== "undefined") {
-        localStorage.setItem("token", res.data["token"]);
-        this.$router.push('/').catch(()=>{});
+      if (res.data["status"] === 200) {
+        if (typeof(Storage) !== "undefined") {
+          localStorage.setItem("token", res.data["token"]);
+          if (res.data["user"]["type"] === 'M') this.$router.push('/management').catch(()=>{});
+          else this.$router.push('/').catch(()=>{});
+        }        
+      }
+      else {
+        alert("Invalid username or password!");
       }
     }
   } 

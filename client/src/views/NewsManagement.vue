@@ -47,6 +47,12 @@
               modified: dateString(new Date(news.modifyDate)),
             }"/>
           </div>
+          <div style="min-height: 20px"> </div>
+          <theme-pagination v-bind="{
+            totalItem: newsList.length,
+            pageItem: pageItem,
+          }" :curPage.sync="curPageChangable"
+          />
         </div>
       </div>
       
@@ -79,6 +85,7 @@
   import PageTitle from '../components/PageTitle.vue'
   import ThemeButton from '../components/ThemeButton.vue'
   import ThemeInput from '../components/ThemeInput.vue'
+  import ThemePagination from '../components/ThemePagination.vue'
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
 
   export default {
@@ -91,6 +98,7 @@
       NewsCard,
       ThemeInput,
       ThemeButton,
+      ThemePagination,
     },
     data() {
       return {
@@ -103,6 +111,24 @@
         image: "",
         from: "",
         to: "",
+        curPage: 1,
+        pageItem: 5,
+        refresh: 0,
+      }
+    },
+    computed: {
+      curPageChangable: {
+        get() {return this.curPage},
+        set(val) {this.curPage = val; this.refresh = 1 - this.refresh;}
+      },
+      firstItem() {
+        return (this.curPage - 1) * this.pageItem;
+      },
+      lastItem() {
+        return this.curPage * this.pageItem - 1;
+      },
+      newsListFilter() {
+        return this.newsList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))
       }
     },
     methods: {
