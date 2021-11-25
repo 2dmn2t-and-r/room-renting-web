@@ -26,7 +26,9 @@
               }" 
                 @click.native="intoDetail(index)"
               />
+              
             </div>
+            <div style="min-height: 1px"> </div>
           </div>
           <div style="min-height: 20px"> </div>
           <theme-pagination v-bind="{
@@ -151,6 +153,8 @@ export default {
           this.addedRoom.type = this.addedRoom.type.substring(0, 1);
           this.addedRoom.statusRo = this.addedRoom.statusRo.substring(0, 1);
           let res = await postDataAPI('room/upload', this.addedRoom, token);
+          console.log(this.addedRoom);
+          console.log(res.data);
           if (res.data["status"] === 200) {
             this.step = -1;
             await this.refreshList();

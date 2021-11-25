@@ -206,5 +206,23 @@
             $result = mysqli_query($db, $query);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
+
+        public function setPayReservation($id) {
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $authorization = $VerifyAccount::checkAuthState();
+            if(!$authorization) {
+                echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
+                return;
+            }
+            $type = $authorization['type'];
+            if($type == 'C') {
+                echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
+                return;
+            }
+            $db = 'Database'::getInstance();
+            $query = "UPDATE reservation SET statusR = 'P' WHERE resId = $id";
+            $result = mysqli_query($db, $query);
+            echo json_encode(['result' => $result, 'status'=>200]);
+        }
     }
 ?>

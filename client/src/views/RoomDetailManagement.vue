@@ -39,7 +39,7 @@
       v-bind="{
         title: 'Customer Reservaion',
         step: this.reservation,
-        buttonTitle: ['Remove'],
+        buttonTitle: (chosenReserve.reservation.statusR != 'P') ? ['Remove'] : ['OK'],
       }"
       @onClose="hideModal()"
       @onCancel="hideModal()"
@@ -63,8 +63,8 @@
           description: chosenReserve.room.description,
           img: chosenReserve.room.image,
           startTime: shortenTime(chosenReserve.reservation.startTime),
-          endTime: shortenTime(chosenReserve.reservation.endTime)
-        }"
+          endTime: shortenTime(chosenReserve.reservation.endTime),
+        }" :key="refresh" :enablePay="chosenReserve.reservation.statusR != 'P'" @setPaid="setPayReserve"
       ></customer-reservation>
     </modal-template>
 
@@ -216,14 +216,19 @@ export default {
 
   methods: {
     remove: function () {
-      (async () => {
-        var token = localStorage.getItem("token");
-        let res = await getDataAPI(`reservation/remove/${this.chosenReserve.reservation.resId}`, token);
-        if (res.data["status"] === 200) {
-          await this.refreshList();
-          this.reservation = -1;
-        }
-      })()
+      if (this.chosenReserve.reservation.statusR != 'P') {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI(`reservation/remove/${this.chosenReserve.reservation.resId}`, token);
+          if (res.data["status"] === 200) {
+            await this.refreshList();
+            this.reservation = -1;
+          }
+        })()
+      }
+      else {
+        this.reservation = -1;
+      }
     },
     async save() {
       var token = localStorage.getItem("token");
@@ -235,8 +240,21 @@ export default {
       }
     },
     showReservation: function (index) {
-      this.chosenReserve = this.reservationsList[index]
+      this.chosenReserve = this.reservationsList[index];
+      this.refresh = 1 - this.refresh;
       this.reservation = 0;
+    },
+    setPayReserve: function () {
+      (async() => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`reservation/setPay/${this.chosenReserve.reservation.resId}`, token);
+        console.log(res.data);
+        if (res.data["status"] === 200) {
+          await this.refreshList();
+          this.refresh = 1 - this.refresh;
+          this.reservation = -1;
+        }
+      })();
     },
 
     hideModal: function () {

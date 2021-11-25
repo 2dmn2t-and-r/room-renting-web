@@ -40,7 +40,7 @@
       v-bind="{
         title: 'Reservation',
         step: showModal,
-        buttonTitle: ['Remove'],
+        buttonTitle: (chosenResere.reservation.statusR != 'P') ? ['Remove'] : ['OK'],
       }"
       @onClose="changeModal()"
       @onCancel="changeModal()"
@@ -183,15 +183,20 @@ export default {
       this.showModal = -1 - this.showModal;
     },
     clickRemove: function () {
-      (async () => {
-        var token = localStorage.getItem("token");
-        let res = await getDataAPI(`reservation/remove/${this.chosenResere.reservation.resId}`, token);
-        if (res.data["status"] === 200) {
-          await this.refreshList();
-          this.refreshPagination = 1 - this.refreshPagination;
-          this.showModal = -1 - this.showModal;
-        }
-      })()
+      if (this.chosenResere.reservation.statusR != 'P') {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI(`reservation/remove/${this.chosenResere.reservation.resId}`, token);
+          if (res.data["status"] === 200) {
+            await this.refreshList();
+            this.refreshPagination = 1 - this.refreshPagination;
+            this.showModal = -1 - this.showModal;
+          }
+        })()
+      }
+      else {
+        this.showModal = -1 - this.showModal;
+      }
     },
     async refreshList() {
       var token = localStorage.getItem("token");

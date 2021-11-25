@@ -22,7 +22,7 @@
     <modal-template v-bind="{
       title: 'Reservation',
       step: showModal,
-      buttonTitle: ['Remove']
+      buttonTitle: (chosenReserve.reservation.statusR != 'P') ? ['Remove'] : ['OK']
     }" @onClose="changeModal()" @onCancel="changeModal()" @onNextStep="clickRemove()">
       <customer-reservation slot="1" v-bind="{
           title: chosenReserve.room.roomName,
@@ -41,7 +41,7 @@
           img: chosenReserve.room.image,
           startTime: shortenTime(chosenReserve.reservation.startTime),
           endTime: shortenTime(chosenReserve.reservation.endTime)
-        }"/>
+        }" :key="refresh" :enablePay="(this.chosenReserve.reservation.statusR != 'P')"  @setPaid="setPayReserve"/>
     </modal-template>
   </div>
 </template>
@@ -131,18 +131,35 @@ export default {
       this.showModal = -1 - this.showModal;      
     },
     clickRemove: function() {
-      (async () => {
-        var token = localStorage.getItem("token");
-        let res = await getDataAPI(`reservation/remove/${this.chosenReserve.reservation.resId}`, token);
-        if (res.data["status"] === 200) {
-          await this.refreshList();
-          this.showModal = -1 - this.showModal;
-        }
-      })()
+      if (this.chosenReserve.reservation.statusR != 'P') {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI(`reservation/remove/${this.chosenReserve.reservation.resId}`, token);
+          if (res.data["status"] === 200) {
+            await this.refreshList();
+            this.showModal = -1 - this.showModal;
+          }
+        })()
+      }
+      else {
+        this.showModal = -1 - this.showModal;
+      }
     },
     showReservation: function (index) {
       this.chosenReserve = this.reservationsList[index]
       this.showModal = -1 - this.showModal;   
+    },
+    setPayReserve: function () {
+      (async() => {
+        var token = localStorage.getItem("token");
+        let res = await getDataAPI(`reservation/setPay/${this.chosenReserve.reservation.resId}`, token);
+        console.log(res.data);
+        if (res.data["status"] === 200) {
+          await this.refreshList();
+          this.refresh = 1 - this.refresh;
+          this.showModal = -1 - this.showModal;
+        }
+      })();
     },
     async refreshList() {
       var token = localStorage.getItem("token");

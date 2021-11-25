@@ -14,4 +14,6 @@
     $router->get('/reservation/interval/{from}/{to}', 'ReservationController.loadIntervalReservation');
 
     $router->get('/reservation/remove/{id}', 'ReservationController.removeReservation');
+
+    $router->get('/reservation/setPay/{id}', 'ReservationController.setPayReservation');
 ?>

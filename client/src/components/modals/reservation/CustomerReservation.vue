@@ -40,6 +40,7 @@
             </div>
             <div class="font black line">Address: <span class="bold">{{ address }}</span></div>
             <div class="font black line">{{ description }}</div>
+            <div class="row center_row" v-if="enablePay"> <theme-button :msg="'Set paid'" @click="$emit('setPaid');"/> </div>
         </div>
     </div>
 </template>
@@ -47,6 +48,7 @@
 <script>
 import moment from 'moment';
 import PictureFrame from '../../PictureFrame.vue'
+import ThemeButton from '../../ThemeButton.vue';
 export default {
     props: {
         title: String,
@@ -64,9 +66,13 @@ export default {
         description: String,
         img: String,
         startTime: String,
-        endTime: String
+        endTime: String,
+        enablePay: {
+            type: Boolean,
+            default: false
+        }
     },
-    components: { PictureFrame },
+    components: { PictureFrame, ThemeButton },
     computed: {
         pay_style: function(){
             return {
@@ -86,6 +92,9 @@ export default {
     .row {
         display: flex;
         flex-direction: row;
+    }
+    .center_row {
+        justify-content: center;
     }
     .col {
         display: flex;
