@@ -204,6 +204,11 @@ export default {
       if (res.data["status"] === 200) {
         this.reserveList = res.data["reversations"];
       }
+      else {
+        if (res.data["msg"])
+            alert(res.data["msg"]);
+          else alert("Connection error. Try again.")
+      }
       this.refresh = 1 - this.refresh;
     },
     triggerFilter(startTime, endTime) {

@@ -282,6 +282,11 @@ export default {
         this.reservationsList = res.data["reversations"];
         // this.refresh = 1 - this.refresh;
       }
+      else {
+        if (res.data["msg"])
+            alert(res.data["msg"]);
+          else alert("Connection error. Try again.")
+      }
       this.refresh = 1 - this.refresh;
     },
     getDuration(openTime, closeTime) {
@@ -317,6 +322,11 @@ export default {
         this.curRoom.type = ((val) => {if (val == 'H') return "Hall"; else if (val == 'M') return "Meeting room"; else return "Stage";})(this.curRoom.type);
         this.modifiedRoom = Object.assign({}, this.curRoom);
         await this.refreshList();
+      }
+      else {
+        if (res.data["msg"])
+            alert(res.data["msg"]);
+          else alert("Connection error. Try again.")
       }
       this.refresh = 1 - this.refresh;
     })()

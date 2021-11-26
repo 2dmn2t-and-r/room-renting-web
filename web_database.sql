@@ -82,3 +82,15 @@ create table NEWS_COMMENT (
     foreign key (userId) references USER (userId) on delete cascade,
     foreign key (newsId) references NEWS (newsId) on delete cascade
 );
+
+create table TIMELINE (
+    timeframe time
+);
+delimiter //
+for i in 6..21
+do
+    insert into TIMELINE (timeframe) values (i * 10000);
+    insert into TIMELINE (timeframe) values (i * 10000 + 3000);
+end for;
+//
+delimiter ;

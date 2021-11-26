@@ -1,5 +1,5 @@
 <template>
-    <md-button :style="button_style" class="md-icon-button md-plain">
+    <md-button :style="button_style" class="md-icon-button md-plain" @click="$emit('onClick')">
         <md-icon :style="icon_style">
             {{icon}}
         </md-icon>

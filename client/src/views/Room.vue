@@ -58,6 +58,7 @@
         chosenDate: new Date(this.chosenDate),
         startDate: startTime,
         endDate: endTime,
+        availableTime: availableTime,
         price: parseInt(this.chosenRoom.price),
         totalPrice: (timeToIndex(this.chosenEndTime) - timeToIndex(this.chosenStartTime)) * parseInt(this.chosenRoom.price)
       }" :key="refresh" :chosenStartTime.sync="chosenStartTime" :chosenEndTime.sync="chosenEndTime">  </room-reserve-step-2> 
@@ -132,7 +133,8 @@ import ThemePagination from '../components/ThemePagination.vue';
         chosenEndTime: '06:30',
         curPage: 1,
         pageItem: 5,
-        userId: ""
+        userId: "",
+        availableTime: []
       }
     },
     computed: {
@@ -156,7 +158,7 @@ import ThemePagination from '../components/ThemePagination.vue';
           this.selected = index;
           this.chosenRoom = this.roomList[index];
           this.startTime = this.chosenRoom.openTime;
-          this.endTime = this.chosenRoom.endTime;
+          this.endTime = this.chosenRoom.closeTime;
           this.chosenStartTime = this.startTime;
           this.chosenEndTime = this.startTime;
           this.refresh = 1 - this.refresh;
@@ -166,6 +168,7 @@ import ThemePagination from '../components/ThemePagination.vue';
         this.step = -1;
         this.chosenDate = moment(new Date()).format("YYYY-MM-DD");
         this.comments = [];
+        this.availableTime = [];
       },
 
       next: function() {
@@ -173,7 +176,20 @@ import ThemePagination from '../components/ThemePagination.vue';
           this.$router.push('/auth/signin').catch(()=>{});
           return;
         }
+        if (this.step == 1) {
+          (async () => {
+            var token = localStorage.getItem("token");
+            let res = await getDataAPI(`room/getAvailableTime/${this.chosenRoom.roomId}/${this.chosenDate}`, token);
+            if (res.data["status"] === 200) {
+              this.availableTime = res.data['timeframes'];
+              this.step += 1;
+              this.refresh = 1 - this.refresh;
+            }
+          })();
+          return;
+        }
         if (this.step == 2) {
+          if (this.chosenStartTime < this.chosenEndTime)
           (async () => {
             var token = localStorage.getItem("token");
             let res = await postDataAPI('reservation/upload', {
@@ -193,6 +209,7 @@ import ThemePagination from '../components/ThemePagination.vue';
               }
             }
           })();
+          else alert("Invalid selected timeframe.")
           return;
         }
         this.step += 1;
@@ -208,6 +225,11 @@ import ThemePagination from '../components/ThemePagination.vue';
           if (res.data["status"] === 200) {
             this.roomList = res.data["rooms"];
           }
+          else {
+            if (res.data["msg"])
+              alert(res.data["msg"]);
+            else alert("Connection error. Try again.")
+          }
           this.curPage = 1;
           this.refresh = 1 - this.refresh;
         })()
@@ -220,13 +242,23 @@ import ThemePagination from '../components/ThemePagination.vue';
     },
     mounted: function(){
       this.step = -1;
-      this.refreshList();
       (async() => {
         var token = localStorage.getItem("token");
-        let res = await getDataAPI('auth/get', token);
-          if (res.data["status"] === 200) {
+        let res = await getDataAPI(`rooms/load/${this.typeChar[this.chosenIndex]}`, token);
+        if (res.data["status"] === 200) {
+          this.roomList = res.data["rooms"];
+        }
+        else {
+          if (res.data["msg"])
+            alert(res.data["msg"]);
+          else alert("Connection error. Try again.")
+        }
+        res = await getDataAPI('auth/get', token);
+        if (res.data["status"] === 200) {
             this.userId = res.data["user"]["userId"];
         }
+        this.curPage = 1;
+        this.refresh = 1 - this.refresh;
       })()
     }
   }

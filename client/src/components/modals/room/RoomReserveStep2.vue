@@ -2,8 +2,9 @@
     <div class="full">
         <div class="title_font bold line black">Timeline: {{ convertDate(chosenDate) }}</div> 
         <choosetime v-bind="{
-            inleft: timeStartToIndex(),
-            inright: timeEndToIndex()
+            inleft: timeStartToIndex,
+            inright: timeEndToIndex,
+            availableIndex: availableIndex()
         }" @leftTime="chosenStartInput = $event" @rightTime="chosenEndInput = $event"/>
         <div class="font black line row"> 
             <div class="half_col row">
@@ -52,6 +53,10 @@ export default {
             type: String,
             default: '18:00'
         },
+        availableTime: {
+            type: Array,
+            default: []
+        },
         chosenStartTime: {
             type: String,
             default: '6:00'
@@ -83,6 +88,14 @@ export default {
                 this.$emit('update:chosenEndTime', value)
             }
         },
+        timeStartToIndex: function() {
+            var res = this.startDate.split(':');
+            return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
+        },
+        timeEndToIndex: function() {
+            var res = this.endDate.split(':');
+            return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30) - 1;
+        },
     },
     methods: {
         convertDate: function(day) {
@@ -102,14 +115,14 @@ export default {
             }
             return res;
         },
-        timeStartToIndex: function() {
-            var res = this.startDate.split(':');
-            return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
-        },
-        timeEndToIndex: function() {
-            var res = this.endDate.split(':');
-            return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30) - 1;
-        },
+        availableIndex: function() {
+            let res = [];
+            for (var i = 0; i < this.availableTime.length; i++) {
+                var sp = this.availableTime[i].timeframe.split(':');
+                res.push((parseInt(sp[0]) - 6) * 2 + Math.round(parseInt(sp[1]) / 30));
+            }
+            return res;
+        }
     }
 }
 </script>

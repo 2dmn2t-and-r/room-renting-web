@@ -5,6 +5,8 @@
 
     $router->get('/room/load/{id}', 'RoomController.loadRoom');
 
+    $router->get('/room/getAvailableTime/{id}/{useDate}', 'RoomController.getAvailableTime');
+
     $router->post('/room/delete', 'RoomController.deleteRoom');
 
     $router->get('/room/comments/load/{id}', 'RoomController.loadRoomComments');
