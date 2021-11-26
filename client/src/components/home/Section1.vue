@@ -2,8 +2,8 @@
     <div class="bare_section">
         <div class="inner_section">
             <div class="info">
-                <div class="text_title">ROOM PRO</div>
-                <div class="text_info">We provide renting meeting rooms, halls and stages for your professional events.</div>
+                <div class="text_title">{{title}}</div>
+                <div class="text_info">{{content}}</div>
                 <div style="width: 10px; height: 10px"> </div>
                 <theme-button v-bind="{
                     msg: 'Book Now',
@@ -20,7 +20,8 @@
                     width_img: '95.83%',
                     height: '100%',
                     height_img: '95.83%',
-                    border_radius: '21.42%'
+                    border_radius: '21.42%',
+                    background_img: img,
                 }"/>
             </div>
         </div>
@@ -31,7 +32,18 @@
 import PictureFrame from '../PictureFrame.vue'
 import ThemeButton from '../ThemeButton.vue'
 export default {
-  components: { PictureFrame, ThemeButton },
+    props: {
+        title: {
+            type: String,
+            default: "",
+        },
+        content: {
+            type: String,
+            default: "",
+        },
+        img:  String,
+    },
+    components: { PictureFrame, ThemeButton },
 
 }
 </script>
@@ -46,6 +58,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding: 0 20px;
 }
 
 .inner_section {
@@ -55,7 +68,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 60px 20px;
+    padding: 60px 0;
 }
 
 .divider {

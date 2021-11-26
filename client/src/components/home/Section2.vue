@@ -56,6 +56,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding: 0 20px;
 }
 
 .inner_section {
@@ -64,7 +65,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 60px 20px;
+    padding: 60px 0px;
 }
 
 .text_title {

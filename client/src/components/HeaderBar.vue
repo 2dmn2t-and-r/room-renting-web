@@ -147,7 +147,7 @@
                 return {
                     "width": "100%",
                     "object-fit": "cover",
-                    "display": this.avt === "" ? "none" : "inline",
+                    // "display": this.avt === "" ? "none" : "inline",
                 }
             },
             home: function() {

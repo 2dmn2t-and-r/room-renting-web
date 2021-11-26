@@ -82,3 +82,37 @@ create table NEWS_COMMENT (
     foreign key (userId) references USER (userId) on delete cascade,
     foreign key (newsId) references NEWS (newsId) on delete cascade
 );
+
+create table INFOMATION (
+    infoId      int AUTO_INCREMENT,
+    title1      varchar(200),
+    content1    varchar(500),
+    image1      varchar(500),
+    title2      varchar(200),
+    content2    varchar(500),
+    image2      varchar(500),
+    address     varchar(200),
+    email       varchar(200),
+    phone       char(10),
+    facebook    varchar(200),
+    twitter     varchar(200),
+    instagram   varchar(200),
+    tiktok      varchar(200),
+    primary key	(infoId)
+);
+
+insert into INFOMATION (title1, content1, image1, title2, content2, image2, address, email, phone, facebook, twitter, instagram, tiktok) values (
+    "ROOM PRO",
+    "We provide renting meeting rooms, halls and stages for your professional events.",
+    "https://firebasestorage.googleapis.com/v0/b/react-native-c15bd.appspot.com/o/DCT%20Trading%20Offices%20-%20Istanbul%20_%20Office%20Snapshots.jfif?alt=media&token=9c0ccbb3-3b96-4672-837a-4827566d384f",
+    "About us",
+    "Everything about customers are all what we are concerned. Therefore, lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Egestas egesta.",
+    "https://firebasestorage.googleapis.com/v0/b/react-native-c15bd.appspot.com/o/Deco%20Shapes.jfif?alt=media&token=22e2899d-c45e-4346-8f46-898fe2872e16",
+    "Linh Trung, Thu Duc, Ho Chi Minh City",
+    "nhduc2001kt@gmail.com",
+    "0935735723",
+    "https://www.facebook.com/profile.php?id=100009976037363",
+    "https://www.facebook.com/profile.php?id=100009976037363",
+    "https://www.facebook.com/profile.php?id=100009976037363",
+    "https://www.facebook.com/profile.php?id=100009976037363"
+);

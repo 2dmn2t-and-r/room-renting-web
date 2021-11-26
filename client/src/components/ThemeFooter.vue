@@ -6,24 +6,23 @@
             <div class="divider"></div>
             <div class="contactus">
                 <div class="texttitle">Contact Us</div>
-                <div class="textcontent">Linh Trung, Thu Duc</div>
-                <div class="textcontent">Ho Chi Minh City</div>
-                <div class="textcontent">nhduc2001kt@gmail.com</div>
-                <div class="textcontent">0935735723</div>
+                <div class="textcontent">{{address}}</div>
+                <div class="textcontent">{{email}}</div>
+                <div class="textcontent">{{phone}}</div>
             </div>
             <div class="followus">
                 <div class="texttitle">Follow Us</div>
                 <div class="socialrow">
-                    <md-button class="md-icon-button social" v-on:click="openLink('https://www.facebook.com/GCollectors')">
+                    <md-button class="md-icon-button social" v-on:click="openLink(facebook)">
                         <img src="../assets/icon/facebook.png" alt="None">
                     </md-button>
-                    <md-button class="md-icon-button social" v-on:click="openLink('https://www.facebook.com/GCollectors')">
+                    <md-button class="md-icon-button social" v-on:click="openLink(twitter)">
                         <img src="../assets/icon/twitter.png" alt="None">
                     </md-button>
-                    <md-button class="md-icon-button social" v-on:click="openLink('https://www.facebook.com/GCollectors')">
+                    <md-button class="md-icon-button social" v-on:click="openLink(instagram)">
                         <img src="../assets/icon/insta.png" alt="None">
                     </md-button>
-                    <md-button class="md-icon-button social" v-on:click="openLink('https://www.facebook.com/GCollectors')">
+                    <md-button class="md-icon-button social" v-on:click="openLink(tiktok)">
                         <img src="../assets/icon/tiktok.png" alt="None">
                     </md-button>
                 </div>
@@ -33,6 +32,7 @@
 </template>
 
 <script>
+import { getDataAPI } from '../utils/fetchData';
 export default {
     props: {
         route: {
@@ -40,10 +40,22 @@ export default {
             default: "",
         }
     },
+    data() {
+        return {
+            address: "",
+            email: "",
+            phone: "",
+            facebook: "",
+            twitter: "",
+            instagram: "",
+            tiktok: "",
+        }
+    },
     methods: {
       openLink: function (link) {   
           window.open(link, "_blank");    
-      }
+      },
+      
     },
     computed: {
         display: function() {
@@ -52,6 +64,20 @@ export default {
             }
         },
     },
+    mounted() {
+    (async () => {
+      let res = await getDataAPI('info', undefined);
+      if (res.data["status"] === 200) {
+        this.address = res.data["info"]["address"];
+        this.email = res.data["info"]["email"];
+        this.phone = res.data["info"]["phone"];
+        this.facebook = res.data["info"]["facebook"];
+        this.twitter = res.data["info"]["twitter"];
+        this.instagram = res.data["info"]["instagram"];
+        this.tiktok = res.data["info"]["tiktok"];
+      }
+    })()
+  },
 }
 </script>
 
