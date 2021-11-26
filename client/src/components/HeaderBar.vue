@@ -318,6 +318,12 @@
         justify-content: center;
     }
 
+    .avt > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
     .username {
         width: 130px;
         display: flex;

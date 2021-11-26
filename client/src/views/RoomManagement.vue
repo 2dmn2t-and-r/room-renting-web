@@ -161,7 +161,9 @@ export default {
             this.refreshPagination = 1 - this.refreshPagination;
           }
           else {
-            alert(res.data["msg"]);
+            if (res.data["msg"])
+              alert(res.data["msg"]);
+            else alert("Connection error. Try again.")
           }
           
         })()

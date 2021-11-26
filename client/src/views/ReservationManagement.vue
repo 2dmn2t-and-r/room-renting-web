@@ -167,6 +167,11 @@ export default {
       if (res.data["status"] === 200) {
         this.reservationsList = res.data["reversations"];
       }
+      else {
+        if (res.data["msg"])
+            alert(res.data["msg"]);
+          else alert("Connection error. Try again.")
+      }
       this.refresh = 1 - this.refresh;
     },
     getDuration(openTime, closeTime) {

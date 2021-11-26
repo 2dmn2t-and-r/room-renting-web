@@ -1,14 +1,22 @@
 <template>
-  <div class="profile">
+  <div class="profile-management">
     <div class="page-container">
       <page-title title="Profile"/>
       <div class="content">
         <div class="avt-box">
           <avatar v-bind="{
-            avt: avatar,
-            username: username,
-          }" @changeAvatar="changeAvatar"/>
-          <input type="file" ref="file" @change="changeImage" style="display: none"/>
+            avt: 'https://picsum.photos/200/300',
+            username: username,            
+          }"/>
+          <theme-input
+            label="Search for user ID:"
+            type="text"
+            value=""
+            buttonTitle="search"
+            :isIconTitle="true"
+            buttonWidth = "50px"
+          >
+          </theme-input>
         </div>
         <div class="form-box">
           <theme-input
@@ -158,7 +166,6 @@
   import Avatar from '../components/profile/Avatar.vue';
   import ThemeButton from '../components/ThemeButton.vue';
   import {getDataAPI, postDataAPI} from '../utils/fetchData';
-  import { uploadImage } from '../utils/uploadImage';
   import HeaderBar from '../components/HeaderBar.vue';
 
   export default {
@@ -181,7 +188,6 @@
         birthday: "",
         username: "",
         phone: "",
-        avatar: "",
         modal_address: "",
         modal_birthday: "",
         modal_username: "",
@@ -217,7 +223,7 @@
           birthday: this.modal_birthday,
           phone: this.modal_phone,
           address: this.modal_address,
-          avatar: this.avatar,
+          avatar: "",
         }, token);
         if (res.data["status"] === 200) {
           this.address = this.modal_address;
@@ -244,32 +250,6 @@
         else {
           alert("Please fill in a valid value!")
         }
-      },
-      changeImage: function(e) {
-        var files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-        return;
-        var file = files[0];
-        uploadImage(file, `user${this.userId}`, (value) => {
-          (async() => {
-            var token = localStorage.getItem('token');
-            var res = await postDataAPI('auth/uploadProfile', {
-              username: this.username,
-              sex: "M",
-              birthday: this.birthday,
-              phone: this.phone,
-              address: this.address,
-              avatar: value,
-            }, token);
-            if (res.data["status"] === 200) {
-              this.avatar = value;
-              location.reload();
-            }
-          })();
-        });
-      },
-      changeAvatar() {
-        this.$refs.file.click();
       }
     },
     mounted() {
@@ -278,13 +258,12 @@
         if (token) {
           let res = await getDataAPI('auth/get', token);
           if (res.data["status"] === 200) {
-            this.userId = res.data["user"]["userId"]
-            this.email = res.data["user"]["email"]
-            this.address = res.data["user"]["address"]
-            this.birthday = res.data["user"]["birthday"]
-            this.username = res.data["user"]["username"]
-            this.phone = res.data["user"]["phone"]
-            this.avatar = res.data["user"]["avatar"]
+            this.userId = res.data["user"]["userId"];
+            this.email = res.data["user"]["email"];
+            this.address = res.data["user"]["address"];
+            this.birthday = res.data["user"]["birthday"];
+            this.username = res.data["user"]["username"];
+            this.phone = res.data["user"]["phone"];
           }
         }
         else {
@@ -301,7 +280,7 @@
 </script>
 
 <style scoped>
-  .profile {
+  .profile-management {
     padding: 20px;
     background-color: var(--theme_white);
     min-height: calc(100vh - 100px);
@@ -335,6 +314,10 @@
     width: 220px;
   }
 
+  .avatar {
+    margin-bottom: 20px;
+  }
+
   .form-box {
     width: calc(100% - 220px);
     padding-left: 80px;
@@ -346,6 +329,7 @@
     margin-top: 60px;
   }
 
+  
   .button {
     width: 140px;
   }

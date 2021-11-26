@@ -12,7 +12,7 @@
         </div>
         <div class="row inner">
             <div class="cell" v-for="(item, index) in status" :key="index + whole + left + right" v-bind:style="{
-                'background-color': ((index >= left && index <= right) ? 'var(--theme_jade)' : ((status[index] == -1) ? 'var(--theme_gray)' : 'var(--theme_white)'))
+                'background-color': ((status[index] == -1) ? 'var(--theme_gray)' : ((index >= left && index <= right) ? 'var(--theme_jade)' : 'var(--theme_white)'))
             }" v-on:click="changeColor(index)"> </div>
         </div>
         <div class="big row font black space_between">
@@ -38,6 +38,10 @@ export default {
         inright: {
             type: Number,
             default: 0
+        },
+        availableIndex: {
+            type: Array,
+            default: []
         }
     },
     data() {
@@ -49,7 +53,16 @@ export default {
             prepre: -1,
             leftTime: Array.from({length: 32}, (_, index) => `${Math.floor((12 + index) / 2)}:${((12 + index) % 2 == 0) ? '00' : '30'}`),
             rightTime: Array.from({length: 32}, (_, index) => `${Math.floor((13 + index) / 2)}:${((13 + index) % 2 == 0) ? '00' : '30'}`),
-            status: Array.from({length: 32}, (_, index) => ((index >= this.inleft && index <= this.inright) ? 0 : -1)) // -1 disabled, 0 empty, 1 chosen
+            status: (() => {
+                let res = Array.from({length: 32}, (_, index) => -1); // -1 disabled, 0 empty, 1 chosen
+                for (var i = 0; i < this.availableIndex.length; i++) {
+                    if (this.availableIndex[i] >= this.inleft && this.availableIndex[i] <= this.inright) {
+                        res[this.availableIndex[i]] = 0;
+                    }
+                }
+                return res;
+            })() 
+            
         }
     },
     methods: {
@@ -72,7 +85,7 @@ export default {
                         if (this.status[i] != -1) this.status[i] = 0;
                     }
                     for (var i = a; i <= b; i++) {
-                        this.status[i] = 1;
+                        if (this.status[i] != -1) this.status[i] = 1;
                     }
                 }
                 this.$emit('leftTime', this.leftTime[this.left]);

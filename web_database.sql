@@ -116,3 +116,15 @@ insert into INFOMATION (title1, content1, image1, title2, content2, image2, addr
     "https://www.facebook.com/profile.php?id=100009976037363",
     "https://www.facebook.com/profile.php?id=100009976037363"
 );
+
+create table TIMELINE (
+    timeframe time
+);
+delimiter //
+for i in 6..21
+do
+    insert into TIMELINE (timeframe) values (i * 10000);
+    insert into TIMELINE (timeframe) values (i * 10000 + 3000);
+end for;
+//
+delimiter ;

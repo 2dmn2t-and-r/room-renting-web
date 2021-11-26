@@ -130,7 +130,7 @@ export default {
         sex: this.sex,
         phone: this.phone,
         address: this.address,
-        avatar: ""
+        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXa1s1BI-GgogSRmwZYZiDRGN2Elkr5hfysw&usqp=CAU"
       })
       if (res.data["status"] === 200) {
         this.$router.push('/auth/signin').catch(()=>{})

@@ -25,7 +25,7 @@
             $statusR = $reservation['statusR'];
             $roomId = $reservation['roomId'];
             $userId = $authorization['userId'];
-            $query = "SELECT * FROM reservation WHERE roomId=$roomId and useDate='$useDate' and ((startTime<='$startTime' and endTime>'$startTime') or (startTime<'$endTime' and endTime>='$endTime'))";
+            $query = "SELECT * FROM reservation WHERE roomId=$roomId and useDate='$useDate' and ((startTime<='$startTime' and endTime>'$startTime') or (startTime<'$endTime' and endTime>='$endTime') or (startTime>='$startTime' and endTime<='$endTime'))";
             $available = mysqli_query($db, $query);
             $row = mysqli_fetch_assoc($available);
             if($row) {

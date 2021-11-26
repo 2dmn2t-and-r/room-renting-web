@@ -192,5 +192,29 @@
             $result = mysqli_query($db, $query);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
+
+        public function getAvailableTime($id, $useDate) {
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+
+            $authorization = $VerifyAccount::checkAuthState();
+            
+            if(!$authorization) {
+                echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
+                return;
+            }
+
+            $db = 'Database'::getInstance();
+
+            $query =   "select timeframe
+                        from TIMELINE 
+                        where (
+                            select count(*)
+                            from RESERVATION 
+                            where roomId = $id and useDate = '$useDate' and startTime <= timeframe and timeframe < endTime
+                        ) = 0";
+            $timeframes = mysqli_query($db, $query);
+            $row = mysqli_fetch_all($timeframes, MYSQLI_ASSOC);
+            echo json_encode(['timeframes'=>$row, 'status'=>200]);
+        }
     }
 ?>
