@@ -217,7 +217,7 @@ Comment scoped>
     .border {
         border-radius: 10px;
         background-color: var(--theme_fore);
-        min-height: 300px;
+        /* min-height: 300px; */
     }
     .inner {
         padding: 20px;

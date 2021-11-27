@@ -55,7 +55,7 @@ create table NEWS (
     title		varchar(100),
     createDate	date,
     modifyDate	date,
-    content		varchar(200),
+    content		varchar(2048),
     image		varchar(1024),
     public		boolean,
     primary key (newsId)

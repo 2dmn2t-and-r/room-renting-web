@@ -6,8 +6,8 @@
                 width_img: '95.83%',
                 height: '100%',
                 height_img: '95.83%',
-                border_radius: '7vw'
-            }"/>
+                border_radius: '7vw',
+            }" :background_img="img"/>
         </div>
         <div class="form-box">
             <theme-textarea v-bind="{
@@ -27,6 +27,8 @@
                 </div>
                 Public news
             </div>
+            <div class="divider"></div>
+            <theme-button :msg="'Choose Image'" :background_color="'var(--theme_jade)'" :width="'100%'" @click="$emit('chooseImage')"/>
         </div>
     </div>
 </template>
@@ -49,6 +51,10 @@ export default {
             default: "",
         },
         content: {
+            type: String,
+            default: "",
+        },
+        img: {
             type: String,
             default: "",
         }

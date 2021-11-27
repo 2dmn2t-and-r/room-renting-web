@@ -11,7 +11,7 @@
               height: '100%',
               height_img: '95.83%',
               border_radius: '7vw'
-            }"/>
+            }" :background_img="news.image"/>
           </div>
           <div class="bt-container">
             <theme-button v-bind="{
@@ -96,11 +96,14 @@
             :checked="check"
             :content.sync="content"
             :title.sync="title"
+            :img="image"
             @on-check="setCheck"
+            @chooseImage="triggerImage"
           />
         </div>
       </modal-template>
     </div>
+    <input type="file" ref="file" @change="changeImage" style="display: none"/>
   </div>
 </template>
 
@@ -112,6 +115,7 @@
   import PictureFrame from '../components/PictureFrame.vue';
   import ThemeButton from '../components/ThemeButton.vue';
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
+  import { uploadImage } from '../utils/uploadImage';
 
   export default {
     name: 'NewsDetailManagement',
@@ -225,7 +229,21 @@
         if (res.data["status"] === 200) {
           this.comments.splice(index, 1);
         }
-      }
+      },
+      changeImage: function(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+        return;
+        var file = files[0];
+        uploadImage(file, `news/${Date()}`, (value) => {
+          (async() => {
+            this.image = value;
+          })();
+        });
+      },
+      triggerImage() {
+        this.$refs.file.click();
+      },
     },
     mounted() {
       (async () => {

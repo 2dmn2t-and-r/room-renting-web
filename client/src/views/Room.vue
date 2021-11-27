@@ -156,7 +156,7 @@ import ThemePagination from '../components/ThemePagination.vue';
       showModal: function(index) {
           if (this.step == -1) this.step = 1;
           this.selected = index;
-          this.chosenRoom = this.roomList[index];
+          this.chosenRoom = this.roomListFilter[index];
           this.startTime = this.chosenRoom.openTime;
           this.endTime = this.chosenRoom.closeTime;
           this.chosenStartTime = this.startTime;
@@ -189,7 +189,11 @@ import ThemePagination from '../components/ThemePagination.vue';
           return;
         }
         if (this.step == 2) {
-          if (this.chosenStartTime < this.chosenEndTime)
+          if ((() => {
+            let a = this.chosenStartTime.split(':');
+            let b = this.chosenEndTime.split(':');
+            return (parseInt(a[0]) * 100 + parseInt(a[1])) < (parseInt(b[0]) * 100 + parseInt(b[1]));
+          })())
           (async () => {
             var token = localStorage.getItem("token");
             let res = await postDataAPI('reservation/upload', {

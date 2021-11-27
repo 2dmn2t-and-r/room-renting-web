@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :key="refresh">
     <section-1
     v-bind="{
       title: title1,
@@ -15,7 +15,7 @@
       img: image2,
     }"
     />
-    <section-4 v-if="userId == ''" :key="refresh"/>
+    <section-4 v-if="userId == ''"/>
   </div> 
 </template>
 
@@ -79,6 +79,7 @@ export default {
         this.twitter = res.data["info"]["twitter"];
         this.instagram = res.data["info"]["instagram"];
         this.tiktok = res.data["info"]["tiktok"];
+        this.refresh = 1 - this.refresh;
       }
     })();
   },

@@ -39,7 +39,7 @@
         </div>
         <div class="list-box">
           <div class="list">
-            <div v-for="(news, index) in newsList" :key="index">
+            <div v-for="(news, index) in newsList.filter((_, i) => (i >= this.firstItem && i <= this.lastItem))" :key="index">
               <news-card class="margin-item" v-bind="{
                 id: news.newsId,
                 img: news.image,
@@ -72,11 +72,14 @@
             :checked="check"
             :content.sync="content"
             :title.sync="title"
+            :img="image"
             @on-check="setCheck"
+            @chooseImage="triggerImage"
           />
         </div>
       </modal-template>
     </div>
+    <input type="file" ref="file" @change="changeImage" style="display: none"/>
   </div>
 </template>
 
@@ -90,6 +93,7 @@
   import ThemeInput from '../components/ThemeInput.vue'
   import ThemePagination from '../components/ThemePagination.vue'
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
+  import { uploadImage } from '../utils/uploadImage';
 
   export default {
     name: 'NewsManagement',
@@ -195,7 +199,21 @@
           })
         }
         this.newsList = temp;
-      }
+      },
+      changeImage: function(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+        return;
+        var file = files[0];
+        uploadImage(file, `news/${Date()}`, (value) => {
+          (async() => {
+            this.image = value;
+          })();
+        });
+      },
+      triggerImage() {
+        this.$refs.file.click();
+      },
     },
     mounted() {
       (async () => {

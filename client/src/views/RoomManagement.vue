@@ -179,7 +179,7 @@ export default {
       },
 
       intoDetail: function(index) {
-        this.$router.push(this.$router.history.current.path + '/' + this.roomList[index].roomId.toString()).catch(()=>{});
+        this.$router.push(this.$router.history.current.path + '/' + this.roomListFilter[index].roomId.toString()).catch(()=>{});
       },
 
       resetAddedRoom: function() {

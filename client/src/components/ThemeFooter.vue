@@ -1,5 +1,5 @@
 <template>
-    <div class="bare_footer" :style="display">
+    <div class="bare_footer" :style="display" :key="refresh">
         <div class="inner_footer" >
             <div style="width: 1%"></div>
             <div class="logo"></div>
@@ -49,6 +49,7 @@ export default {
             twitter: "",
             instagram: "",
             tiktok: "",
+            refresh: 0
         }
     },
     methods: {
@@ -75,6 +76,7 @@ export default {
         this.twitter = res.data["info"]["twitter"];
         this.instagram = res.data["info"]["instagram"];
         this.tiktok = res.data["info"]["tiktok"];
+        this.refresh = 1 - this.refresh;
       }
     })()
   },

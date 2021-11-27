@@ -11,7 +11,7 @@
               height: '100%',
               height_img: '95.83%',
               border_radius: '7vw'
-            }"/>
+            }" :background_img="news.image"/>
           </div>
           <div class="bt-container">
             <theme-button v-bind="{

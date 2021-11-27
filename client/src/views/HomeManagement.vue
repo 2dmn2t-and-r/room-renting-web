@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :key="refresh">
     <section-1
     v-bind="{
       title: title1,
@@ -15,6 +15,8 @@
       img: image2,
     }"
     />
+    <input type="file" ref="file" @change="changeImage1" style="display: none"/>
+    <input type="file" ref="file2" @change="changeImage2" style="display: none"/>
     <div class="button">
       <theme-button 
         v-bind="{
@@ -72,7 +74,7 @@
                   border_radius: '15px',
                   background_color: 'var(--theme_jade)',
                 }"
-                @click.native="1"
+                @click.native="triggerImage1"
               />
             </div>
           </div>
@@ -111,7 +113,7 @@
                   border_radius: '15px',
                   background_color: 'var(--theme_jade)',
                 }"
-                @click.native="1"
+                @click.native="triggerImage2"
               />
             </div>
           </div>
@@ -122,49 +124,42 @@
             label="Company address:"
             type="text"
             :value.sync="modal_address"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Company email:"
             type="text"
             :value.sync="modal_email"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Company phone:"
             type="text"
             :value.sync="modal_phone"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Facebook:"
             type="text"
             :value.sync="modal_facebook"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Twitter:"
             type="text"
             :value.sync="modal_twitter"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Instagram:"
             type="text"
             :value.sync="modal_instagram"
-            v-bind:disable="true"
           />
           <div class="divider"></div>
           <theme-input
             label="Tik Tok:"
             type="text"
             :value.sync="modal_tiktok"
-            v-bind:disable="true"
           />
         </div>
     </modal-template>
@@ -182,6 +177,7 @@ import PictureFrame from '../components/PictureFrame.vue';
 import ThemeTextarea from '../components/ThemeTextarea.vue';
 import ThemeInput from '../components/ThemeInput.vue';
 import {getDataAPI, postDataAPI} from '../utils/fetchData';
+import { uploadImage } from '../utils/uploadImage';
 
 export default {
   name: 'Home',
@@ -225,6 +221,7 @@ export default {
       modal_twitter: "",
       modal_instagram: "",
       modal_tiktok: "",
+      refresh: 0
     }
   },
   methods: {
@@ -281,10 +278,40 @@ export default {
               this.instagram = this.modal_instagram;
               this.tiktok = this.modal_tiktok;
               this.setEditModalStep(-1);
+              this.refresh = 1 - this.refresh;
+              location.reload();
             }
           }
         }
         else this.setEditModalStep(this.editModalStep + 1);
+    },
+    changeImage1: function(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+      return;
+      var file = files[0];
+      uploadImage(file, `homeImage1`, (value) => {
+        (async() => {
+          this.modal_image1 = value;
+        })();
+      });
+    },
+    triggerImage1() {
+      this.$refs.file.click();
+    },
+    changeImage2: function(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+      return;
+      var file = files[0];
+      uploadImage(file, `homeImage2`, (value) => {
+        (async() => {
+          this.modal_image2 = value;
+        })();
+      });
+    },
+    triggerImage2() {
+      this.$refs.file2.click();
     }
   },
   mounted() {
@@ -317,6 +344,7 @@ export default {
         this.modal_twitter = this.twitter;
         this.modal_instagram = this.instagram;
         this.modal_tiktok = this.tiktok;
+        this.refresh = 1 - this.refresh;
       }
     })()
   },
