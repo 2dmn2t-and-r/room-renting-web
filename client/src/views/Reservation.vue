@@ -178,7 +178,7 @@ export default {
     },
     changeModal: function (index = -1) {
         if (index != -1) {
-            this.chosenResere = this.reserveList[index];
+            this.chosenResere = this.reserveListFilter[index];
         }
       this.showModal = -1 - this.showModal;
     },
