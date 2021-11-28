@@ -107,7 +107,7 @@ export default {
                 var day = date.getDate().toString();
                 day = day.length > 1 ? day : '0' + day;
                 
-                return month + '/' + day + '/' + year;
+                return day + '/' + month + '/' + year;
             }
         },
         timeRange: function(start = true) {
