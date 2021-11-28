@@ -57,9 +57,9 @@
             </div>
         </div>
         <div class="date_box row date_box_row">
-            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="actionChange"/>
-            <div class="divider_other"> </div>
-            <theme-button msg="Delete" :background_color="'var(--theme_jade)'" height="40px" width="120px" @click.native="actionDelete"/>
+            <theme-button msg="Change" :background_color="'var(--theme_jade)'" height="40px" width="30%" @click.native="actionChange"/>
+            <theme-button msg="Comments" :background_color="'var(--theme_jade)'" height="40px" width="30%" @click.native="actionComment"/>
+            <theme-button msg="Delete" :background_color="'var(--theme_jade)'" height="40px" width="30%" @click.native="actionDelete"/>
         </div>
     </div>
 </template>
@@ -77,6 +77,9 @@ export default {
     },
     actionDelete() {
         this.$emit('deleteInfo');
+    },
+    actionComment() {
+        this.$emit('showComments');
     }
   }  
 }
@@ -161,7 +164,7 @@ export default {
     }
     .date_box_row {
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
     }
     .content_col {
         justify-content: space-between;

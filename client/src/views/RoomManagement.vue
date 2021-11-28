@@ -153,8 +153,6 @@ export default {
           this.addedRoom.type = this.addedRoom.type.substring(0, 1);
           this.addedRoom.statusRo = this.addedRoom.statusRo.substring(0, 1);
           let res = await postDataAPI('room/upload', this.addedRoom, token);
-          console.log(this.addedRoom);
-          console.log(res.data);
           if (res.data["status"] === 200) {
             this.step = -1;
             await this.refreshList();
@@ -206,78 +204,83 @@ export default {
 </script>
 <style scoped>
 .room-management {
-    padding: 20px;
-    background-color: var(--theme_white);
-    min-height: calc(100vh - 100px);
-    
-  }
-
-.right-bar {
-  width: 100%;
-  flex-basis: 80%;
+  padding: 20px;
+  background-color: var(--theme_white);
+  min-height: calc(100vh - 100px);  
 }
 
-  .card-container {
+.right-bar {
+  width: calc(100% - 220px);
+  padding-left: 20px;
+}
+
+.card-container {
+  width: 100%;
+  background-color: var(--theme_fore);
+  padding: 18px 18px 0px 18px;
+  border-radius: 10px;
+}
+
+.sidebar {
+  width: 220px;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+
+}
+
+.btn{
+  margin: 10px auto;
+  text-align: center;
+  
+}
+
+.title {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.main {
+  width: 100%;
+
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-basis: 100%;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+
+.margin-item {
+  margin-bottom: 18px;
+}
+
+.timeline {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  display: block;  
+}
+
+@media only screen and (max-width: 768px) {
+  .main {
+    display: block;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .right-bar {
     width: 100%;
-    background-color: var(--theme_fore);
-    padding: 18px 18px 0px 18px;
-    border-radius: 10px;
+    padding-left: 0px;
   }
 
   .sidebar {
-    flex-basis: 20%;
-  }
-
-  .page-container {
     width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
-
   }
-
-  .btn{
-    margin: 10px auto;
-    text-align: center;
-    
-  }
-
-  .title {
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .main {
-    width: 100%;
-
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-basis: 100%;
-    align-items: flex-start;
-    margin: 0 auto;
-  }
-
-  .margin-item {
-    margin-bottom: 18px;
-  }
-
-   @media only screen and (max-width: 768px) {
-        .main {
-          display: block;
-        }
-    }
-  .timeline {
-    width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
-    display: block;
-    
-  }
-
-   @media only screen and (max-width: 768px) {
-        .main {
-          display: block;
-        }
-    }
+}
 </style>

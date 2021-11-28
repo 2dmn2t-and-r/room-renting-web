@@ -122,12 +122,22 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    beforeEnter: async (to, from, next) => {
+      var token = localStorage.getItem("token");
+      if (token) {
+        let res = await getDataAPI('auth/get', token);
+        if (res.data["status"] === 200) {
+          next()
+        }
+        else next('/')
+      }
+      else next('/')
+    }
   },
   {
     path: '/management/room',
     name: 'RoomManagement',
-    component: RoomManagement,
-    
+    component: RoomManagement,    
     beforeEnter: async (to, from, next) => {
       var token = localStorage.getItem("token");
       if (token) {

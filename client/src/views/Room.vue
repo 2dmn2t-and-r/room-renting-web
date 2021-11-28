@@ -2,7 +2,6 @@
   <div class="room">
     <div class="page-container">
       <page-title title="Book Now" class="title"/>
-
       <div class="main"> 
         <div class="sidebar">
           <side-bar-room-type :types="type" :chosen_index="chosenIndex" @updateIndex="chosenIndex = $event; refreshList();"> </side-bar-room-type>
@@ -30,7 +29,6 @@
             pageItem: pageItem,
           }" :curPage.sync="curPageChangable"/>
         </div>
-        
       </div>
 
     </div>
@@ -51,7 +49,8 @@
         address: this.chosenRoom.address,
         description: this.chosenRoom.description,
         comments: comments,
-        canComment: userId != ''
+        canComment: userId != '',
+        userId: userId
       }" :chosenDate.sync="chosenDate" :key="refresh">   </room-reserve-step-1>
 
       <room-reserve-step-2 slot="2" v-bind="{
@@ -73,13 +72,11 @@
   import RoomCard from '@/components/RoomCard.vue';
   import PageTitle from '../components/PageTitle.vue'
   import SideBarRoomType from '../components/SideBarRoomType.vue';
-
   import RoomReserveStep3 from '@/components/modals/room/RoomReserveStep3.vue'
   import RoomReserveStep2 from '@/components/modals/room/RoomReserveStep2.vue'
   import RoomReserveStep1 from '@/components/modals/room/RoomReserveStep1.vue'
   import { getDataAPI, postDataAPI } from '../utils/fetchData';
-import moment from 'moment';
-import ThemePagination from '../components/ThemePagination.vue';
+  import ThemePagination from '../components/ThemePagination.vue';
 
   export default {
     name: 'Room',
@@ -91,7 +88,7 @@ import ThemePagination from '../components/ThemePagination.vue';
       RoomReserveStep3, 
       RoomReserveStep2,
       RoomReserveStep1,
-        ThemePagination
+      ThemePagination
     },
     data (){
       return {
@@ -126,7 +123,7 @@ import ThemePagination from '../components/ThemePagination.vue';
         selected: 0,
         chosenIndex: 0,
         refresh: 0,
-        chosenDate: moment(new Date()).format("YYYY-MM-DD"),
+        chosenDate: (new Date()).toISOString().split('T')[0],
         startTime: '06:00',
         endTime: '06:30',
         chosenStartTime: '06:00',
@@ -166,7 +163,7 @@ import ThemePagination from '../components/ThemePagination.vue';
 
       hide: function() {
         this.step = -1;
-        this.chosenDate = moment(new Date()).format("YYYY-MM-DD");
+        this.chosenDate = (new Date()).toISOString().split('T')[0];
         this.comments = [];
         this.availableTime = [];
       },
@@ -237,12 +234,20 @@ import ThemePagination from '../components/ThemePagination.vue';
           this.curPage = 1;
           this.refresh = 1 - this.refresh;
         })()
-      },
-      
+      },      
       timeToIndex: function(time) {
         var res = time.split(':');
         return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
-      }
+      },
+      async deleteComment(index) {
+        var token = localStorage.getItem("token");
+        let res = await postDataAPI('news/comment/delete', {
+          commentId: this.comments[index]['commentId'],
+        }, token);
+        if (res.data["status"] === 200) {
+          this.comments.splice(index, 1);
+        }
+      },
     },
     mounted: function(){
       this.step = -1;
@@ -273,12 +278,11 @@ import ThemePagination from '../components/ThemePagination.vue';
     padding: 20px;
     background-color: var(--theme_white);
     min-height: calc(100vh - 100px);
-    
   }
 
   .left-side {
-    flex-basis: 80%;
-    width: 100%;
+    width: calc(100% - 220px);
+    padding-left: 20px;
   }
 
   .card-container {
@@ -289,8 +293,7 @@ import ThemePagination from '../components/ThemePagination.vue';
   }
 
   .sidebar {
-    flex-basis: 20%;
-    min-width: 200px;
+    width: 220px;
   }
 
   .page-container {
@@ -319,12 +322,6 @@ import ThemePagination from '../components/ThemePagination.vue';
   .margin-item {
     margin-bottom: 18px;
   }
-
-   @media only screen and (max-width: 768px) {
-        .main {
-          display: block;
-        }
-    }
   .timeline {
     width: 100%;
     max-width: 1140px;
@@ -333,10 +330,27 @@ import ThemePagination from '../components/ThemePagination.vue';
     
   }
 
-   @media only screen and (max-width: 768px) {
-        .main {
-          display: block;
-        }
+  @media only screen and (max-width: 768px) {
+    .main {
+      display: block;
     }
+
+    .sidebar {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .left-side {
+      width: 100%;
+      padding-left: 0px;
+    }
+  }
+    
+
+  @media only screen and (max-width: 768px) {
+      .main {
+        display: block;
+      }
+  }
 </style>
 

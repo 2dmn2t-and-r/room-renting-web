@@ -170,9 +170,7 @@
             createDate: date,
             public: this.check ? '1' : '0',
           }, token);
-          console.log(res);
           if (res.data["status"] === 200) {
-            console.log(res);
             let loadRes = await getDataAPI('news/load', token);
             if (loadRes.data["status"] === 200) {
               this.newsList = loadRes.data["news"].sort((a, b) => {

@@ -15,13 +15,6 @@
   import {getDataAPI, postDataAPI} from './utils/fetchData';
   import axios from 'axios'
 
-  // (async () => {
-  //   var token = localStorage.getItem("token");
-  //   // var data = await getDataAPI('auth/get', token);
-  //   let res = await getDataAPI('auth/get', token);
-  //   console.log(res)
-  // })()
-
   export default {
     name: 'App',
     components: {

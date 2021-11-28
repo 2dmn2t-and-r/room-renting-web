@@ -87,7 +87,7 @@ export default {
         width: 10px;
         min-width: 10px;
     }
-    @media only screen and (max-width: 768px) {
+    /* @media only screen and (max-width: 768px) {
         .outer {
             display: flex;
             flex-direction: row;
@@ -99,8 +99,8 @@ export default {
         .text_class {
             display: none;
         }
-    }
-    @media only screen and (max-width: 600px) {
+    } */
+    @media only screen and (max-width: 768px) {
         .outer {
             display: flex;
             flex-direction: column;

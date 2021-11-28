@@ -31,6 +31,7 @@
           :room="curRoom"
           @changeInfo="showRoomModal()"
           @deleteInfo="deleteRoom()"
+          @showComments="loadComments()"
         >
         </information-block>
       </div>
@@ -94,6 +95,28 @@
         :key="refresh"
       ></add-room>
     </modal-template>
+
+    <modal-template  v-bind="{
+        title: 'Comments',
+        step: commentsModalStep,
+        buttonTitle: ['Send']
+      }"
+      @onClose="setCommentsModalStep(-1)"
+      @onCancel="setCommentsModalStep(commentsModalStep - 1)"
+      @onNextStep="uploadComment()"
+      >
+        <div slot="1" class="slot">
+          <comment-box v-bind="{
+            comments: comments,
+            manager: true,
+          }"
+          :newComment.sync="newComment"
+          @onDelete="(index) => {
+            deleteComment(index)
+          }"
+          />
+        </div>
+      </modal-template>
   </div>
 </template>
 <script>
@@ -103,11 +126,11 @@ import ModalTemplate from "@/components/ModalTemplate.vue";
 import PageTitle from "../components/PageTitle.vue";
 import Reservation from "./Reservation.vue";
 import ReservationInfo from "../components/ReservationInfo.vue";
-import moment from "moment";
 import CustomerReservation from "../components/modals/reservation/CustomerReservation.vue";
 import RoomInformation from "../components/modals/room/RoomInformation.vue";
 import { getDataAPI, postDataAPI } from '../utils/fetchData';
 import AddRoom from '../components/modals/room/AddRoom.vue';
+import CommentBox from '../components/modals/news/CommentBox.vue';
 export default {
   components: {
     InformationBlock,
@@ -119,6 +142,7 @@ export default {
     CustomerReservation,
     RoomInformation,
     AddRoom,
+    CommentBox,
   },
   props: {},
   data() {
@@ -200,7 +224,7 @@ export default {
       roomChange: -1,
       refresh: 0,
       filterStart: '2000-01-01',
-      filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return moment(t).format('YYYY-MM-DD');})(),
+      filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return t.toISOString().split('T')[0];})(),
       payStatus: {
         'U': "Unpaid",
         'P': "Paid",
@@ -210,7 +234,10 @@ export default {
         'H': 'Hall',
         'M': 'Meeting room',
         'S': 'Stage'
-      }
+      },
+      comments: [],
+      newComment: "",
+      commentsModalStep: -1,
     };
   },
 
@@ -248,7 +275,6 @@ export default {
       (async() => {
         var token = localStorage.getItem("token");
         let res = await getDataAPI(`reservation/setPay/${this.chosenReserve.reservation.resId}`, token);
-        console.log(res.data);
         if (res.data["status"] === 200) {
           await this.refreshList();
           this.refresh = 1 - this.refresh;
@@ -298,12 +324,56 @@ export default {
       return dur;
     },
     dateFormat(date) {
-      return moment(Date(date)).format("DD/MM/YYYY");
+      if (date) {
+        var year = date.getFullYear();
+
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+        
+        return month + '/' + day + '/' + year;
+      }
     },
     shortenTime(time) {
       return time.charAt(0) == "0"
         ? time.substring(1, 5)
         : time.substring(0, 5);
+    },
+    setCommentsModalStep(val) {
+      this.commentsModalStep = val;
+    },
+    async loadComments() {
+      var token = localStorage.getItem("token");
+      let res = await getDataAPI('room/comments/load/' + this.$route.params.roomId, token);
+      if (res.data["status"] === 200) {
+        this.comments = res.data["room_comments"]
+        this.setCommentsModalStep(0);
+      }
+    },
+    async deleteComment(index) {
+      var token = localStorage.getItem("token");
+      let res = await postDataAPI('room/comment/delete', {
+        commentId: this.comments[index]['commentId'],
+      }, token);
+      if (res.data["status"] === 200) {
+        this.comments.splice(index, 1);
+      }
+    },
+    async uploadComment() {
+      if (this.newComment !== "") {
+        var token = localStorage.getItem("token");
+        let res = await postDataAPI('room/comment/upload', {
+          content: this.newComment,
+          date: (new Date()).toISOString().split('T')[0],
+          roomId: this.$route.params.roomId,
+        }, token);
+        if (res.data["status"] === 200) {
+          this.newComment = "";
+          this.setCommentsModalStep(-1);
+        }
+      }
     },
   },
 

@@ -6,7 +6,6 @@
         <div class="grow1">
           <side-bar-reserve-time @triggerFilter="triggerFilter"/>
         </div>
-        <div style="min-height: 10px; min-width: 10px"></div>
         <div class="right-bar">
           <div class="grow4" :key="refresh">
             <div v-for="(item, index) in reserveListFilter" :key="index">
@@ -277,11 +276,12 @@ export default {
 }
 
 .grow1 {
-  width: 20%;
+  width: 220px;
 }
 
 .right-bar {
-  width: 80%
+  width: calc(100% - 220px);
+  padding-left: 20px;
 }
 
 .grow4 {
@@ -292,8 +292,13 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
+  .right-bar {
+    width: 100%;
+    padding-left: 0px;
+  }
   .grow1 {
     width: 100%;
+    margin-bottom: 20px;
   }
 
   .grow4 {

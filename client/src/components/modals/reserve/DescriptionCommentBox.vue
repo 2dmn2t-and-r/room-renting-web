@@ -31,7 +31,8 @@
                         name: comment['name'],
                         time: comment['time'],
                         content: comment['content'],
-                        img: comment['img']
+                        img: comment['img'],
+                        deletable: userId === comment['userId'],
                     }"
                 />
                 <div class="divider"></div>
@@ -42,7 +43,7 @@
             <div class="row baseline" v-if="canComment">
                 <theme-input
                     type="text"
-                    :value.sync="comment"
+                    :value.sync="newComment"
                     placeholder="Write your comment here"
                     buttonTitle="Send"
                     buttonWidth="60px"
@@ -74,13 +75,17 @@ export default {
         canComment: {
             type: Boolean,
             default: true
+        },
+        userId: {
+            type: String,
+            default: ""
         }
     },
     data() {
         return {
             tagComment: false,
             refresh: 0,
-            comment: '',
+            newComment: '',
             comments: [] // {name: string, time: date, content: string, img: string url}
         }
     },
@@ -99,40 +104,41 @@ export default {
                 let token = localStorage.getItem("token");
                 let data = {
                     date: new Date(),
-                    content: this.comment,
+                    content: this.newComment,
                     roomId: this.roomId
                 };
                 let res = await postDataAPI('/room/comment/upload', data, token);
                 if (res.data["status"] === 200) {
                     this.loadComments();
-                    this.comment = '';
+                    this.newComment = '';
                 }
             })()
         },
         loadComments: function() {
             (async () => {
-            let token = localStorage.getItem("token");
-            let res = await getDataAPI(`room/comments/load/${this.roomId}`, token);
-            this.comments = [];
-            let temp = [];
-            if (res.data["status"] === 200) {
-                temp = res.data["room_comments"];
-            }
-            if (temp)
-                for (let item of temp) {
-                    this.comments.push({
-                        name: item.username,
-                        time: new Date(item.date),
-                        content: item.content,
-                        img: item.avatar
-                    });
+                let token = localStorage.getItem("token");
+                let res = await getDataAPI(`room/comments/load/${this.roomId}`, token);
+                let temp = [];
+                if (res.data["status"] === 200) {
+                    temp = res.data["room_comments"];
                 }
-            this.refresh = 1 - this.refresh;
+                if (temp)
+                    for (let item of temp) {
+                        this.comments.push({
+                            name: item.username,
+                            time: new Date(item.date),
+                            content: item.content,
+                            img: item.avatar,
+                            userId: item.userId
+                        });
+                    }
+                this.refresh = 1 - this.refresh;
             })()
         },
     },
     computed: {
-        status_style: function(){
+        
+        status_style: function(){            
             return {
                 "color": this.status == "Available" ? "var(--theme_jade)" : "var(--theme_gray)",
                 "text-decoration": this.status == "Available" ? "none" : "line-through"

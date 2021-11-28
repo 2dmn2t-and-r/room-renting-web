@@ -262,7 +262,6 @@ export default {
               instagram: this.modal_instagram,
               tiktok: this.modal_tiktok,
             }, token);
-            console.log(res);
             if (res.data["status"] === 200) {
               this.title1 = this.modal_title1;
               this.content1 = this.modal_content1;

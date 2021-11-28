@@ -53,7 +53,7 @@ import PageTitle from '../components/PageTitle.vue'
 import ReservationBlock from '../components/ReservationBlock.vue';
 import ReservationInfo from '../components/ReservationInfo.vue';
 import { getDataAPI, postDataAPI } from '../utils/fetchData';
-import moment from "moment";
+
 export default {
   components: { PageTitle, ReservationBlock, ReservationInfo, ModalTemplate, CustomerReservation },
   data() {
@@ -100,7 +100,7 @@ export default {
       showModal: -1,
       refresh: 0,
       filterStart: '2000-01-01',
-      filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return moment(t).format('YYYY-MM-DD');})(),
+      filterEnd: (() => {var t = new Date(); t.setFullYear(t.getFullYear() + 1); return t.toISOString().split('T')[0]})(),
       payStatus: {
         'U': "Unpaid",
         'P': "Paid",
@@ -153,7 +153,6 @@ export default {
       (async() => {
         var token = localStorage.getItem("token");
         let res = await getDataAPI(`reservation/setPay/${this.chosenReserve.reservation.resId}`, token);
-        console.log(res.data);
         if (res.data["status"] === 200) {
           await this.refreshList();
           this.refresh = 1 - this.refresh;
@@ -181,9 +180,6 @@ export default {
         (parseInt(cl[0]) - parseInt(op[0])) * 60 +
         (parseInt(cl[1]) - parseInt(op[1]));
       return dur;
-    },
-    dateFormat(date) {
-      return moment(Date(date)).format("DD/MM/YYYY");
     },
     shortenTime(time) {
       return time.charAt(0) == "0"

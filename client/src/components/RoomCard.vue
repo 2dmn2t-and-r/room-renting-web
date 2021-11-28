@@ -144,6 +144,7 @@ export default {
     .card_outer {
         height: 200px;
         width: 100%;
+        cursor: pointer;
     }
     .card_img {
         height: 182px;

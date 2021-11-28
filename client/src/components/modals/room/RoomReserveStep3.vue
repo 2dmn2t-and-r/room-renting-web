@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import PictureFrame from '../../PictureFrame.vue'
 import DescriptionCommentBox from '../reserve/DescriptionCommentBox.vue';
 import ThemeInput from '../../ThemeInput.vue';
@@ -24,7 +23,17 @@ export default {
     },
     methods: {
         convertDate: function(day) {
-            return moment(String(day)).format('DD/MM/YYYY');
+            if (date) {
+                var year = date.getFullYear();
+
+                var month = (1 + date.getMonth()).toString();
+                month = month.length > 1 ? month : '0' + month;
+
+                var day = date.getDate().toString();
+                day = day.length > 1 ? day : '0' + day;
+                
+                return month + '/' + day + '/' + year;
+            }
         },
     }
 }
