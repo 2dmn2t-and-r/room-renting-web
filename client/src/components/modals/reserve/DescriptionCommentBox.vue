@@ -144,7 +144,7 @@ export default {
                 commentId: this.comments[index]['commentId'],
             }, token);
             if (res.data["status"] === 200) {
-                // this.comments.splice(index, 1);
+                this.comments.splice(index, 1);
                 this.loadComments();
             }
         },
