@@ -51,8 +51,7 @@
         comments: comments,
         canComment: userId != '',
         userId: userId
-      }" :chosenDate.sync="chosenDate" :key="refresh">   </room-reserve-step-1>
-
+      }" :chosenDate.sync="chosenDate" :key="refresh"/>
       <room-reserve-step-2 slot="2" v-bind="{
         chosenDate: new Date(this.chosenDate),
         startDate: startTime,
@@ -60,9 +59,8 @@
         availableTime: availableTime,
         price: parseInt(this.chosenRoom.price),
         totalPrice: (timeToIndex(this.chosenEndTime) - timeToIndex(this.chosenStartTime)) * parseInt(this.chosenRoom.price)
-      }" :key="refresh" :chosenStartTime.sync="chosenStartTime" :chosenEndTime.sync="chosenEndTime">  </room-reserve-step-2> 
-      
-      <room-reserve-step-3 slot="3"> </room-reserve-step-3> 
+      }" :key="refresh" :chosenStartTime.sync="chosenStartTime" :chosenEndTime.sync="chosenEndTime"/>      
+      <room-reserve-step-3 slot="3"/>
     </modal-template>
   </div>
 </template>
@@ -167,7 +165,6 @@
         this.comments = [];
         this.availableTime = [];
       },
-
       next: function() {
         if (this.userId == '') {
           this.$router.push('/auth/signin').catch(()=>{});
@@ -218,7 +215,6 @@
           this.hide();
         }
       },
-
       refreshList: function() {
         (async () => {
           var token = localStorage.getItem("token");
@@ -238,16 +234,7 @@
       timeToIndex: function(time) {
         var res = time.split(':');
         return (parseInt(res[0]) - 6) * 2 + Math.round(parseInt(res[1]) / 30);
-      },
-      async deleteComment(index) {
-        var token = localStorage.getItem("token");
-        let res = await postDataAPI('news/comment/delete', {
-          commentId: this.comments[index]['commentId'],
-        }, token);
-        if (res.data["status"] === 200) {
-          this.comments.splice(index, 1);
-        }
-      },
+      },      
     },
     mounted: function(){
       this.step = -1;

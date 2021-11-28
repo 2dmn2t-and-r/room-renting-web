@@ -34,6 +34,7 @@
                         img: comment['img'],
                         deletable: userId === comment['userId'],
                     }"
+                    @onDelete="deleteComment(index)"
                 />
                 <div class="divider"></div>
             </div>
@@ -129,15 +130,24 @@ export default {
                             time: new Date(item.date),
                             content: item.content,
                             img: item.avatar,
-                            userId: item.userId
+                            userId: item.userId,
+                            commentId: item.commentId
                         });
                     }
                 this.refresh = 1 - this.refresh;
             })()
         },
+        async deleteComment(index) {
+            var token = localStorage.getItem("token");
+            let res = await postDataAPI('room/comment/delete', {
+                commentId: this.comments[index]['commentId'],
+            }, token);
+            if (res.data["status"] === 200) {
+                this.comments.splice(index, 1);
+            }
+        },
     },
     computed: {
-        
         status_style: function(){            
             return {
                 "color": this.status == "Available" ? "var(--theme_jade)" : "var(--theme_gray)",
