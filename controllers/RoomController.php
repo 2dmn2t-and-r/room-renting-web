@@ -160,7 +160,7 @@
             }
 
             $result = mysqli_query($db, $query);
-            echo json_encode(['result' => $result, 'status'=>200]);
+            echo json_encode(['result' => $comment, 'status'=>200]);
         }
 
         public function deleteRoomComment() {

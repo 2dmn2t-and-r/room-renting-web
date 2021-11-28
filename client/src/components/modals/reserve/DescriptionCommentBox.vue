@@ -104,7 +104,7 @@ export default {
             (async () => {
                 let token = localStorage.getItem("token");
                 let data = {
-                    date: new Date(),
+                    date: (new Date()).toISOString().split('T')[0],
                     content: this.newComment,
                     roomId: this.roomId
                 };
