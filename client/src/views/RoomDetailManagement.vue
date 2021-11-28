@@ -105,7 +105,7 @@
       @onCancel="setCommentsModalStep(commentsModalStep - 1)"
       @onNextStep="uploadComment()"
       >
-        <div slot="1" class="slot">
+        <div slot="1" style="width: 100%">
           <comment-box v-bind="{
             comments: comments,
             manager: true,
