@@ -120,6 +120,7 @@ export default {
                 let token = localStorage.getItem("token");
                 let res = await getDataAPI(`room/comments/load/${this.roomId}`, token);
                 let temp = [];
+                this.comments = [];
                 if (res.data["status"] === 200) {
                     temp = res.data["room_comments"];
                 }
@@ -143,7 +144,8 @@ export default {
                 commentId: this.comments[index]['commentId'],
             }, token);
             if (res.data["status"] === 200) {
-                this.comments.splice(index, 1);
+                // this.comments.splice(index, 1);
+                this.loadComments();
             }
         },
     },
