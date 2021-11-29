@@ -6,7 +6,14 @@
         public function loadNewsList() {
             $News = 'Models\\News';
             $db = 'Database'::getInstance();
-            $query = "SELECT * FROM WEB_DATABASE.NEWS";
+            $query = "SELECT * FROM WEB_DATABASE.NEWS WHERE public = '1'";
+
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $authorization = $VerifyAccount::checkAuthState();
+            if($authorization && $authorization['type'] == 'M') {
+                $query = "SELECT * FROM WEB_DATABASE.NEWS";
+            }
+
             $newsList = mysqli_query($db, $query);
             $row = mysqli_fetch_all($newsList, MYSQLI_ASSOC);
             
@@ -17,7 +24,13 @@
             $News = 'Models\\News';
             $db = 'Database'::getInstance();
 
-            $query = "SELECT * FROM WEB_DATABASE.NEWS WHERE newsId = '$id'";
+            $query = "SELECT * FROM WEB_DATABASE.NEWS WHERE newsId = '$id' AND public = '1'";
+
+            $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $authorization = $VerifyAccount::checkAuthState();
+            if($authorization && $authorization['type'] == 'M') {
+                $query = "SELECT * FROM WEB_DATABASE.NEWS WHERE newsId = '$id'";
+            }
             $news = mysqli_query($db, $query);
             $row = mysqli_fetch_assoc($news);
             if(!$row) {
