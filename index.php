@@ -10,7 +10,6 @@
 
 	$router = new Route();
     
-    require_once('router/ExampleRoute.php');
     require_once('router/RoomRoute.php');
     require_once('router/ReservationRoute.php');
     require_once('router/NewsRoute.php');

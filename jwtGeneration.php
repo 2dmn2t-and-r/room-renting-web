@@ -13,6 +13,7 @@
 
     function isJwtValid($jwt, $secret = 'N270201') {
         $tokenParts = explode('.', $jwt);
+        if(!isset($tokenParts[1])) return null;
         $header = base64_decode($tokenParts[0]);
         $payload = base64_decode($tokenParts[1]);
         $signature_provided = $tokenParts[2];

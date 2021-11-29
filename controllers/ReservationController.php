@@ -8,6 +8,7 @@
 
     class ReservationController {
         public function uploadReservation() {
+            $Reservation = 'Models\\Reservation';
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
@@ -15,7 +16,6 @@
                 return;
             }
 
-            $db = 'Database'::getInstance();
             $reservation = json_decode(file_get_contents('php://input'), true);
             $bookDate = date_create()->format('Y-m-d');
             $useDate = $reservation['useDate'];
@@ -25,52 +25,19 @@
             $statusR = $reservation['statusR'];
             $roomId = $reservation['roomId'];
             $userId = $authorization['userId'];
-            $query = "SELECT * FROM reservation WHERE roomId=$roomId and useDate='$useDate' and ((startTime<='$startTime' and endTime>'$startTime') or (startTime<'$endTime' and endTime>='$endTime') or (startTime>='$startTime' and endTime<='$endTime'))";
-            $available = mysqli_query($db, $query);
-            $row = mysqli_fetch_assoc($available);
-            if($row) {
+
+            $available = $Reservation::checkAvailableTime($roomId, $useDate, $startTime, $endTime);
+            if (!$available) {
                 echo json_encode(['msg' => 'The room has been reserved in that time.', 'result'=>false, 'status'=>200]); 
                 return;
             }
-            $query = "INSERT INTO reservation(bookDate, useDate, startTime, endTime, totalPrice, statusR, roomId, userId) VALUES ('$bookDate', '$useDate', '$startTime', '$endTime', '$totalPrice', '$statusR', '$roomId', '$userId')";
-            $result = mysqli_query($db, $query);
+
+            $result = $Reservation::uploadReservation($bookDate, $useDate, $startTime, $endTime, $totalPrice, $statusR, $roomId, $userId);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
 
-        public function loadUserReservations($id, $from, $to) {
-            $VerifyAccount = 'Middlewares\\VerifyAccount';
-            $authorization = $VerifyAccount::checkAuthState();
-            if(!$authorization) {
-                echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
-                return;
-            }
-            $userId = $authorization['userId'];
-            $type = $authorization['type'];
-            if($type == 'C') {
-                echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
-                return;
-            }
-            $db = 'Database'::getInstance();
-            $Room = 'Models\\Room';
-            $Reservation = 'Models\\Reservation';
-            $User = 'Models\\User';
-
-            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
-                        FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
-                        WHERE re.userId = $id and re.useDate >= '$from' and re.useDate <='$to'";
-            $result = mysqli_query($db, $query);
-            $i = 0;
-            $list = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
-                $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
-                $i++;
-            }
-            echo json_encode(['reversations'=>$list, 'status'=>200]);
-        }
-
         public function loadRoomReservations($id, $from, $to) {
+            $Reservation = 'Models\\Reservation';
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
@@ -84,27 +51,12 @@
                 return;
             }
             
-            $db = 'Database'::getInstance();
-            $Room = 'Models\\Room';
-            $Reservation = 'Models\\Reservation';
-            $User = 'Models\\User';
-
-            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
-                        FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
-                        WHERE re.roomId = $id and re.useDate >= '$from' and re.useDate <='$to'";
-            $result = mysqli_query($db, $query);
-            $i = 0;
-            $list = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
-                $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
-                $i++;
-            }
+            $list = $Reservation::loadRoomReservations($id, $from, $to);
             echo json_encode(['reversations'=>$list, 'status'=>200]);
         }
 
         public function loadReservations($from, $to) {
+            $Reservation = 'Models\\Reservation';
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
@@ -118,96 +70,50 @@
                 return;
             }
 
-            $db = 'Database'::getInstance();
-            $Room = 'Models\\Room';
-            $Reservation = 'Models\\Reservation';
-            $User = 'Models\\User';
-
-            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
-                        FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
-                        WHERE re.useDate >= '$from' and re.useDate <= '$to'";
-            $result = mysqli_query($db, $query);
-            $i = 0;
-            $list = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
-                $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
-                $i++;
-            }
+            $list = $Reservation::loadReservations($from, $to);
             echo json_encode(['reversations'=>$list, 'status'=>200]);
         }
 
         public function loadReservation() {
             $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $Reservation = 'Models\\Reservation';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
                 echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
                 return;
             }
             $userId = $authorization['userId'];
-            $db = 'Database'::getInstance();
-            $Room = 'Models\\Room';
-            $Reservation = 'Models\\Reservation';
-            $User = 'Models\\User';
-
-            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
-                        FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
-                        WHERE re.userId = $userId";
-            $result = mysqli_query($db, $query);
-            $i = 0;
-            $list = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
-                $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
-                $i++;
-            }
+            $list = $Reservation::loadReservation($userId);
             echo json_encode(['reversations'=>$list, 'status'=>200]);
         }
 
         public function loadIntervalReservation($from, $to) {
             $VerifyAccount = 'Middlewares\\VerifyAccount';
+            $Reservation = 'Models\\Reservation';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
                 echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
                 return;
             }
             $userId = $authorization['userId'];
-            $db = 'Database'::getInstance();
-            $Room = 'Models\\Room';
-            $Reservation = 'Models\\Reservation';
-            $User = 'Models\\User';
-
-            $query = "SELECT *, ro.address as ro_address, ro.type as ro_type
-                        FROM (reservation re join room ro on re.roomId = ro.roomId) join user usr on re.userId = usr.userId
-                        WHERE re.userId = $userId and re.useDate >= '$from' and re.useDate <= '$to'";
-            $result = mysqli_query($db, $query);
-            $i = 0;
-            $list = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $list[$i]['reservation'] = new $Reservation($row['resId'], $row['bookDate'], $row['useDate'], $row['startTime'], $row['endTime'], $row['totalPrice'], $row['statusR'], $row['roomId'], $row['userId']);
-                $list[$i]['room'] = new $Room($row['roomId'], $row['roomName'], $row['ro_type'], $row['floor'], $row['seat'], $row['price'], $row['statusRo'], $row['openTime'], $row['closeTime'], $row['ro_address'], $row['description'], $row['image']);
-                $list[$i]['user'] = new $User($row['userId'], $row['username'], '', $row['sex'], $row['birthday'], $row['phone'], $row['address'], '', $row['type'], $row['avatar']);
-                $i++;
-            }
+            $list = $Reservation::loadReservation($userId, $from, $to);
             echo json_encode(['reversations'=>$list, 'status'=>200]);
         }
 
         public function removeReservation($id) {
+            $Reservation = 'Models\\Reservation';
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
                 echo json_encode(['msg'=>'Invalid account.', 'status'=>401]);
                 return;
             }
-            $db = 'Database'::getInstance();
-            $query = "DELETE FROM reservation WHERE resId = $id";
-            $result = mysqli_query($db, $query);
+            $result = $Reservation::removeReservation($id);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
 
         public function setPayReservation($id) {
+            $Reservation = 'Models\\Reservation';
             $VerifyAccount = 'Middlewares\\VerifyAccount';
             $authorization = $VerifyAccount::checkAuthState();
             if(!$authorization) {
@@ -219,9 +125,7 @@
                 echo json_encode(['msg'=>'Permission denied.', 'status'=>401]);
                 return;
             }
-            $db = 'Database'::getInstance();
-            $query = "UPDATE reservation SET statusR = 'P' WHERE resId = $id";
-            $result = mysqli_query($db, $query);
+            $result = $Reservation::setPayReservation($id);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
     }

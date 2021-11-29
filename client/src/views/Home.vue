@@ -58,13 +58,11 @@ export default {
     (async() => {
       var token = localStorage.getItem("token");
       let res = await getDataAPI('auth/get', token);
-        if (res.data["status"] === 200) {
-          this.userId = res.data["user"]["userId"];
-          this.refresh = 1 - this.refresh;
+      if (res.data["status"] === 200) {
+        this.userId = res.data["user"]["userId"];
+        this.refresh = 1 - this.refresh;
       }
-    })();
-    (async () => {
-      let res = await getDataAPI('info', undefined);
+      res = await getDataAPI('info', undefined);
       if (res.data["status"] === 200) {
         this.title1 = res.data["info"]["title1"];
         this.content1 = res.data["info"]["content1"];

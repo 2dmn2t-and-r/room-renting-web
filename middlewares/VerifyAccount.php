@@ -26,11 +26,12 @@
         public static function checkAuthState() {
             $userId = self::verifyAccount();
             if(!$userId) return null;
-            $db = 'Database'::getInstance();
+            // $db = 'Database'::getInstance();
             $User = 'Models\\User';
-            $query = "SELECT usr.* FROM user as usr WHERE userId=$userId";
-            $account = mysqli_query($db, $query);
-            $row = mysqli_fetch_assoc($account);
+            // $query = "SELECT usr.* FROM user as usr WHERE userId=$userId";
+            // $account = mysqli_query($db, $query);
+            // $row = mysqli_fetch_assoc($account);
+            $row = $User::getUser($userId);
             if(!$row) return null;
             return $row;
         }
