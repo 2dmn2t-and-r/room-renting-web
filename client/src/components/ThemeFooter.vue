@@ -38,17 +38,17 @@ export default {
         route: {
             type: String,
             default: "",
-        }
+        },
+        address: String,
+        email: String,
+        phone: String,
+        facebook: String,
+        twitter: String,
+        instagram: String,
+        tiktok: String,
     },
     data() {
         return {
-            address: "",
-            email: "",
-            phone: "",
-            facebook: "",
-            twitter: "",
-            instagram: "",
-            tiktok: "",
             refresh: 0
         }
     },
@@ -65,21 +65,21 @@ export default {
             }
         },
     },
-    mounted() {
-    (async () => {
-      let res = await getDataAPI('info', undefined);
-      if (res.data["status"] === 200) {
-        this.address = res.data["info"]["address"];
-        this.email = res.data["info"]["email"];
-        this.phone = res.data["info"]["phone"];
-        this.facebook = res.data["info"]["facebook"];
-        this.twitter = res.data["info"]["twitter"];
-        this.instagram = res.data["info"]["instagram"];
-        this.tiktok = res.data["info"]["tiktok"];
-        this.refresh = 1 - this.refresh;
-      }
-    })()
-  },
+    // beforeMount() {
+    // (async () => {
+    //   let res = await getDataAPI('info', undefined);
+    //   if (res.data["status"] === 200) {
+    //     this.address = res.data["info"]["address"];
+    //     this.email = res.data["info"]["email"];
+    //     this.phone = res.data["info"]["phone"];
+    //     this.facebook = res.data["info"]["facebook"];
+    //     this.twitter = res.data["info"]["twitter"];
+    //     this.instagram = res.data["info"]["instagram"];
+    //     this.tiktok = res.data["info"]["tiktok"];
+    //     this.refresh = 1 - this.refresh;
+    //   }
+    // })()
+//   },
 }
 </script>
 
