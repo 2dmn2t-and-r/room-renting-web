@@ -14,20 +14,8 @@
                 echo json_encode(['msg' => 'Invalid room type.', 'status'=>401]); 
                 return;
             }
-            // $VerifyAccount = 'Middlewares\\VerifyAccount';
-            // $authorization = $VerifyAccount::checkAuthState();
-            // $type = $authorization['type'];
-
-            // $db = 'Database'::getInstance();
             $roomType = strtoupper(substr($type, 0, 1));
 
-            // $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType' AND statusRo <> 'R'";
-            // if ($type == 'M') {
-            //     $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE type = '$roomType'";
-            // }
-
-            // $rooms = mysqli_query($db, $query);
-            // $row = mysqli_fetch_all($rooms, MYSQLI_ASSOC);
             $row = $Room::loadRooms($roomType);
             
             echo json_encode(['rooms'=>$row, 'status'=>200]);
@@ -36,9 +24,6 @@
         public function loadRoom($id) {
             $Room = 'Models\\Room';
             $db = 'Database'::getInstance();
-            // $query = "SELECT * FROM WEB_DATABASE.ROOM WHERE roomId = '$id'";
-            // $room = mysqli_query($db, $query);
-            // $row = mysqli_fetch_assoc($room);
             $row = $Room::loadRoom($id);
             if(!$row) {
                 echo json_encode(['msg' => 'Invalid room ID.', 'status'=>401]); 
@@ -81,18 +66,12 @@
 
             if (array_key_exists('roomId', $room)) {
                 $roomId = $room['roomId'];
-                // $query =   "UPDATE WEB_DATABASE.ROOM
-                //             SET roomName = '$roomName', type = '$roomType', floor = '$floor', price = '$price', seat = '$seat', statusRo = '$statusRo', openTime= '$openTime', closeTime = '$closeTime', address = '$address', description = '$description', image = '$image'
-                //             WHERE roomId = '$roomId';";
                 $result = $Room::updateRoom($roomId, $roomName, $roomType, $floor, $seat, $price, $statusRo, $openTime, $closeTime, $address, $description, $image);
             }
             else {
-                // $query =   "INSERT INTO WEB_DATABASE.ROOM (roomName, type, floor, price, seat, statusRo, openTime, closeTime, address, description, image)
-                //             VALUES ('$roomName', '$roomType', '$floor', '$price', '$seat', '$statusRo', '$openTime', '$closeTime', '$address', '$description', '$image')";
                 $result = $Room::createRoom($roomName, $roomType, $floor, $seat, $price, $statusRo, $openTime, $closeTime, $address, $description, $image);
             }
 
-            // $result = mysqli_query($db, $query);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
 
@@ -113,22 +92,12 @@
             $room = json_decode(file_get_contents('php://input'), true);
             $roomId = $room['roomId'];
 
-            // $query =   "UPDATE WEB_DATABASE.ROOM
-            //             SET statusRo = 'R'
-            //             WHERE roomId = '$roomId';";
             $result = $Room::deleteRoom($roomId);
             echo json_encode(['result' => $result, 'status'=>200]);
         }
 
         public function loadRoomComments($id) {
             $RoomComment = 'Models\\RoomComment';
-            // $db = 'Database'::getInstance();
-
-            // $query =   "SELECT commentId, date, content, roomId, userId, username, avatar 
-            //             FROM WEB_DATABASE.ROOM_COMMENT NATURAL JOIN WEB_DATABASE.USER 
-            //             WHERE roomId = '$id'";
-            // $roomcomments = mysqli_query($db, $query);
-            // $row = mysqli_fetch_all($roomcomments, MYSQLI_ASSOC);
 
             $row = $RoomComment::loadRoomComments($id);
             echo json_encode(['room_comments'=>$row, 'status'=>200]);

@@ -16,8 +16,9 @@
           <div class="bt-container">
             <theme-button v-bind="{
               msg: 'Comments',
+              background_color: 'var(--theme_jade)',
               height: '40px',
-              width: '45%',
+              width: '30%',
               border_radius: '15px'
             }"
             @click.native="loadComments()"></theme-button>
@@ -25,10 +26,20 @@
                 msg: 'Edit',
                 background_color: 'var(--theme_jade)',
                 height: '40px',
-                width: '45%',
+                width: '30%',
                 border_radius: '15px'
               }"
               @click.native="setEditModalStep(0)"
+            >
+            </theme-button>
+            <theme-button v-bind="{
+                msg: 'Remove',
+                background_color: 'var(--theme_jade)',
+                height: '40px',
+                width: '30%',
+                border_radius: '15px'
+              }"
+              @click.native="removeNews()"
             >
             </theme-button>
           </div>
@@ -244,6 +255,15 @@
       triggerImage() {
         this.$refs.file.click();
       },
+      removeNews() {
+        (async () => {
+          var token = localStorage.getItem("token");
+          let res = await getDataAPI('news/delete/' + this.$route.params.newsId, token);
+          if (res.data["status"] === 200) {
+            this.$router.push('/management/news').catch(()=>{});
+          }
+        })()
+      }
     },
     mounted() {
       (async () => {

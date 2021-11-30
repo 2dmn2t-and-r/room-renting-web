@@ -112,14 +112,26 @@ export default {
         },
         timeRange: function(start = true) {
             var res = [];
+            var tempS = this.startDate.split(':');
+            var tempE = this.endDate.split(':');
+            tempS[0] = parseInt(tempS[0]);
+            tempS[1] = parseInt(tempS[1]);
+            var intS = tempS[0] * 100 + tempS[1];
+            tempE[0] = parseInt(tempE[0]);
+            tempE[1] = parseInt(tempE[1]);
+            var intE = tempE[0] * 100 + tempE[1];
             for (var i = 6; i < 22; i++) {
                 if (start) {
-                    res.push(`${i}:00`);
-                    res.push(`${i}:30`);
+                    if (i * 100 >= intS && i * 100 < intE)
+                        res.push(`${i}:00`);
+                    if (i * 100 + 30 >= intS && i * 100 + 30 < intE)
+                        res.push(`${i}:30`);
                 }
                 else {
-                    res.push(`${i}:30`);
-                    res.push(`${i + 1}:00`);
+                    if (i * 100 + 30 > intS && i * 100 + 30 <= intE)
+                        res.push(`${i}:30`);
+                    if ((i + 1) * 100 > intS && (i + 1) * 100 <= intE)
+                        res.push(`${i + 1}:00`);
                 }
             }
             return res;

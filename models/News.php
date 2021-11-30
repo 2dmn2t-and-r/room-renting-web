@@ -61,5 +61,12 @@
             $result = mysqli_query($db, $query);
             return $result;
         }
+
+        public static function removeNews($id) {
+            $db = 'Database'::getInstance();
+            $query = "DELETE FROM WEB_DATABASE.NEWS WHERE newsId = '$id';";
+            $result = mysqli_query($db, $query);
+            return $result;
+        }
     }
 ?>

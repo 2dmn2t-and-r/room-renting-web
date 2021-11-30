@@ -1,3 +1,4 @@
+drop schema if exists web_database;
 create schema web_database;
 use web_database;
 

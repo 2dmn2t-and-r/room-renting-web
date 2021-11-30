@@ -110,7 +110,8 @@
         var token = localStorage.getItem("token");
         let res = await getDataAPI('news/comments/load/' + this.$route.params.newsId, token);
         if (res.data["status"] === 200) {
-          this.comments = res.data["news_comments"]
+          this.comments = res.data["news_comments"];
+          this.newComment = "";
           this.setModalStep(0);
         }
       },

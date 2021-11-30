@@ -5,6 +5,8 @@
 
     $router->get('/news/load/{id}', 'NewsController.loadNews');
 
+    $router->get('/news/delete/{newsId}', 'NewsController.removeNews');
+
     $router->get('/news/comments/load/{id}', 'NewsController.loadNewsComments');
 
     $router->post('/news/upload', 'NewsController.uploadNews');
